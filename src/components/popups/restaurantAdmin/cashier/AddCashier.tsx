@@ -1,30 +1,20 @@
-import { Box, Paper, Stack, Button, Typography, Input } from "@mui/material";
+import { Box, Stack, Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { FormInputText } from "../formComponents/FormInputText";
-import { FormInputDropdown } from "../formComponents/FormInputDropDown";
-import { FormInputFile } from "../formComponents/FormInputFile";
-import { useEffect } from "react";
 
 interface IFormInput {
-  itemName: string;
-  price: number | null;
-  image: string;
-  category: string;
+  name: string;
+  email: number | null;
+  password: string;
 }
 
 const defaultValues = {
-  itemName: "",
-  price: null,
-  image: "",
-  category: "",
+  name: "",
+  email: null,
+  password: "",
 };
 
-export default function AddItemPopup({
-  trigger,
-  setTrigger,
-  data,
-  isAdd,
-}: any) {
+export default function AddCashier({ trigger, setTrigger }: any) {
   const methods = useForm<IFormInput>({ defaultValues: defaultValues });
   const { handleSubmit, reset, control, setValue, watch } = methods;
   const onSubmit = (data: IFormInput) => console.log(data);
@@ -69,36 +59,30 @@ export default function AddItemPopup({
             </Typography>
             <Stack spacing={"8px"}>
               <Box>
-                <Typography sx={labelStyle}>Item Name</Typography>
+                <Typography sx={labelStyle}>Cashier Name</Typography>
                 <FormInputText
-                  name="itemName"
+                  name="name"
                   control={control}
-                  label="Item Name"
+                  label="Add Cashier Name"
                   type="text"
                 />
               </Box>
-
               <Box>
-                <Typography sx={labelStyle}>Price</Typography>
+                <Typography sx={labelStyle}>E-Mail</Typography>
                 <FormInputText
-                  name="price"
+                  name="email"
                   control={control}
-                  label="EGP"
-                  type="number"
+                  label="E-Mail"
+                  type="email"
                 />
               </Box>
-
               <Box>
-                <Typography sx={labelStyle}>Image</Typography>
-                <FormInputFile name="image" control={control} label="EGP" />
-              </Box>
-
-              <Box>
-                <Typography sx={labelStyle}>Category</Typography>
-                <FormInputDropdown
-                  name="category"
+                <Typography sx={labelStyle}>Password</Typography>
+                <FormInputText
+                  name="password"
                   control={control}
-                  label="Choose Category"
+                  label="Password"
+                  type="password"
                 />
               </Box>
             </Stack>
@@ -132,7 +116,7 @@ export default function AddItemPopup({
                 }}
               >
                 {" "}
-                {isAdd ? "Add" : "Save"}{" "}
+                Add{" "}
               </Button>
             </Stack>
           </Box>

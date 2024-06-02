@@ -1,6 +1,6 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 
-export default function DeleteItemPopup({ trigger, setTrigger }: any) {
+export default function DeleteCategoryPopup({ trigger, setTrigger }: any) {
   const handleDelete = () => {
     console.log("delete");
   };
@@ -39,7 +39,9 @@ export default function DeleteItemPopup({ trigger, setTrigger }: any) {
               Warning
             </Typography>
 
-            <Typography>Are you sure you want to delete this Item?</Typography>
+            <Typography>
+              Are you sure you want to delete this Category?
+            </Typography>
 
             <Stack
               marginTop={"24px"}

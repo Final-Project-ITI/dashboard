@@ -1,26 +1,12 @@
 import { Button, Typography } from "@mui/material";
-import { useState } from "react";
 
-export default function MainButton({ width, Icon, text, handler }: any) {
-  const [isActive, setIsActive] = useState(false);
-
-  const activeStyle = {
+export default function MainButton({ width, Icon, text, handler, state }: any) {
+  const style = {
     width,
     padding: "8.5px 0",
     textAlign: "center",
-    color: "white",
-    backgroundColor: "#d84339",
-    "&:hover": {
-      backgroundColor: "#d84339",
-      color: "white",
-    },
-  };
-
-  const deactiveStyle = {
-    width,
-    padding: "8.5px 0",
-    textAlign: "center",
-    color: "#0A0A0A80",
+    color: state ? "white" : "#0A0A0A80",
+    backgroundColor: state ? "#d84339" : "none",
     "&:hover": {
       backgroundColor: "#d84339",
       color: "white",
@@ -28,8 +14,8 @@ export default function MainButton({ width, Icon, text, handler }: any) {
   };
 
   return (
-    <Button sx={activeStyle} onClick={handler}>
-      {Icon ? <Icon /> : ""}
+    <Button sx={style} onClick={handler}>
+      {Icon ? <Icon color={state ? "white" : "#0A0A0A80"} /> : ""}
       <Typography
         sx={{
           fontSize: "16px",

@@ -1,30 +1,16 @@
-import { Box, Paper, Stack, Button, Typography, Input } from "@mui/material";
+import { Box, Stack, Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { FormInputText } from "../formComponents/FormInputText";
-import { FormInputDropdown } from "../formComponents/FormInputDropDown";
-import { FormInputFile } from "../formComponents/FormInputFile";
-import { useEffect } from "react";
 
 interface IFormInput {
-  itemName: string;
-  price: number | null;
-  image: string;
   category: string;
 }
 
 const defaultValues = {
-  itemName: "",
-  price: null,
-  image: "",
   category: "",
 };
 
-export default function AddItemPopup({
-  trigger,
-  setTrigger,
-  data,
-  isAdd,
-}: any) {
+export default function AddCategory({ trigger, setTrigger, isAdd }: any) {
   const methods = useForm<IFormInput>({ defaultValues: defaultValues });
   const { handleSubmit, reset, control, setValue, watch } = methods;
   const onSubmit = (data: IFormInput) => console.log(data);
@@ -65,40 +51,16 @@ export default function AddItemPopup({
                 marginBottom: "16px",
               }}
             >
-              Add Item
+              Categories
             </Typography>
             <Stack spacing={"8px"}>
               <Box>
-                <Typography sx={labelStyle}>Item Name</Typography>
-                <FormInputText
-                  name="itemName"
-                  control={control}
-                  label="Item Name"
-                  type="text"
-                />
-              </Box>
-
-              <Box>
-                <Typography sx={labelStyle}>Price</Typography>
-                <FormInputText
-                  name="price"
-                  control={control}
-                  label="EGP"
-                  type="number"
-                />
-              </Box>
-
-              <Box>
-                <Typography sx={labelStyle}>Image</Typography>
-                <FormInputFile name="image" control={control} label="EGP" />
-              </Box>
-
-              <Box>
                 <Typography sx={labelStyle}>Category</Typography>
-                <FormInputDropdown
+                <FormInputText
                   name="category"
                   control={control}
-                  label="Choose Category"
+                  label="Category"
+                  type="text"
                 />
               </Box>
             </Stack>
