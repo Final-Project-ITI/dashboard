@@ -2,13 +2,13 @@ import { Box, Stack, Typography } from "@mui/material";
 import icon from "../../assets/logo.svg";
 import MainButton from "../shared/MainButton";
 
-import PersonSVG from "../../assets/svgs/PersonSVG";
-
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import RestaurantsTable from "../tables/mainAdmin/RestaurantsTable";
+import { Outlet, useLocation } from "react-router-dom";
+import PhoneSVG from "../../assets/svgs/PhoneSVG";
+import OrdersTable from "../tables/restaurantCashier/OrdersTable";
+import FilterTable from "../tables/restaurantCashier/FilterTable";
 
-export default function MainAdmin() {
+export default function RestaurantCashier() {
   const location = useLocation();
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function MainAdmin() {
               marginBottom: "80px",
             }}
           >
-            Admin
+            Restaurant Cashier
           </Typography>
 
           <Stack justifyContent={"space-between"} height={"100%"}>
@@ -58,8 +58,8 @@ export default function MainAdmin() {
             >
               <MainButton
                 width={"100%"}
-                text={"Restaurants"}
-                Icon={PersonSVG}
+                text={"cashier"}
+                Icon={PhoneSVG}
                 state={true}
               ></MainButton>
             </Stack>
@@ -90,10 +90,13 @@ export default function MainAdmin() {
           backgroundColor: "#F3ECE4",
           width: "85%",
         }}
+        spacing={"24px"}
+        direction={"row"}
         justifyContent={"center"}
         alignItems={"center"}
       >
-        <RestaurantsTable />
+        <OrdersTable />
+        <FilterTable />
       </Stack>
     </Stack>
   );
