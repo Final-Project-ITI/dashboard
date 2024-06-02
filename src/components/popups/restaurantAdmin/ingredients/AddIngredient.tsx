@@ -1,6 +1,6 @@
 import { Box, Paper, Stack, Button, Typography, Input } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { FormInputText } from "../formComponents/FormInputText";
+import { FormInputText } from "../../../shared/formComponents/FormInputText";
 
 interface IFormInput {
   ingredient: string;

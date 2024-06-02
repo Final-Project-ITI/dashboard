@@ -1,20 +1,30 @@
 import { Box, Stack, Button, Typography } from "@mui/material";
+import { FormInputText } from "../../shared/formComponents/FormInputText";
+import { FormInputDropdown } from "../../shared/formComponents/FormInputDropDown";
+import { FormInputFile } from "../../shared/formComponents/FormInputFile";
 import { useForm } from "react-hook-form";
-import { FormInputText } from "../../../shared/formComponents/FormInputText";
 
 interface IFormInput {
-  name: string;
-  email: number | null;
-  password: string;
+  restaurantName: string;
+  email: string;
+  address: string;
+  description: string;
+  phone: string;
+  icon: string;
+  banner: string;
 }
 
 const defaultValues = {
-  name: "",
-  email: null,
-  password: "",
+  restaurantName: "",
+  email: "",
+  address: "",
+  description: "",
+  phone: "",
+  icon: "",
+  banner: "",
 };
 
-export default function AddCashier({ trigger, setTrigger }: any) {
+export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
   const methods = useForm<IFormInput>({ defaultValues: defaultValues });
   const { handleSubmit, reset, control, setValue, watch } = methods;
   const onSubmit = (data: IFormInput) => console.log(data);
@@ -55,35 +65,67 @@ export default function AddCashier({ trigger, setTrigger }: any) {
                 marginBottom: "16px",
               }}
             >
-              Add Item
+              Add Restaurant
             </Typography>
             <Stack spacing={"8px"}>
               <Box>
-                <Typography sx={labelStyle}>Cashier Name</Typography>
+                <Typography sx={labelStyle}>Restaurant Name</Typography>
                 <FormInputText
-                  name="name"
+                  name="restaurantName"
                   control={control}
-                  label="Add Cashier Name"
+                  label="Restaurant Name"
                   type="text"
                 />
               </Box>
+
               <Box>
-                <Typography sx={labelStyle}>E-Mail</Typography>
+                <Typography sx={labelStyle}>Email</Typography>
                 <FormInputText
                   name="email"
                   control={control}
-                  label="E-Mail"
+                  label="Email"
                   type="email"
                 />
               </Box>
+
               <Box>
-                <Typography sx={labelStyle}>Password</Typography>
+                <Typography sx={labelStyle}>Address</Typography>
                 <FormInputText
-                  name="password"
+                  name="address"
                   control={control}
-                  label="Password"
-                  type="password"
+                  label="Address"
+                  type="text"
                 />
+              </Box>
+
+              <Box>
+                <Typography sx={labelStyle}>Description</Typography>
+                <FormInputText
+                  name="description"
+                  control={control}
+                  label="Description"
+                  type="text"
+                />
+              </Box>
+
+              <Box>
+                <Typography sx={labelStyle}>Phone</Typography>
+                <FormInputText
+                  name="phone"
+                  control={control}
+                  label="Phone"
+                  type="text"
+                />
+              </Box>
+
+              <Box>
+                <Typography sx={labelStyle}>Icon</Typography>
+                <FormInputFile name="icon" control={control} label="icon" />
+              </Box>
+
+              <Box>
+                <Typography sx={labelStyle}>Banner</Typography>
+                <FormInputFile name="banner" control={control} label="banner" />
               </Box>
             </Stack>
 

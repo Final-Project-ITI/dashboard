@@ -1,8 +1,8 @@
 import { Box, Paper, Stack, Button, Typography, Input } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { FormInputText } from "../formComponents/FormInputText";
-import { FormInputDropdown } from "../formComponents/FormInputDropDown";
-import { FormInputFile } from "../formComponents/FormInputFile";
+import { FormInputText } from "../../../shared/formComponents/FormInputText";
+import { FormInputDropdown } from "../../../shared/formComponents/FormInputDropDown";
+import { FormInputFile } from "../../../shared/formComponents/FormInputFile";
 import { useEffect } from "react";
 
 interface IFormInput {
