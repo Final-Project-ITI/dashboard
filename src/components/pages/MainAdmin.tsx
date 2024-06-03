@@ -4,16 +4,24 @@ import MainButton from "../shared/MainButton";
 
 import PersonSVG from "../../assets/svgs/PersonSVG";
 
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import RestaurantsTable from "../tables/mainAdmin/RestaurantsTable";
 
-export default function MainAdmin() {
-  const location = useLocation();
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
-  useEffect(() => {
-    console.log(location.pathname.split("/")[2]);
-  }, []);
+export default function MainAdmin() {
+  const navigate = useNavigate();
+  const { setAuth }: any = useAuth();
+  const [, , removeCookie] = useCookies();
+
+  function handleLogout() {
+    setAuth({
+      token: "",
+    });
+    removeCookie("token");
+    // navigate("/login", { replace: true });
+  }
 
   return (
     <Stack height={"100vh"} direction={"row"}>
@@ -69,6 +77,7 @@ export default function MainAdmin() {
                 width={"100%"}
                 text={"Log Out"}
                 state={true}
+                handler={handleLogout}
               ></MainButton>
 
               <img

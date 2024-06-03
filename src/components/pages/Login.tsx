@@ -1,6 +1,13 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
+import axios from "../../api/axios";
 import { LoginFormInput } from "../loginInput/LoginFormInput";
+import { LOGIN_URL } from "../../utils/URLs";
+import useAuth from "../../hooks/useAuth";
+import { useCookies } from "react-cookie";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import { IPayload } from "../../models/payload.mode";
 
 interface IFormInput {
   email: string;
@@ -15,7 +22,38 @@ const defaultValues = {
 export default function Login() {
   const methods = useForm<IFormInput>({ defaultValues: defaultValues });
   const { handleSubmit, reset, control, setValue, watch } = methods;
-  const onSubmit = (data: IFormInput) => console.log(data);
+
+  const { setAuth }: any = useAuth();
+  const [, setCookie] = useCookies();
+  const navigate = useNavigate();
+
+  console.log("test");
+  const onSubmit = async (loginData: IFormInput) => {
+    try {
+      const res = await axios.post(LOGIN_URL, loginData);
+      const token = await res.data.token;
+      const userData: IPayload = jwtDecode(token);
+      setAuth({ token });
+
+      setCookie("token", token);
+
+      switch (userData.role.name) {
+        case "admin":
+          navigate("/", { replace: true });
+          break;
+        case "restaurantAdmin":
+          navigate("/restaurantAdmin", { replace: true });
+          break;
+        case "restaurantCashier":
+          navigate("/restaurantCashier", { replace: true });
+          break;
+        default:
+          throw new Error("unauthorized");
+      }
+    } catch (err: any) {
+      console.log(err.message);
+    }
+  };
 
   const labelStyle = {
     fontSize: "16px",

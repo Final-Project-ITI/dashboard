@@ -2,21 +2,18 @@ import { Box, Stack, Typography } from "@mui/material";
 import icon from "../../assets/logo.svg";
 import MainButton from "../shared/MainButton";
 
+import CategorySVG from "../../assets/svgs/CategorySVG";
 import MenuSVG from "../../assets/svgs/MenuSVG";
 import PersonSVG from "../../assets/svgs/PersonSVG";
 import TomatoSVG from "../../assets/svgs/TomatoSVG";
-import CategorySVG from "../../assets/svgs/CategorySVG";
 
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 export default function RestaurantAdmin() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    console.log(location.pathname.split("/")[2]);
-  }, []);
+  console.log("ss");
 
   return (
     <Stack height={"100vh"} direction={"row"}>

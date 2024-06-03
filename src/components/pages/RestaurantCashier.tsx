@@ -2,19 +2,11 @@ import { Box, Stack, Typography } from "@mui/material";
 import icon from "../../assets/logo.svg";
 import MainButton from "../shared/MainButton";
 
-import { useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
 import PhoneSVG from "../../assets/svgs/PhoneSVG";
-import OrdersTable from "../tables/restaurantCashier/OrdersTable";
 import FilterTable from "../tables/restaurantCashier/FilterTable";
+import OrdersTable from "../tables/restaurantCashier/OrdersTable";
 
 export default function RestaurantCashier() {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.log(location.pathname.split("/")[2]);
-  }, []);
-
   return (
     <Stack height={"100vh"} direction={"row"}>
       <Stack
