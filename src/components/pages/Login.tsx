@@ -71,7 +71,7 @@ export default function Login() {
       }}
     >
       <Box
-        width={"35%"}
+        width={{ xs: "65%", md: "50%", xl: "35%" }}
         sx={{
           backgroundColor: "#E8DCCC",
           border: "1px solid #D74339",
@@ -93,22 +93,12 @@ export default function Login() {
         <Stack spacing={"8px"}>
           <Box>
             <Typography sx={labelStyle}>E-Mail</Typography>
-            <LoginFormInput
-              name="email"
-              control={control}
-              label="E-Mail"
-              type="email"
-            />
+            <LoginFormInput name="email" control={control} type="email" />
           </Box>
 
           <Box>
             <Typography sx={labelStyle}>Password</Typography>
-            <LoginFormInput
-              name="password"
-              control={control}
-              label="Password"
-              type="password"
-            />
+            <LoginFormInput name="password" control={control} type="password" />
           </Box>
         </Stack>
 

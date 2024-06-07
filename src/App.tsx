@@ -17,35 +17,38 @@ function App() {
   refreshToken();
   return (
     <>
-      <Routes>
-        {/* Auth */}
-        <Route path="/login" element={<Login />} />
-        {/* <Route element={<IsNotAuthGuard />}>
-        </Route> */}
-
-        {/* Main Admin */}
-        <Route element={<IsAuthGuard role="admin" />}>
-          <Route path="/" element={<MainAdmin />} />
-        </Route>
-
-        {/* Restaurant Admin */}
-        <Route element={<IsAuthGuard role="restaurantAdmin" />}>
-          <Route path="/restaurantAdmin" element={<RestaurantAdmin />}>
-            <Route path="menu" element={<MenuTable />} />
-            <Route path="cashier" element={<CashierTable />} />
-            <Route path="ingredients" element={<IngredientsTable />} />
-            <Route path="category" element={<CategoryTable />} />
-          </Route>
-        </Route>
-
-        {/* Restaurant Cashier */}
-        <Route element={<IsAuthGuard role="restaurantCashier" />}>
-          <Route path="/restaurantCashier" element={<RestaurantCashier />} />
-        </Route>
-
-        {/* <Route path="*" element={<IsAuthGuard role={""} />} /> */}
-      </Routes>
+      <RestaurantCashier />
     </>
+    // <>
+    //   <Routes>
+    //     {/* Auth */}
+    //     <Route path="/login" element={<Login />} />
+    //     {/* <Route element={<IsNotAuthGuard />}>
+    //     </Route> */}
+
+    //     {/* Main Admin */}
+    //     <Route element={<IsAuthGuard role="admin" />}>
+    //       <Route path="/" element={<MainAdmin />} />
+    //     </Route>
+
+    //     {/* Restaurant Admin */}
+    //     <Route element={<IsAuthGuard role="restaurantAdmin" />}>
+    //       <Route path="/restaurantAdmin" element={<RestaurantAdmin />}>
+    //         <Route path="menu" element={<MenuTable />} />
+    //         <Route path="cashier" element={<CashierTable />} />
+    //         <Route path="ingredients" element={<IngredientsTable />} />
+    //         <Route path="category" element={<CategoryTable />} />
+    //       </Route>
+    //     </Route>
+
+    //     {/* Restaurant Cashier */}
+    //     <Route element={<IsAuthGuard role="restaurantCashier" />}>
+    //       <Route path="/restaurantCashier" element={<RestaurantCashier />} />
+    //     </Route>
+
+    //     {/* <Route path="*" element={<IsAuthGuard role={""} />} /> */}
+    //   </Routes>
+    // </>
   );
 }
 

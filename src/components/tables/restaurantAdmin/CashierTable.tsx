@@ -37,128 +37,134 @@ export default function CashierTable() {
   return (
     <>
       <Stack
-        position={"absolute"}
-        width={"56%"}
-        top={"4%"}
-        direction={"row"}
-        justifyContent={"space-between"}
+        height={"100%"}
+        justifyContent={"space-evenly"}
+        alignItems={"center"}
       >
-        <Typography
-          sx={{
-            fontSize: "28px",
-            fontWeight: "bold",
-          }}
-        >
-          Cashier
-        </Typography>
-
-        <MainButton
-          width={"156px"}
-          text={"Add Cashier"}
-          Icon={AddIcon}
-          handler={() => {
-            setAddCashierTrigger(true);
-          }}
-          state={true}
-        ></MainButton>
-      </Stack>
-
-      <Stack>
-        <AddCashier
-          trigger={addCashierTrigger}
-          setTrigger={setAddCashierTrigger}
-        />
-
-        <Box
-          sx={{
-            width: "1000px",
-            height: "600px",
-            backgroundColor: "#E8DCCC",
-            borderRadius: "15px",
-          }}
+        <Stack
+          direction={"row"}
+          marginBlock={"10px"}
+          justifyContent={"space-between"}
+          width={"85%"}
         >
           <Typography
             sx={{
               fontSize: "28px",
               fontWeight: "bold",
-              marginTop: "30px",
-              marginLeft: "40px",
             }}
           >
-            Cashiers
+            Cashier
           </Typography>
 
-          <Stack justifyContent={"space-between"} height={"85%"}>
-            <Table>
-              <TableHead>
-                <TableCell sx={tableHeadTextStyle}>Cashier Name</TableCell>
-                <TableCell sx={tableHeadTextStyle}>E-Mail</TableCell>
-                <TableCell sx={tableHeadTextStyle}>Password</TableCell>
-              </TableHead>
+          <MainButton
+            width={"156px"}
+            text={"Add Cashier"}
+            Icon={AddIcon}
+            handler={() => {
+              setAddCashierTrigger(true);
+            }}
+            state={true}
+          ></MainButton>
+        </Stack>
 
-              <TableBody>
-                <TableRow>
-                  <TableCell sx={tableBodyTextStyle}>Waleed Almenawy</TableCell>
-                  <TableCell sx={tableBodyTextStyle}>
-                    waleed.almenawy@outlook.com
-                  </TableCell>
-                  <TableCell sx={tableBodyTextStyle}>123123</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+        <Stack>
+          <AddCashier
+            trigger={addCashierTrigger}
+            setTrigger={setAddCashierTrigger}
+          />
 
-            <Stack width={"100%"} justifyContent={"center"} direction={"row"}>
-              <Stack
-                width={"120px"}
-                direction={"row"}
-                justifyContent={"space-between"}
-                alignItems={"center"}
-              >
-                <IconButton>
-                  <ArrowBackIosNewIcon
-                    fontSize="small"
+          <Box
+            sx={{
+              width: { xl: "1000px", md: "850px", xs: "450px" },
+              height: "600px",
+              backgroundColor: "#E8DCCC",
+              borderRadius: "15px",
+            }}
+            marginBottom={{ xl: 0, md: "20px", xs: "30px" }}
+          >
+            <Typography
+              sx={{
+                fontSize: "28px",
+                fontWeight: "bold",
+                marginTop: "30px",
+                marginLeft: "40px",
+              }}
+            >
+              Cashiers
+            </Typography>
+
+            <Stack justifyContent={"space-between"} height={"85%"}>
+              <Table>
+                <TableHead>
+                  <TableCell sx={tableHeadTextStyle}>Cashier Name</TableCell>
+                  <TableCell sx={tableHeadTextStyle}>E-Mail</TableCell>
+                </TableHead>
+
+                <TableBody>
+                  <TableRow>
+                    <TableCell sx={tableBodyTextStyle}>
+                      Waleed Almenawy
+                    </TableCell>
+                    <TableCell sx={tableBodyTextStyle}>
+                      waleed.almenawy@outlook.com
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+
+              <Stack width={"100%"} justifyContent={"center"} direction={"row"}>
+                <Stack
+                  width={"120px"}
+                  direction={"row"}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                >
+                  <IconButton>
+                    <ArrowBackIosNewIcon
+                      fontSize="small"
+                      sx={{
+                        color: "black",
+                      }}
+                    />
+                  </IconButton>
+                  <Box
                     sx={{
+                      width: "20px",
+                      height: "20px",
                       color: "black",
+                      border: "solid 2px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "2px",
+                      fontWeight: "bold",
                     }}
-                  />
-                </IconButton>
-                <Box
-                  sx={{
-                    width: "20px",
-                    height: "20px",
-                    color: "black",
-                    border: "solid 2px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: "2px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  1
-                </Box>
-                <Box
-                  sx={{
-                    width: "20px",
-                    height: "20px",
-                    color: "#E4002B",
-                    border: "solid 2px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: "2px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  2
-                </Box>
-                <IconButton>
-                  <ArrowForwardIosIcon fontSize="small" />
-                </IconButton>
+                  >
+                    1
+                  </Box>
+                  <Box
+                    sx={{
+                      width: "20px",
+                      height: "20px",
+                      color: "#E4002B",
+                      border: "solid 2px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "2px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    2
+                  </Box>
+                  <IconButton>
+                    <ArrowForwardIosIcon fontSize="small" />
+                  </IconButton>
+                </Stack>
               </Stack>
             </Stack>
-          </Stack>
-        </Box>
+          </Box>
+        </Stack>
       </Stack>
     </>
   );

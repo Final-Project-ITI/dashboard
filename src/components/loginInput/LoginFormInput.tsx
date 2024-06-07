@@ -2,12 +2,7 @@ import { Controller } from "react-hook-form";
 import { TextField } from "@mui/material";
 import { FormInputProps } from "../shared/formComponents/FormInputProps";
 
-export const LoginFormInput = ({
-  name,
-  control,
-  label,
-  type,
-}: FormInputProps) => {
+export const LoginFormInput = ({ name, control, type }: FormInputProps) => {
   const borderStyle = {
     "& .MuiInput-underline:after": {
       borderBottomColor: "yellow",
@@ -45,7 +40,6 @@ export const LoginFormInput = ({
           onChange={onChange}
           value={value}
           fullWidth
-          label={label}
           inputProps={{ type }}
         />
       )}

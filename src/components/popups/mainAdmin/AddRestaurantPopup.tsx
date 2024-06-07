@@ -50,7 +50,7 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
           alignItems={"center"}
         >
           <Box
-            width={"35%"}
+            width={{ xl: "35%", md: "55%", xs: "85%" }}
             sx={{
               backgroundColor: "#F3ECE4",
               borderRadius: "15px",

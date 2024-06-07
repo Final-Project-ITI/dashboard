@@ -35,154 +35,177 @@ export default function RestaurantsTable() {
     borderBottom: "none",
   };
 
+  const hideContent = {
+    display: { md: "table-cell", xs: "none" },
+  };
+
   return (
     <>
       <Stack
-        position={"absolute"}
-        width={"56%"}
-        top={"4%"}
-        direction={"row"}
-        justifyContent={"space-between"}
+        height={"100%"}
+        justifyContent={"space-evenly"}
+        alignItems={"center"}
       >
-        <Typography
-          sx={{
-            fontSize: "28px",
-            fontWeight: "bold",
-          }}
-        >
-          Admin
-        </Typography>
-
-        <MainButton
-          width={"200px"}
-          text={"Add Restaurant"}
-          Icon={AddIcon}
-          handler={() => {
-            setAddRestaurantTrigger(true);
-          }}
-          state={true}
-        ></MainButton>
-      </Stack>
-
-      <Stack>
-        <AddRestaurantPopup
-          trigger={addRestaurantTrigger}
-          setTrigger={setAddRestaurantTrigger}
-        />
-        <Box
-          sx={{
-            width: "1000px",
-            height: "600px",
-            backgroundColor: "#E8DCCC",
-            borderRadius: "15px",
-          }}
+        <Stack
+          direction={"row"}
+          marginBlock={"10px"}
+          justifyContent={"space-between"}
+          width={"85%"}
         >
           <Typography
             sx={{
               fontSize: "28px",
               fontWeight: "bold",
-              marginTop: "30px",
-              marginLeft: "40px",
             }}
           >
-            Restaurants
+            Admin
           </Typography>
 
-          <Stack justifyContent={"space-between"} height={"85%"}>
-            <Table>
-              <TableHead>
-                <TableCell sx={tableHeadTextStyle}>Restaurant Name</TableCell>
-                <TableCell sx={tableHeadTextStyle}>Icon</TableCell>
-                <TableCell sx={{ ...tableHeadTextStyle, textAlign: "start" }}>
-                  Address
-                </TableCell>
-                <TableCell sx={tableHeadTextStyle}>Phone</TableCell>
-                <TableCell sx={tableHeadTextStyle}>Admin</TableCell>
-              </TableHead>
+          <MainButton
+            width={"200px"}
+            text={"Add Restaurant"}
+            Icon={AddIcon}
+            handler={() => {
+              setAddRestaurantTrigger(true);
+            }}
+            state={true}
+          ></MainButton>
+        </Stack>
 
-              <TableBody>
-                <TableRow>
-                  <TableCell sx={tableBodyTextStyle}>Alsaraya</TableCell>
-                  <TableCell sx={tableBodyTextStyle}>
-                    <img
-                      src={icon}
-                      title="icon"
-                      style={{
-                        objectFit: "cover",
-                        width: "64px",
-                        height: "64px",
-                      }}
-                    />
+        <Stack>
+          <AddRestaurantPopup
+            trigger={addRestaurantTrigger}
+            setTrigger={setAddRestaurantTrigger}
+          />
+          <Box
+            sx={{
+              width: { xl: "1000px", md: "850px", xs: "450px" },
+              height: "600px",
+              backgroundColor: "#E8DCCC",
+              borderRadius: "15px",
+            }}
+            marginBottom={{ xl: 0, md: "20px", xs: "30px" }}
+          >
+            <Typography
+              sx={{
+                fontSize: "28px",
+                fontWeight: "bold",
+                marginTop: "30px",
+                marginLeft: "40px",
+              }}
+            >
+              Restaurants
+            </Typography>
+
+            <Stack justifyContent={"space-between"} height={"85%"}>
+              <Table>
+                <TableHead>
+                  <TableCell sx={tableHeadTextStyle}>Restaurant Name</TableCell>
+                  <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
+                    Icon
                   </TableCell>
                   <TableCell
                     sx={{
-                      ...tableBodyTextStyle,
-                      width: "200px",
+                      ...tableHeadTextStyle,
+                      ...hideContent,
                       textAlign: "start",
                     }}
                   >
-                    Ammar Ibn Yasser St , Al villal, Zagazig
+                    Address
                   </TableCell>
-                  <TableCell sx={tableBodyTextStyle}>01503852538</TableCell>
-                  <TableCell sx={tableBodyTextStyle}>
-                    waleed.almenawy@outlook.com
+                  <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
+                    Phone
                   </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+                  <TableCell sx={tableHeadTextStyle}>Admin</TableCell>
+                </TableHead>
 
-            <Stack width={"100%"} justifyContent={"center"} direction={"row"}>
-              <Stack
-                width={"120px"}
-                direction={"row"}
-                justifyContent={"space-between"}
-                alignItems={"center"}
-              >
-                <IconButton>
-                  <ArrowBackIosNewIcon
-                    fontSize="small"
+                <TableBody>
+                  <TableRow>
+                    <TableCell sx={tableBodyTextStyle}>Alsaraya</TableCell>
+                    <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
+                      <img
+                        src={icon}
+                        title="icon"
+                        style={{
+                          objectFit: "cover",
+                          width: "64px",
+                          height: "64px",
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        ...tableBodyTextStyle,
+                        ...hideContent,
+                        width: "200px",
+                        textAlign: "start",
+                      }}
+                    >
+                      Ammar Ibn Yasser St , Al villal, Zagazig
+                    </TableCell>
+                    <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
+                      01503852538
+                    </TableCell>
+                    <TableCell sx={tableBodyTextStyle}>
+                      waleed.almenawy@outlook.com
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+
+              <Stack width={"100%"} justifyContent={"center"} direction={"row"}>
+                <Stack
+                  width={"120px"}
+                  direction={"row"}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                >
+                  <IconButton>
+                    <ArrowBackIosNewIcon
+                      fontSize="small"
+                      sx={{
+                        color: "black",
+                      }}
+                    />
+                  </IconButton>
+                  <Box
                     sx={{
+                      width: "20px",
+                      height: "20px",
                       color: "black",
+                      border: "solid 2px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "2px",
+                      fontWeight: "bold",
                     }}
-                  />
-                </IconButton>
-                <Box
-                  sx={{
-                    width: "20px",
-                    height: "20px",
-                    color: "black",
-                    border: "solid 2px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: "2px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  1
-                </Box>
-                <Box
-                  sx={{
-                    width: "20px",
-                    height: "20px",
-                    color: "#E4002B",
-                    border: "solid 2px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: "2px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  2
-                </Box>
-                <IconButton>
-                  <ArrowForwardIosIcon fontSize="small" />
-                </IconButton>
+                  >
+                    1
+                  </Box>
+                  <Box
+                    sx={{
+                      width: "20px",
+                      height: "20px",
+                      color: "#E4002B",
+                      border: "solid 2px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "2px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    2
+                  </Box>
+                  <IconButton>
+                    <ArrowForwardIosIcon fontSize="small" />
+                  </IconButton>
+                </Stack>
               </Stack>
             </Stack>
-          </Stack>
-        </Box>
+          </Box>
+        </Stack>
       </Stack>
     </>
   );

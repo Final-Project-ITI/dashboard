@@ -8,11 +8,11 @@ import OrdersTable from "../tables/restaurantCashier/OrdersTable";
 
 export default function RestaurantCashier() {
   return (
-    <Stack height={"100vh"} direction={"row"}>
+    <Stack height={"100vh"} direction={{ xl: "row", xs: "column" }}>
       <Stack
         sx={{
           backgroundColor: "#E8DCCC",
-          width: "18%",
+          width: { xl: "18%", md: "100%" },
           padding: "0 20px",
         }}
       >
@@ -38,14 +38,14 @@ export default function RestaurantCashier() {
               marginBottom: "80px",
             }}
           >
-            Restaurant Cashier
+            Restaurant Name
           </Typography>
 
-          <Stack justifyContent={"space-between"} height={"100%"}>
+          <Stack>
             <Stack
               spacing={"16px"}
               sx={{
-                marginBottom: "50%",
+                marginBottom: { xl: "50%", xs: "10%" },
               }}
             >
               <MainButton
@@ -80,10 +80,10 @@ export default function RestaurantCashier() {
       <Stack
         sx={{
           backgroundColor: "#F3ECE4",
-          width: "85%",
+          width: { xl: "85%", md: "100%" },
         }}
         spacing={"24px"}
-        direction={"row"}
+        direction={{ xl: "row", xs: "column" }}
         justifyContent={"center"}
         alignItems={"center"}
       >

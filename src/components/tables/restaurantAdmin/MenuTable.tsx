@@ -49,292 +49,197 @@ export default function MenuTable() {
   return (
     <>
       <Stack
-        position={"absolute"}
-        width={"56%"}
-        top={"4%"}
-        direction={"row"}
-        justifyContent={"space-between"}
+        height={"100%"}
+        justifyContent={"space-evenly"}
+        alignItems={"center"}
       >
-        <Typography
-          sx={{
-            fontSize: "28px",
-            fontWeight: "bold",
-          }}
-        >
-          Menu
-        </Typography>
-
-        <MainButton
-          width={"156px"}
-          text={"Add item"}
-          Icon={AddIcon}
-          handler={() => {
-            setIsAdd(true);
-            setAddItemTrigger(true);
-          }}
-          state={true}
-        ></MainButton>
-      </Stack>
-
-      <Stack>
-        <AddItemPopup
-          trigger={addItemTrigger}
-          setTrigger={setAddItemTrigger}
-          isAdd={isAdd}
-        />
-        <DeleteItemPopup
-          trigger={deleteItemTrigger}
-          setTrigger={setDeleteItemTrigger}
-        />
-        <Box
-          sx={{
-            width: "1000px",
-            height: "600px",
-            backgroundColor: "#E8DCCC",
-            borderRadius: "15px",
-          }}
+        <Stack
+          direction={"row"}
+          marginBlock={"10px"}
+          justifyContent={"space-between"}
+          width={"85%"}
         >
           <Typography
             sx={{
               fontSize: "28px",
               fontWeight: "bold",
-              marginTop: "30px",
-              marginLeft: "40px",
             }}
           >
-            List Menu
+            Menu
           </Typography>
 
-          <Stack justifyContent={"space-between"} height={"85%"}>
-            <Table>
-              <TableHead>
-                <TableCell sx={tableHeadTextStyle}>Item Name</TableCell>
-                <TableCell sx={tableHeadTextStyle}>Icon</TableCell>
-                <TableCell sx={{ ...tableHeadTextStyle, textAlign: "start" }}>
-                  Ingredients
-                </TableCell>
-                <TableCell sx={tableHeadTextStyle}>Price</TableCell>
-                <TableCell sx={tableHeadTextStyle}>Action</TableCell>
-              </TableHead>
+          <MainButton
+            width={"156px"}
+            text={"Add item"}
+            Icon={AddIcon}
+            handler={() => {
+              setIsAdd(true);
+              setAddItemTrigger(true);
+            }}
+            state={true}
+          ></MainButton>
+        </Stack>
 
-              <TableBody>
-                <TableRow>
-                  <TableCell sx={tableBodyTextStyle}>
-                    Margherita pizza
-                  </TableCell>
-                  <TableCell sx={tableBodyTextStyle}>
-                    <img
-                      src={icon}
-                      title="icon"
-                      style={{
-                        objectFit: "cover",
-                        width: "64px",
-                        height: "64px",
-                      }}
-                    />
-                  </TableCell>
+        <Stack>
+          <AddItemPopup
+            trigger={addItemTrigger}
+            setTrigger={setAddItemTrigger}
+            isAdd={isAdd}
+          />
+          <DeleteItemPopup
+            trigger={deleteItemTrigger}
+            setTrigger={setDeleteItemTrigger}
+          />
+          <Box
+            sx={{
+              width: { xl: "1000px", md: "850px", xs: "450px" },
+              height: "600px",
+              backgroundColor: "#E8DCCC",
+              borderRadius: "15px",
+            }}
+            marginBottom={{ xl: 0, md: "20px", xs: "30px" }}
+          >
+            <Typography
+              sx={{
+                fontSize: "28px",
+                fontWeight: "bold",
+                marginTop: "30px",
+                marginLeft: "40px",
+              }}
+            >
+              List Menu
+            </Typography>
+
+            <Stack justifyContent={"space-between"} height={"85%"}>
+              <Table>
+                <TableHead>
+                  <TableCell sx={tableHeadTextStyle}>Item Name</TableCell>
                   <TableCell
                     sx={{
                       ...tableBodyTextStyle,
-                      width: "200px",
-                      textAlign: "start",
+                      display: { md: "table-cell", xs: "none" },
                     }}
                   >
-                    fresh tomato sauce mozzarella cheese touch of basil
-                  </TableCell>
-                  <TableCell sx={tableBodyTextStyle}>EGP120</TableCell>
-                  <TableCell sx={tableBodyTextStyle}>
-                    <IconButton
-                      onClick={() => {
-                        setIsAdd(false);
-                        setAddItemTrigger(true);
-                      }}
-                    >
-                      <PinSVG />
-                    </IconButton>
-
-                    <IconButton onClick={() => handleDeleteItem()}>
-                      <TrashSVG />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={tableBodyTextStyle}>
-                    Margherita pizza
-                  </TableCell>
-                  <TableCell sx={tableBodyTextStyle}>
-                    <img
-                      src={icon}
-                      title="icon"
-                      style={{
-                        objectFit: "cover",
-                        width: "64px",
-                        height: "64px",
-                      }}
-                    />
+                    Icon
                   </TableCell>
                   <TableCell
                     sx={{
-                      ...tableBodyTextStyle,
-                      width: "200px",
+                      ...tableHeadTextStyle,
                       textAlign: "start",
+                      display: { md: "table-cell", xs: "none" },
                     }}
                   >
-                    fresh tomato sauce mozzarella cheese touch of basil
+                    Ingredients
                   </TableCell>
-                  <TableCell sx={tableBodyTextStyle}>EGP120</TableCell>
-                  <TableCell sx={tableBodyTextStyle}>
-                    <IconButton
-                      onClick={() => {
-                        setIsAdd(false);
-                        setAddItemTrigger(true);
+                  <TableCell sx={tableHeadTextStyle}>Price</TableCell>
+                  <TableCell sx={tableHeadTextStyle}>Action</TableCell>
+                </TableHead>
+
+                <TableBody>
+                  <TableRow>
+                    <TableCell sx={tableBodyTextStyle}>
+                      Margherita pizza
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        ...tableBodyTextStyle,
+                        display: { md: "table-cell", xs: "none" },
                       }}
                     >
-                      <PinSVG />
-                    </IconButton>
+                      <img
+                        src={icon}
+                        title="icon"
+                        style={{
+                          objectFit: "cover",
+                          width: "64px",
+                          height: "64px",
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        ...tableBodyTextStyle,
+                        width: "200px",
+                        textAlign: "start",
+                        display: { md: "table-cell", xs: "none" },
+                      }}
+                    >
+                      fresh tomato sauce mozzarella cheese touch of basil
+                    </TableCell>
+                    <TableCell sx={tableBodyTextStyle}>EGP120</TableCell>
+                    <TableCell sx={tableBodyTextStyle}>
+                      <IconButton
+                        onClick={() => {
+                          setIsAdd(false);
+                          setAddItemTrigger(true);
+                        }}
+                      >
+                        <PinSVG />
+                      </IconButton>
 
-                    <IconButton onClick={() => handleDeleteItem()}>
-                      <TrashSVG />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={tableBodyTextStyle}>
-                    Margherita pizza
-                  </TableCell>
-                  <TableCell sx={tableBodyTextStyle}>
-                    <img
-                      src={icon}
-                      title="icon"
-                      style={{
-                        objectFit: "cover",
-                        width: "64px",
-                        height: "64px",
+                      <IconButton onClick={() => handleDeleteItem()}>
+                        <TrashSVG />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+
+              <Stack width={"100%"} justifyContent={"center"} direction={"row"}>
+                <Stack
+                  width={"120px"}
+                  direction={"row"}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                >
+                  <IconButton>
+                    <ArrowBackIosNewIcon
+                      fontSize="small"
+                      sx={{
+                        color: "black",
                       }}
                     />
-                  </TableCell>
-                  <TableCell
+                  </IconButton>
+                  <Box
                     sx={{
-                      ...tableBodyTextStyle,
-                      width: "200px",
-                      textAlign: "start",
-                    }}
-                  >
-                    fresh tomato sauce mozzarella cheese touch of basil
-                  </TableCell>
-                  <TableCell sx={tableBodyTextStyle}>EGP120</TableCell>
-                  <TableCell sx={tableBodyTextStyle}>
-                    <IconButton
-                      onClick={() => {
-                        setIsAdd(false);
-                        setAddItemTrigger(true);
-                      }}
-                    >
-                      <PinSVG />
-                    </IconButton>
-
-                    <IconButton onClick={() => handleDeleteItem()}>
-                      <TrashSVG />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={tableBodyTextStyle}>
-                    Margherita pizza
-                  </TableCell>
-                  <TableCell sx={tableBodyTextStyle}>
-                    <img
-                      src={icon}
-                      title="icon"
-                      style={{
-                        objectFit: "cover",
-                        width: "64px",
-                        height: "64px",
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      ...tableBodyTextStyle,
-                      width: "200px",
-                      textAlign: "start",
-                    }}
-                  >
-                    fresh tomato sauce mozzarella cheese touch of basil
-                  </TableCell>
-                  <TableCell sx={tableBodyTextStyle}>EGP120</TableCell>
-                  <TableCell sx={tableBodyTextStyle}>
-                    <IconButton
-                      onClick={() => {
-                        setIsAdd(false);
-                        setAddItemTrigger(true);
-                      }}
-                    >
-                      <PinSVG />
-                    </IconButton>
-
-                    <IconButton onClick={() => handleDeleteItem()}>
-                      <TrashSVG />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-
-            <Stack width={"100%"} justifyContent={"center"} direction={"row"}>
-              <Stack
-                width={"120px"}
-                direction={"row"}
-                justifyContent={"space-between"}
-                alignItems={"center"}
-              >
-                <IconButton>
-                  <ArrowBackIosNewIcon
-                    fontSize="small"
-                    sx={{
+                      width: "20px",
+                      height: "20px",
                       color: "black",
+                      border: "solid 2px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "2px",
+                      fontWeight: "bold",
                     }}
-                  />
-                </IconButton>
-                <Box
-                  sx={{
-                    width: "20px",
-                    height: "20px",
-                    color: "black",
-                    border: "solid 2px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: "2px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  1
-                </Box>
-                <Box
-                  sx={{
-                    width: "20px",
-                    height: "20px",
-                    color: "#E4002B",
-                    border: "solid 2px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: "2px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  2
-                </Box>
-                <IconButton>
-                  <ArrowForwardIosIcon fontSize="small" />
-                </IconButton>
+                  >
+                    1
+                  </Box>
+                  <Box
+                    sx={{
+                      width: "20px",
+                      height: "20px",
+                      color: "#E4002B",
+                      border: "solid 2px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "2px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    2
+                  </Box>
+                  <IconButton>
+                    <ArrowForwardIosIcon fontSize="small" />
+                  </IconButton>
+                </Stack>
               </Stack>
             </Stack>
-          </Stack>
 
-          <Stack></Stack>
-        </Box>
+            <Stack></Stack>
+          </Box>
+        </Stack>
       </Stack>
     </>
   );

@@ -8,19 +8,22 @@ import PersonSVG from "../../assets/svgs/PersonSVG";
 import TomatoSVG from "../../assets/svgs/TomatoSVG";
 
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function RestaurantAdmin() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log("ss");
+  useEffect(() => {
+    console.log("ss");
+  }, []);
 
   return (
-    <Stack height={"100vh"} direction={"row"}>
+    <Stack height={"100vh"} direction={{ xl: "row", xs: "column" }}>
       <Stack
         sx={{
           backgroundColor: "#E8DCCC",
-          width: "18%",
+          width: { xl: "18%", md: "100%" },
           padding: "0 20px",
         }}
       >
@@ -52,7 +55,7 @@ export default function RestaurantAdmin() {
           <Stack
             spacing={"16px"}
             sx={{
-              marginBottom: "50%",
+              marginBottom: { xl: "50%", xs: "10%" },
             }}
           >
             <MainButton
@@ -116,7 +119,7 @@ export default function RestaurantAdmin() {
       <Stack
         sx={{
           backgroundColor: "#F3ECE4",
-          width: "85%",
+          width: { xl: "85%", md: "100%" },
         }}
         justifyContent={"center"}
         alignItems={"center"}
