@@ -8,6 +8,7 @@ import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { IPayload } from "../../models/payload.mode";
+import { useEffect } from "react";
 
 interface IFormInput {
   email: string;
@@ -27,7 +28,6 @@ export default function Login() {
   const [, setCookie] = useCookies();
   const navigate = useNavigate();
 
-  console.log("test");
   const onSubmit = async (loginData: IFormInput) => {
     try {
       const res = await axios.post(LOGIN_URL, loginData);

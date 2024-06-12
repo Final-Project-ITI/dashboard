@@ -11,8 +11,6 @@ const IsAuthGuard = ({ role }: { role: string | null }) => {
     return <Outlet />;
   }
 
-  console.log("ss");
-
   switch (payload?.role.name) {
     case "admin":
       return <Navigate to="/" replace />;

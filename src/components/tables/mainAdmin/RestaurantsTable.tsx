@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import {
   Box,
@@ -17,9 +17,48 @@ import AddIcon from "@mui/icons-material/Add";
 import icon from "../../../assets/logo.svg";
 import MainButton from "../../shared/MainButton";
 import AddRestaurantPopup from "../../popups/mainAdmin/AddRestaurantPopup";
+import { IUser } from "../../../models/user.model";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { RESTAURANTS_ADMINS_URL } from "../../../utils/URLs";
 
 export default function RestaurantsTable() {
   const [addRestaurantTrigger, setAddRestaurantTrigger] = useState(false);
+  const [restaurants, setRestaurants] = useState<IUser[]>([]);
+  const axiosPrivate = useAxiosPrivate();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handleGetRestuarants = async (page = 1) => {
+    try {
+      const { data } = await axiosPrivate.get(RESTAURANTS_ADMINS_URL + page);
+      setRestaurants(data);
+    } catch (e) {}
+  };
+
+  const handlePagination = async (direction: number) => {
+    if (!direction && currentPage == 1) return;
+
+    const { data } = await axiosPrivate.get(
+      `${RESTAURANTS_ADMINS_URL}${
+        direction ? currentPage + 1 : currentPage - 1
+      }`
+    );
+
+    if (data.length) {
+      setCurrentPage((pre) => {
+        if (direction) {
+          return ++pre;
+        } else {
+          return --pre;
+        }
+      });
+
+      setRestaurants(data);
+    }
+  };
+
+  useEffect(() => {
+    handleGetRestuarants();
+  }, []);
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -120,36 +159,47 @@ export default function RestaurantsTable() {
                 </TableHead>
 
                 <TableBody>
-                  <TableRow>
-                    <TableCell sx={tableBodyTextStyle}>Alsaraya</TableCell>
-                    <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
-                      <img
-                        src={icon}
-                        title="icon"
-                        style={{
-                          objectFit: "cover",
-                          width: "64px",
-                          height: "64px",
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        ...tableBodyTextStyle,
-                        ...hideContent,
-                        width: "200px",
-                        textAlign: "start",
-                      }}
-                    >
-                      Ammar Ibn Yasser St , Al villal, Zagazig
-                    </TableCell>
-                    <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
-                      01503852538
-                    </TableCell>
-                    <TableCell sx={tableBodyTextStyle}>
-                      waleed.almenawy@outlook.com
-                    </TableCell>
-                  </TableRow>
+                  {restaurants.map((admin) => {
+                    return (
+                      <TableRow>
+                        <TableCell sx={tableBodyTextStyle}>
+                          {admin.restaurantId?.name}
+                        </TableCell>
+                        <TableCell
+                          sx={{ ...tableHeadTextStyle, ...hideContent }}
+                        >
+                          <img
+                            src={admin.restaurantId?.icon}
+                            title="icon"
+                            style={{
+                              objectFit: "cover",
+                              width: "64px",
+                              height: "64px",
+                              borderRadius: "50%",
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            ...tableBodyTextStyle,
+                            ...hideContent,
+                            width: "200px",
+                            textAlign: "start",
+                          }}
+                        >
+                          {admin.restaurantId?.address}
+                        </TableCell>
+                        <TableCell
+                          sx={{ ...tableHeadTextStyle, ...hideContent }}
+                        >
+                          {admin.restaurantId?.phone}
+                        </TableCell>
+                        <TableCell sx={tableBodyTextStyle}>
+                          {admin.email}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
 
@@ -160,11 +210,11 @@ export default function RestaurantsTable() {
                   justifyContent={"space-between"}
                   alignItems={"center"}
                 >
-                  <IconButton>
+                  <IconButton onClick={() => handlePagination(0)}>
                     <ArrowBackIosNewIcon
                       fontSize="small"
                       sx={{
-                        color: "black",
+                        color: currentPage == 1 ? "" : "black",
                       }}
                     />
                   </IconButton>
@@ -172,7 +222,7 @@ export default function RestaurantsTable() {
                     sx={{
                       width: "20px",
                       height: "20px",
-                      color: "black",
+                      color: currentPage == 1 ? "#E4002B" : "black",
                       border: "solid 2px",
                       display: "flex",
                       justifyContent: "center",
@@ -181,13 +231,13 @@ export default function RestaurantsTable() {
                       fontWeight: "bold",
                     }}
                   >
-                    1
+                    {currentPage != 1 ? currentPage - 1 : 1}
                   </Box>
                   <Box
                     sx={{
                       width: "20px",
                       height: "20px",
-                      color: "#E4002B",
+                      color: currentPage == 1 ? "black" : "#E4002B",
                       border: "solid 2px",
                       display: "flex",
                       justifyContent: "center",
@@ -196,10 +246,15 @@ export default function RestaurantsTable() {
                       fontWeight: "bold",
                     }}
                   >
-                    2
+                    {currentPage != 1 ? currentPage : 2}
                   </Box>
-                  <IconButton>
-                    <ArrowForwardIosIcon fontSize="small" />
+                  <IconButton onClick={() => handlePagination(1)}>
+                    <ArrowForwardIosIcon
+                      fontSize="small"
+                      sx={{
+                        color: "black",
+                      }}
+                    />
                   </IconButton>
                 </Stack>
               </Stack>

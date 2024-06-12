@@ -7,22 +7,12 @@ export const FormInputFile = ({
   control,
   label,
   type,
-}: FormInputProps) => {
+  register,
+}: any) => {
   return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field: { onChange, value }, fieldState: { error } }) => (
-        <Button
-          variant="contained"
-          component="label"
-          fullWidth
-          color="secondary"
-        >
-          Choose File
-          <input onChange={onChange} value={value} type="file" hidden />
-        </Button>
-      )}
-    />
+    <Button variant="contained" component="label" fullWidth color="secondary">
+      Choose File
+      <input ref={register} name={name} type="file" hidden />
+    </Button>
   );
 };

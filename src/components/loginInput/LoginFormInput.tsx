@@ -4,23 +4,24 @@ import { FormInputProps } from "../shared/formComponents/FormInputProps";
 
 export const LoginFormInput = ({ name, control, type }: FormInputProps) => {
   const borderStyle = {
+    "& .MuiInputBase-root": {
+      borderRadius: "50px",
+    },
     "& .MuiInput-underline:after": {
       borderBottomColor: "yellow",
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
-        borderRadius: "50px",
         borderColor: "#D74339",
       },
       "&:hover fieldset": {
-        borderRadius: "50px",
         borderColor: "#F3ECE4",
       },
       "&.Mui-focused fieldset": {
-        borderRadius: "50px",
         borderColor: "black",
       },
     },
+    "& .MuiTextField-root": { borderRadius: "50px" },
   };
 
   return (

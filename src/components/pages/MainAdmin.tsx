@@ -6,22 +6,39 @@ import PersonSVG from "../../assets/svgs/PersonSVG";
 
 import RestaurantsTable from "../tables/mainAdmin/RestaurantsTable";
 
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { IUser } from "../../models/user.model";
+import { USER_URL } from "../../utils/URLs";
 
 export default function MainAdmin() {
   const navigate = useNavigate();
   const { setAuth }: any = useAuth();
+  const axiosPrivate = useAxiosPrivate();
   const [, , removeCookie] = useCookies();
+  const [admin, setAdmin] = useState<IUser>();
 
   function handleLogout() {
     setAuth({
       token: "",
     });
     removeCookie("token");
-    // navigate("/login", { replace: true });
+    navigate("/login", { replace: true });
   }
+
+  useEffect(() => {
+    handleGetAdminData();
+  }, []);
+
+  const handleGetAdminData = async () => {
+    try {
+      const { data } = await axiosPrivate.get(USER_URL);
+      setAdmin(data);
+    } catch (e) {}
+  };
 
   return (
     <Stack height={"100vh"} direction={{ xl: "row", xs: "column" }}>
@@ -44,7 +61,7 @@ export default function MainAdmin() {
               marginBottom: "8px",
             }}
           >
-            User Name
+            {admin?.fullName}
           </Typography>
           <Typography
             sx={{
