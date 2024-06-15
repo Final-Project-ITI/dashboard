@@ -1,24 +1,56 @@
-import { Box, Stack, Button, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
+import { MENU_CATEGORY_URL } from "../../../../utils/URLs";
 import { FormInputText } from "../../../shared/formComponents/FormInputText";
 
 interface IFormInput {
-  category: string;
+  name: string;
+  icon: any;
 }
 
 const defaultValues = {
-  category: "",
+  name: "",
 };
 
-export default function AddCategory({ trigger, setTrigger, isAdd }: any) {
+export default function AddCategory({
+  trigger,
+  setTrigger,
+  isAdd,
+  menuCategory,
+}: any) {
   const methods = useForm<IFormInput>({ defaultValues: defaultValues });
-  const { handleSubmit, reset, control, setValue, watch } = methods;
-  const onSubmit = (data: IFormInput) => console.log(data);
+  const { handleSubmit, reset, control, setValue, watch, register } = methods;
+  const axiosPrivate = useAxiosPrivate();
+
+  const onSubmit = async (data: IFormInput) => {
+    const formData = new FormData();
+
+    formData.append("name", data.name);
+    formData.append("icon", data.icon[0]);
+
+    let res: any;
+
+    if (isAdd) res = await axiosPrivate.post(MENU_CATEGORY_URL, formData);
+    else {
+      res = await axiosPrivate.patch(
+        MENU_CATEGORY_URL + "/" + menuCategory?._id,
+        formData
+      );
+    }
+  };
 
   const labelStyle = {
     fontSize: "16px",
     marginBottom: "8px",
   };
+
+  useEffect(() => {
+    if (!isAdd) {
+      setValue("name", menuCategory?.name);
+    }
+  }, [menuCategory]);
 
   return (
     <>
@@ -54,15 +86,35 @@ export default function AddCategory({ trigger, setTrigger, isAdd }: any) {
               Categories
             </Typography>
             <Stack spacing={"8px"}>
-              <Box>
-                <Typography sx={labelStyle}>Category</Typography>
-                <FormInputText
-                  name="category"
-                  control={control}
-                  label="Category"
-                  type="text"
-                />
-              </Box>
+              <form>
+                <Box>
+                  <Typography sx={labelStyle}>Category</Typography>
+                  <FormInputText
+                    name="name"
+                    control={control}
+                    label="Category"
+                    type="text"
+                  />
+                </Box>
+
+                <Box>
+                  <Typography sx={labelStyle}>Icon</Typography>
+                  <Button
+                    variant="contained"
+                    component="label"
+                    fullWidth
+                    color="secondary"
+                  >
+                    Choose File
+                    <input
+                      {...register("icon")}
+                      name="icon"
+                      type="file"
+                      hidden
+                    />
+                  </Button>
+                </Box>
+              </form>
             </Stack>
 
             <Stack

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import {
   Box,
@@ -19,11 +19,56 @@ import PinSVG from "../../../assets/svgs/PinSVG";
 import TrashSVG from "../../../assets/svgs/TrashSVG";
 import AddIngredient from "../../popups/restaurantAdmin/ingredients/AddIngredient";
 import DeleteIngredientPopup from "../../popups/restaurantAdmin/ingredients/DeleteIngredient";
+import { IIngredient } from "../../../models/ingredient.model";
+import { INGREDIENT_URL } from "../../../utils/URLs";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 export default function IngredientsTable() {
   const [addIngredientTrigger, setAddIngredientTrigger] = useState(false);
   const [deleteItemTrigger, setDeleteCategoryTrigger] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
+  const [data, setData] = useState<IIngredient[]>([]);
+
+  const axiosPrivate = useAxiosPrivate();
+
+  const [ingredients, setIngredients] = useState<IIngredient[]>([]);
+  const [ingredient, setIngredient] = useState<IIngredient>();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handleDeleteIngredient = (item: IIngredient) => {
+    setIngredient(item);
+    setDeleteCategoryTrigger(true);
+  };
+
+  const handleGetIngredients = async () => {
+    try {
+      const res = await axiosPrivate.get(INGREDIENT_URL);
+      setData(res.data);
+    } catch (e) {}
+  };
+
+  const handlePagination = async (direction: number) => {
+    const pageSize = 5;
+    let page = currentPage;
+
+    if (direction && currentPage == Math.ceil(data.length / pageSize)) return;
+    if (!direction && currentPage == 1) return;
+
+    setCurrentPage((pre) => {
+      if (direction) {
+        page++;
+        return ++pre;
+      } else {
+        page--;
+        return --pre;
+      }
+    });
+
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    setIngredients(data.slice(startIndex, endIndex));
+  };
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -39,9 +84,13 @@ export default function IngredientsTable() {
     borderBottom: "none",
   };
 
-  const handleDeleteIngredient = () => {
-    setDeleteCategoryTrigger(true);
-  };
+  useEffect(() => {
+    handleGetIngredients();
+  }, []);
+
+  useEffect(() => {
+    setIngredients(data.slice(0, 5));
+  }, [data]);
 
   return (
     <>
@@ -82,10 +131,12 @@ export default function IngredientsTable() {
             trigger={addIngredientTrigger}
             setTrigger={setAddIngredientTrigger}
             isAdd={isAdd}
+            ingredient={ingredient}
           />
           <DeleteIngredientPopup
             trigger={deleteItemTrigger}
             setTrigger={setDeleteCategoryTrigger}
+            ingredient={ingredient}
           />
           <Box
             sx={{
@@ -115,24 +166,37 @@ export default function IngredientsTable() {
                 </TableHead>
 
                 <TableBody>
-                  <TableRow>
-                    <TableCell sx={tableBodyTextStyle}>Tomato</TableCell>
+                  {ingredients.length
+                    ? ingredients.map((ingredient) => {
+                        return (
+                          <TableRow>
+                            <TableCell sx={tableBodyTextStyle}>
+                              {ingredient.name}
+                            </TableCell>
 
-                    <TableCell sx={tableBodyTextStyle}>
-                      <IconButton
-                        onClick={() => {
-                          setAddIngredientTrigger(true);
-                          setIsAdd(false);
-                        }}
-                      >
-                        <PinSVG />
-                      </IconButton>
+                            <TableCell sx={tableBodyTextStyle}>
+                              <IconButton
+                                onClick={() => {
+                                  setIngredient(ingredient);
+                                  setIsAdd(false);
+                                  setAddIngredientTrigger(true);
+                                }}
+                              >
+                                <PinSVG />
+                              </IconButton>
 
-                      <IconButton onClick={() => handleDeleteIngredient()}>
-                        <TrashSVG />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
+                              <IconButton
+                                onClick={() =>
+                                  handleDeleteIngredient(ingredient)
+                                }
+                              >
+                                <TrashSVG />
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    : ""}
                 </TableBody>
               </Table>
 
@@ -143,11 +207,11 @@ export default function IngredientsTable() {
                   justifyContent={"space-between"}
                   alignItems={"center"}
                 >
-                  <IconButton>
+                  <IconButton onClick={() => handlePagination(0)}>
                     <ArrowBackIosNewIcon
                       fontSize="small"
                       sx={{
-                        color: "black",
+                        color: currentPage == 1 ? "" : "black",
                       }}
                     />
                   </IconButton>
@@ -155,7 +219,7 @@ export default function IngredientsTable() {
                     sx={{
                       width: "20px",
                       height: "20px",
-                      color: "black",
+                      color: currentPage == 1 ? "#E4002B" : "black",
                       border: "solid 2px",
                       display: "flex",
                       justifyContent: "center",
@@ -164,13 +228,13 @@ export default function IngredientsTable() {
                       fontWeight: "bold",
                     }}
                   >
-                    1
+                    {currentPage != 1 ? currentPage - 1 : 1}
                   </Box>
                   <Box
                     sx={{
                       width: "20px",
                       height: "20px",
-                      color: "#E4002B",
+                      color: currentPage == 1 ? "black" : "#E4002B",
                       border: "solid 2px",
                       display: "flex",
                       justifyContent: "center",
@@ -179,16 +243,19 @@ export default function IngredientsTable() {
                       fontWeight: "bold",
                     }}
                   >
-                    2
+                    {currentPage != 1 ? currentPage : 2}
                   </Box>
-                  <IconButton>
-                    <ArrowForwardIosIcon fontSize="small" />
+                  <IconButton onClick={() => handlePagination(1)}>
+                    <ArrowForwardIosIcon
+                      fontSize="small"
+                      sx={{
+                        color: currentPage == 1 ? "black" : "",
+                      }}
+                    />
                   </IconButton>
                 </Stack>
               </Stack>
             </Stack>
-
-            <Stack></Stack>
           </Box>
         </Stack>
       </Stack>

@@ -12,8 +12,26 @@ import {
 } from "@mui/material";
 import icon from "../../../assets/logo.svg";
 import ExitSVG from "../../../assets/svgs/ExitSVG";
+import { useEffect, useState } from "react";
+import { IOrder } from "../../../models/order.model";
+import { IItem } from "../../../models/item.model";
 
-export default function OrderDetailsPopup({ trigger, setTrigger }: any) {
+export default function OrderDetailsPopup({
+  trigger,
+  setTrigger,
+  order,
+  items,
+  handleTotalPrice,
+}: {
+  order: IOrder;
+  items: IItem[];
+  trigger: any;
+  setTrigger: any;
+  handleTotalPrice: any;
+}) {
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [orderItems, setOrderItems] = useState<IItem[]>([]);
+
   const headerStyle = {
     fontSize: "24px",
     fontWeight: "bold",
@@ -26,6 +44,11 @@ export default function OrderDetailsPopup({ trigger, setTrigger }: any) {
     color: "#D7433980",
     textAlign: "center",
   };
+
+  useEffect(() => {
+    setOrderItems(items.filter((item) => item.orderId === order._id));
+    setTotalPrice(handleTotalPrice(order?._id));
+  }, [order]);
 
   return (
     <>
@@ -72,7 +95,7 @@ export default function OrderDetailsPopup({ trigger, setTrigger }: any) {
                   alignItems={"flex-end"}
                 >
                   <Typography sx={tableHeaderStyle}>Name:</Typography>
-                  <Typography>Hamada</Typography>
+                  <Typography>{order.userId.fullName}</Typography>
                 </Stack>
                 <Stack
                   direction={"row"}
@@ -80,7 +103,7 @@ export default function OrderDetailsPopup({ trigger, setTrigger }: any) {
                   alignItems={"flex-end"}
                 >
                   <Typography sx={tableHeaderStyle}>E-Mail:</Typography>
-                  <Typography>waleed.almenawy@oulook.com</Typography>
+                  <Typography>{order.userId.email}</Typography>
                 </Stack>
                 <Stack
                   direction={"row"}
@@ -88,7 +111,7 @@ export default function OrderDetailsPopup({ trigger, setTrigger }: any) {
                   alignItems={"flex-end"}
                 >
                   <Typography sx={tableHeaderStyle}>Phone:</Typography>
-                  <Typography>01503852538</Typography>
+                  <Typography>{order.phoneId.phoneNumber}</Typography>
                 </Stack>
               </Stack>
               <Typography sx={headerStyle}>Order Details</Typography>
@@ -117,156 +140,49 @@ export default function OrderDetailsPopup({ trigger, setTrigger }: any) {
                     </TableHead>
 
                     <TableBody>
-                      <TableRow>
-                        <TableCell>
-                          <Stack
-                            direction={"row"}
-                            alignItems={"center"}
-                            spacing={"30px"}
-                          >
-                            <img
-                              src={icon}
-                              title="icon"
-                              style={{
-                                objectFit: "cover",
-                                width: "60px",
-                                height: "60px",
-                              }}
-                            />
-                            <Typography>Margherita pizza</Typography>
-                          </Stack>
-                        </TableCell>
+                      {orderItems.length
+                        ? orderItems.map((item) => (
+                            <TableRow>
+                              <TableCell>
+                                <Stack
+                                  direction={"row"}
+                                  alignItems={"center"}
+                                  spacing={"30px"}
+                                >
+                                  <img
+                                    src={item.productId.icon}
+                                    title="icon"
+                                    style={{
+                                      objectFit: "cover",
+                                      borderRadius: "50px",
+                                      width: "60px",
+                                      height: "60px",
+                                    }}
+                                  />
+                                  <Typography>
+                                    {item.productId.title}
+                                  </Typography>
+                                </Stack>
+                              </TableCell>
 
-                        <TableCell>
-                          <Typography textAlign={"center"}>2</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography textAlign={"center"}>EGP 120</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography textAlign={"center"}>EGP 240</Typography>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <Stack
-                            direction={"row"}
-                            alignItems={"center"}
-                            spacing={"30px"}
-                          >
-                            <img
-                              src={icon}
-                              title="icon"
-                              style={{
-                                objectFit: "cover",
-                                width: "60px",
-                                height: "60px",
-                              }}
-                            />
-                            <Typography>Margherita pizza</Typography>
-                          </Stack>
-                        </TableCell>
-
-                        <TableCell>
-                          <Typography textAlign={"center"}>2</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography textAlign={"center"}>EGP 120</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography textAlign={"center"}>EGP 240</Typography>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <Stack
-                            direction={"row"}
-                            alignItems={"center"}
-                            spacing={"30px"}
-                          >
-                            <img
-                              src={icon}
-                              title="icon"
-                              style={{
-                                objectFit: "cover",
-                                width: "60px",
-                                height: "60px",
-                              }}
-                            />
-                            <Typography>Margherita pizza</Typography>
-                          </Stack>
-                        </TableCell>
-
-                        <TableCell>
-                          <Typography textAlign={"center"}>2</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography textAlign={"center"}>EGP 120</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography textAlign={"center"}>EGP 240</Typography>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <Stack
-                            direction={"row"}
-                            alignItems={"center"}
-                            spacing={"30px"}
-                          >
-                            <img
-                              src={icon}
-                              title="icon"
-                              style={{
-                                objectFit: "cover",
-                                width: "60px",
-                                height: "60px",
-                              }}
-                            />
-                            <Typography>Margherita pizza</Typography>
-                          </Stack>
-                        </TableCell>
-
-                        <TableCell>
-                          <Typography textAlign={"center"}>2</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography textAlign={"center"}>EGP 120</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography textAlign={"center"}>EGP 240</Typography>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <Stack
-                            direction={"row"}
-                            alignItems={"center"}
-                            spacing={"30px"}
-                          >
-                            <img
-                              src={icon}
-                              title="icon"
-                              style={{
-                                objectFit: "cover",
-                                width: "60px",
-                                height: "60px",
-                              }}
-                            />
-                            <Typography>Margherita pizza</Typography>
-                          </Stack>
-                        </TableCell>
-
-                        <TableCell>
-                          <Typography textAlign={"center"}>2</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography textAlign={"center"}>EGP 120</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography textAlign={"center"}>EGP 240</Typography>
-                        </TableCell>
-                      </TableRow>
+                              <TableCell>
+                                <Typography textAlign={"center"}>
+                                  {item.quantity}
+                                </Typography>
+                              </TableCell>
+                              <TableCell>
+                                <Typography textAlign={"center"}>
+                                  EGP {item.productId.price}
+                                </Typography>
+                              </TableCell>
+                              <TableCell>
+                                <Typography textAlign={"center"}>
+                                  EGP {item.quantity * item.productId.price}
+                                </Typography>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        : ""}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -283,7 +199,7 @@ export default function OrderDetailsPopup({ trigger, setTrigger }: any) {
                   >
                     Total
                   </Typography>
-                  <Typography>EGP 440</Typography>
+                  <Typography>EGP {totalPrice}</Typography>
                 </Stack>
               </Stack>
             </Stack>

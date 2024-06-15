@@ -21,17 +21,17 @@ export default function MainAdmin() {
   const [, , removeCookie] = useCookies();
   const [admin, setAdmin] = useState<IUser>();
 
-  function handleLogout() {
+  useEffect(() => {
+    handleGetAdminData();
+  }, []);
+
+  const handleLogout = () => {
     setAuth({
       token: "",
     });
     removeCookie("token");
     navigate("/login", { replace: true });
-  }
-
-  useEffect(() => {
-    handleGetAdminData();
-  }, []);
+  };
 
   const handleGetAdminData = async () => {
     try {
@@ -56,7 +56,7 @@ export default function MainAdmin() {
         >
           <Typography
             sx={{
-              fontSize: "28px",
+              fontSize: "24px",
               fontWeight: "bold",
               marginBottom: "8px",
             }}
@@ -65,7 +65,7 @@ export default function MainAdmin() {
           </Typography>
           <Typography
             sx={{
-              fontSize: "24px",
+              fontSize: "20px",
               fontWeight: "bold",
               color: "#0A0A0A80",
               marginBottom: "80px",

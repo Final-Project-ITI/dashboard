@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import {
   Box,
@@ -16,9 +16,16 @@ import AddIcon from "@mui/icons-material/Add";
 
 import MainButton from "../../shared/MainButton";
 import AddCashier from "../../popups/restaurantAdmin/cashier/AddCashier";
+import { IUser } from "../../../models/user.model";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { RESTAURANTS_CAHSIERS_URL } from "../../../utils/URLs";
 
 export default function CashierTable() {
   const [addCashierTrigger, setAddCashierTrigger] = useState(false);
+  const axiosPrivate = useAxiosPrivate();
+  const [data, setData] = useState<IUser[]>([]);
+  const [cashiers, setCashiers] = useState<IUser[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -33,6 +40,44 @@ export default function CashierTable() {
     fontSize: "16px",
     borderBottom: "none",
   };
+
+  const handleGetCashiers = async () => {
+    try {
+      const res = await axiosPrivate.get(RESTAURANTS_CAHSIERS_URL);
+      setData(res.data);
+    } catch (e) {}
+  };
+
+  const handlePagination = async (direction: number) => {
+    const pageSize = 7;
+    let page = currentPage;
+
+    if (direction && currentPage == Math.ceil(data.length / pageSize)) return;
+    if (!direction && currentPage == 1) return;
+
+    setCurrentPage((pre) => {
+      if (direction) {
+        page++;
+        return ++pre;
+      } else {
+        page--;
+        return --pre;
+      }
+    });
+
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    setCashiers(data.slice(startIndex, endIndex));
+  };
+
+  useEffect(() => {
+    handleGetCashiers();
+  }, []);
+
+  useEffect(() => {
+    setCashiers(data.slice(0, 7));
+  }, [data]);
 
   return (
     <>
@@ -101,14 +146,20 @@ export default function CashierTable() {
                 </TableHead>
 
                 <TableBody>
-                  <TableRow>
-                    <TableCell sx={tableBodyTextStyle}>
-                      Waleed Almenawy
-                    </TableCell>
-                    <TableCell sx={tableBodyTextStyle}>
-                      waleed.almenawy@outlook.com
-                    </TableCell>
-                  </TableRow>
+                  {cashiers.length
+                    ? cashiers.map((cashier) => {
+                        return (
+                          <TableRow>
+                            <TableCell sx={tableBodyTextStyle}>
+                              {cashier.fullName}
+                            </TableCell>
+                            <TableCell sx={tableBodyTextStyle}>
+                              {cashier.email}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    : ""}
                 </TableBody>
               </Table>
 
@@ -119,11 +170,11 @@ export default function CashierTable() {
                   justifyContent={"space-between"}
                   alignItems={"center"}
                 >
-                  <IconButton>
+                  <IconButton onClick={() => handlePagination(0)}>
                     <ArrowBackIosNewIcon
                       fontSize="small"
                       sx={{
-                        color: "black",
+                        color: currentPage == 1 ? "" : "black",
                       }}
                     />
                   </IconButton>
@@ -131,7 +182,7 @@ export default function CashierTable() {
                     sx={{
                       width: "20px",
                       height: "20px",
-                      color: "black",
+                      color: currentPage == 1 ? "#E4002B" : "black",
                       border: "solid 2px",
                       display: "flex",
                       justifyContent: "center",
@@ -140,13 +191,13 @@ export default function CashierTable() {
                       fontWeight: "bold",
                     }}
                   >
-                    1
+                    {currentPage != 1 ? currentPage - 1 : 1}
                   </Box>
                   <Box
                     sx={{
                       width: "20px",
                       height: "20px",
-                      color: "#E4002B",
+                      color: currentPage == 1 ? "black" : "#E4002B",
                       border: "solid 2px",
                       display: "flex",
                       justifyContent: "center",
@@ -155,10 +206,18 @@ export default function CashierTable() {
                       fontWeight: "bold",
                     }}
                   >
-                    2
+                    {currentPage != 1 ? currentPage : 2}
                   </Box>
-                  <IconButton>
-                    <ArrowForwardIosIcon fontSize="small" />
+                  <IconButton onClick={() => handlePagination(1)}>
+                    <ArrowForwardIosIcon
+                      fontSize="small"
+                      sx={{
+                        color:
+                          currentPage == Math.ceil(data.length / 7)
+                            ? ""
+                            : "black",
+                      }}
+                    />
                   </IconButton>
                 </Stack>
               </Stack>

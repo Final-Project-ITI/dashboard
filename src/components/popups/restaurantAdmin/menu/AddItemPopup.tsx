@@ -1,33 +1,74 @@
-import { Box, Paper, Stack, Button, Typography, Input } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { FormInputText } from "../../../shared/formComponents/FormInputText";
+import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
+import { IIngredient } from "../../../../models/ingredient.model";
+import { CREATE_PRODUCT_URL } from "../../../../utils/URLs";
 import { FormInputDropdown } from "../../../shared/formComponents/FormInputDropDown";
-import { FormInputFile } from "../../../shared/formComponents/FormInputFile";
-import { useEffect } from "react";
+import { FormInputTags } from "../../../shared/formComponents/FormInputTags";
+import { FormInputText } from "../../../shared/formComponents/FormInputText";
 
 interface IFormInput {
-  itemName: string;
-  price: number | null;
-  image: string;
+  title: string;
+  price: string;
+  icon: any;
+  description: string;
   category: string;
 }
 
 const defaultValues = {
-  itemName: "",
-  price: null,
-  image: "",
+  title: "",
+  price: "",
+  description: "",
   category: "",
 };
 
 export default function AddItemPopup({
   trigger,
   setTrigger,
-  data,
   isAdd,
+  menuItem,
+  ingredients,
+  setIngredients,
+  categories,
 }: any) {
   const methods = useForm<IFormInput>({ defaultValues: defaultValues });
-  const { handleSubmit, reset, control, setValue, watch } = methods;
-  const onSubmit = (data: IFormInput) => console.log(data);
+  const { handleSubmit, reset, control, setValue, register } = methods;
+  const [tags, setTags] = useState<IIngredient[]>([]);
+  const axiosPrivate = useAxiosPrivate();
+
+  const onSubmit = async (data: IFormInput) => {
+    const formData = new FormData();
+
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("price", data.price);
+    if (data.icon[0]) formData.append("icon", data.icon[0]);
+    formData.append("menuCategoryId", data.category);
+    tags.forEach((element) => {
+      formData.append("ingredientsIds", element._id);
+    });
+
+    let res: any;
+
+    if (isAdd) res = await axiosPrivate.post(CREATE_PRODUCT_URL, formData);
+    else {
+      res = await axiosPrivate.patch(
+        CREATE_PRODUCT_URL + "/" + menuItem?._id,
+        formData
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (!isAdd) {
+      setValue("title", menuItem?.title);
+      setValue("price", menuItem?.price);
+      setValue("description", menuItem?.description);
+      setValue("category", menuItem?.menuCategoryId);
+      setTags(menuItem?.ingredientsIds);
+    }
+  }, [menuItem]);
 
   const labelStyle = {
     fontSize: "16px",
@@ -71,9 +112,18 @@ export default function AddItemPopup({
               <Box>
                 <Typography sx={labelStyle}>Item Name</Typography>
                 <FormInputText
-                  name="itemName"
+                  name="title"
                   control={control}
                   label="Item Name"
+                  type="text"
+                />
+              </Box>
+              <Box>
+                <Typography sx={labelStyle}>Description</Typography>
+                <FormInputText
+                  name="description"
+                  control={control}
+                  label="Description"
                   type="text"
                 />
               </Box>
@@ -89,8 +139,16 @@ export default function AddItemPopup({
               </Box>
 
               <Box>
-                <Typography sx={labelStyle}>Image</Typography>
-                <FormInputFile name="image" control={control} label="EGP" />
+                <Typography sx={labelStyle}>Icon</Typography>
+                <Button
+                  variant="contained"
+                  component="label"
+                  fullWidth
+                  color="secondary"
+                >
+                  Choose File
+                  <input {...register("icon")} name="icon" type="file" hidden />
+                </Button>
               </Box>
 
               <Box>
@@ -99,6 +157,16 @@ export default function AddItemPopup({
                   name="category"
                   control={control}
                   label="Choose Category"
+                  categories={categories}
+                />
+              </Box>
+              <Box>
+                <Typography sx={labelStyle}>Ingredients</Typography>
+                <FormInputTags
+                  ingredients={ingredients}
+                  setIngredients={setIngredients}
+                  tags={tags}
+                  setTags={setTags}
                 />
               </Box>
             </Stack>
@@ -114,6 +182,7 @@ export default function AddItemPopup({
                 onClick={() => {
                   reset();
                   setTrigger(false);
+                  setTags([]);
                 }}
                 variant={"outlined"}
                 sx={{

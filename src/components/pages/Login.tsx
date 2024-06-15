@@ -8,7 +8,6 @@ import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { IPayload } from "../../models/payload.mode";
-import { useEffect } from "react";
 
 interface IFormInput {
   email: string;

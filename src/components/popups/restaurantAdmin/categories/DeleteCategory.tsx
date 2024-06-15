@@ -1,9 +1,20 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
+import { MENU_CATEGORY_URL } from "../../../../utils/URLs";
+import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 
-export default function DeleteCategoryPopup({ trigger, setTrigger }: any) {
-  const handleDelete = () => {
-    console.log("delete");
+export default function DeleteCategoryPopup({
+  trigger,
+  setTrigger,
+  menuCategory,
+}: any) {
+  const axiosPrivate = useAxiosPrivate();
+
+  const handleDelete = async () => {
+    const res = await axiosPrivate.delete(
+      MENU_CATEGORY_URL + "/" + menuCategory._id
+    );
   };
+
   return (
     <>
       {trigger ? (

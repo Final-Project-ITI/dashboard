@@ -1,29 +1,46 @@
 import { Box, Button, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import * as React from "react";
 import ArrowDown from "../../assets/svgs/ArrowDown";
+import { MouseEvent, useEffect, useState } from "react";
+import { IOrderStatus } from "../../models/orderStatus.model";
+import { IOrder } from "../../models/order.model";
+import { GET_ORDERS_URL } from "../../utils/URLs";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-const options = [
-  "placed",
-  "confirmed",
-  "being prepared",
-  "ready for pickup",
-  "cancelled",
-];
-
-export default function StatusDropDown() {
-  const [currentOption, setCurrentOption] = React.useState("placed");
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+export default function StatusDropDown({
+  orderStatuses,
+  order,
+}: {
+  orderStatuses: IOrderStatus[];
+  order: IOrder;
+}) {
+  const [currentOption, setCurrentOption] = useState<IOrderStatus>({
+    _id: "",
+    status: "",
+  });
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const axiosPrivate = useAxiosPrivate();
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (option: string) => {
+  const handleClose = async (option: IOrderStatus) => {
     setAnchorEl(null);
+    handleUpdateOrderStatus(option._id);
     setCurrentOption(option);
   };
+
+  const handleUpdateOrderStatus = async (statusId: string) => {
+    await axiosPrivate.patch(GET_ORDERS_URL + "/" + order._id, {
+      statusId,
+    });
+  };
+
+  useEffect(() => {
+    setCurrentOption(order.statusId);
+  }, [order]);
 
   return (
     <Box>
@@ -42,7 +59,7 @@ export default function StatusDropDown() {
             color: "black",
           }}
         >
-          {currentOption}
+          {currentOption?.status}
         </Typography>
         <ArrowDown />
       </Button>
@@ -55,18 +72,18 @@ export default function StatusDropDown() {
         open={open}
         onClose={() => handleClose(currentOption)}
       >
-        {options.map((option) => (
+        {orderStatuses.map((orderStatus) => (
           <MenuItem
-            key={option}
-            selected={option === currentOption}
-            onClick={() => handleClose(option)}
+            key={orderStatus.status}
+            selected={orderStatus.status === currentOption.status}
+            onClick={() => handleClose(orderStatus)}
           >
             <Typography
               sx={{
                 textTransform: "capitalize",
               }}
             >
-              {option}
+              {orderStatus.status}
             </Typography>
           </MenuItem>
         ))}

@@ -29,8 +29,6 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
   const axiosPrivate = useAxiosPrivate();
 
   const onSubmit = async (data: IFormInput) => {
-    console.log(data);
-
     const formData = new FormData();
 
     formData.append("name", data.name);
@@ -42,7 +40,6 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
     formData.append("banner", data.banner[0]);
 
     const res = await axiosPrivate.post(CREATE_RESTAURANT_URL, formData);
-    console.log(res);
   };
 
   const labelStyle = {

@@ -2,7 +2,13 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
 
-export default function DateFilter({ label }: { label: string }) {
+export default function DateFilter({
+  label,
+  setDate,
+}: {
+  label: string;
+  setDate: any;
+}) {
   const [val, setVal] = useState<any>();
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -16,7 +22,7 @@ export default function DateFilter({ label }: { label: string }) {
         }}
         value={val}
         onChange={(date: any) => {
-          console.log(date.format("YYYY-MM-DD"));
+          setDate(date.format("YYYY-MM-DD"));
         }}
       />
     </LocalizationProvider>

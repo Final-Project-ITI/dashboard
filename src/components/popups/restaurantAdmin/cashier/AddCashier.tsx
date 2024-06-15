@@ -1,23 +1,31 @@
 import { Box, Stack, Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { FormInputText } from "../../../shared/formComponents/FormInputText";
+import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
+import { REGISTER_CASHIER_URL } from "../../../../utils/URLs";
 
 interface IFormInput {
-  name: string;
+  fullName: string;
   email: number | null;
   password: string;
 }
 
 const defaultValues = {
-  name: "",
+  fullName: "",
   email: null,
   password: "",
 };
 
 export default function AddCashier({ trigger, setTrigger }: any) {
   const methods = useForm<IFormInput>({ defaultValues: defaultValues });
-  const { handleSubmit, reset, control, setValue, watch } = methods;
-  const onSubmit = (data: IFormInput) => console.log(data);
+  const { handleSubmit, reset, control } = methods;
+  const axiosPrivate = useAxiosPrivate();
+
+  const onSubmit = async (data: IFormInput) => {
+    let res: any;
+
+    res = await axiosPrivate.post(REGISTER_CASHIER_URL, data);
+  };
 
   const labelStyle = {
     fontSize: "16px",
@@ -61,7 +69,7 @@ export default function AddCashier({ trigger, setTrigger }: any) {
               <Box>
                 <Typography sx={labelStyle}>Cashier Name</Typography>
                 <FormInputText
-                  name="name"
+                  name="fullName"
                   control={control}
                   label="Add Cashier Name"
                   type="text"

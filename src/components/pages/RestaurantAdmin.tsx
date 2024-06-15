@@ -7,16 +7,40 @@ import MenuSVG from "../../assets/svgs/MenuSVG";
 import PersonSVG from "../../assets/svgs/PersonSVG";
 import TomatoSVG from "../../assets/svgs/TomatoSVG";
 
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { Outlet, useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { USER_URL } from "../../utils/URLs";
+import { IUser } from "../../models/user.model";
+import { Context } from "../../App";
 
-export default function RestaurantAdmin() {
+export default function RestaurantAdmin({ setUser }: any) {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { setAuth }: any = useAuth();
+  const axiosPrivate = useAxiosPrivate();
+  const [, , removeCookie] = useCookies();
+  const user = useContext(Context);
 
   useEffect(() => {
-    console.log("ss");
+    handleGetAdminData();
   }, []);
+
+  const handleLogout = () => {
+    setAuth({
+      token: "",
+    });
+    removeCookie("token");
+    navigate("/login", { replace: true });
+  };
+
+  const handleGetAdminData = async () => {
+    try {
+      const { data } = await axiosPrivate.get(USER_URL);
+      setUser(data);
+    } catch (e) {}
+  };
 
   return (
     <Stack height={"100vh"} direction={{ xl: "row", xs: "column" }}>
@@ -34,22 +58,22 @@ export default function RestaurantAdmin() {
         >
           <Typography
             sx={{
-              fontSize: "28px",
+              fontSize: "24px",
               fontWeight: "bold",
               marginBottom: "8px",
             }}
           >
-            User Name
+            {user?.fullName}
           </Typography>
           <Typography
             sx={{
-              fontSize: "24px",
+              fontSize: "20px",
               fontWeight: "bold",
               color: "#0A0A0A80",
               marginBottom: "80px",
             }}
           >
-            Restaurant Name
+            {user?.restaurantId?.name.toUpperCase()}
           </Typography>
 
           <Stack
@@ -101,6 +125,7 @@ export default function RestaurantAdmin() {
               width={"100%"}
               text={"Log Out"}
               state={true}
+              handler={handleLogout}
             ></MainButton>
 
             <img

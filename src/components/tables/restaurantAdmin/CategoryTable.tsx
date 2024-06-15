@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import {
   Box,
@@ -18,14 +18,21 @@ import MainButton from "../../shared/MainButton";
 import PinSVG from "../../../assets/svgs/PinSVG";
 import TrashSVG from "../../../assets/svgs/TrashSVG";
 
-import DeleteIngredientPopup from "../../popups/restaurantAdmin/ingredients/DeleteIngredient";
 import AddCategory from "../../popups/restaurantAdmin/categories/AddCategory";
 import DeleteCategoryPopup from "../../popups/restaurantAdmin/categories/DeleteCategory";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { IMenuCategory } from "../../../models/menuCategory.model";
+import { MENU_CATEGORY_URL } from "../../../utils/URLs";
 
 export default function CategoryTable() {
   const [addCategoryTrigger, setAddCategoryTrigger] = useState(false);
   const [deleteCategoryTrigger, setDeleteCategoryTrigger] = useState(false);
+  const axiosPrivate = useAxiosPrivate();
   const [isAdd, setIsAdd] = useState(false);
+  const [data, setData] = useState<IMenuCategory[]>([]);
+  const [menuCategories, setMenuCategories] = useState<IMenuCategory[]>([]);
+  const [menuCategory, setMenuCategory] = useState<IMenuCategory>();
+  const [currentPage, setCurrentPage] = useState(1);
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -41,9 +48,48 @@ export default function CategoryTable() {
     borderBottom: "none",
   };
 
-  const handleDeleteCategory = () => {
+  const handleDeleteCategory = (item: IMenuCategory) => {
+    setMenuCategory(item);
     setDeleteCategoryTrigger(true);
   };
+
+  const handleGetMenuCategories = async () => {
+    try {
+      const res = await axiosPrivate.get(MENU_CATEGORY_URL);
+      setData(res.data);
+    } catch (e) {}
+  };
+
+  const handlePagination = async (direction: number) => {
+    const pageSize = 5;
+    let page = currentPage;
+
+    if (direction && currentPage == Math.ceil(data.length / pageSize)) return;
+    if (!direction && currentPage == 1) return;
+
+    setCurrentPage((pre) => {
+      if (direction) {
+        page++;
+        return ++pre;
+      } else {
+        page--;
+        return --pre;
+      }
+    });
+
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    setMenuCategories(data.slice(startIndex, endIndex));
+  };
+
+  useEffect(() => {
+    handleGetMenuCategories();
+  }, []);
+
+  useEffect(() => {
+    setMenuCategories(data.slice(0, 5));
+  }, [data]);
 
   return (
     <>
@@ -84,10 +130,12 @@ export default function CategoryTable() {
             trigger={addCategoryTrigger}
             setTrigger={setAddCategoryTrigger}
             isAdd={isAdd}
+            menuCategory={menuCategory}
           />
           <DeleteCategoryPopup
             trigger={deleteCategoryTrigger}
             setTrigger={setDeleteCategoryTrigger}
+            menuCategory={menuCategory}
           />
           <Box
             sx={{
@@ -117,24 +165,37 @@ export default function CategoryTable() {
                 </TableHead>
 
                 <TableBody>
-                  <TableRow>
-                    <TableCell sx={tableBodyTextStyle}>Pizza</TableCell>
+                  {menuCategories.length
+                    ? menuCategories.map((menuCategory) => {
+                        return (
+                          <TableRow>
+                            <TableCell sx={tableBodyTextStyle}>
+                              {menuCategory.name}
+                            </TableCell>
 
-                    <TableCell sx={tableBodyTextStyle}>
-                      <IconButton
-                        onClick={() => {
-                          setIsAdd(false);
-                          setAddCategoryTrigger(true);
-                        }}
-                      >
-                        <PinSVG />
-                      </IconButton>
+                            <TableCell sx={tableBodyTextStyle}>
+                              <IconButton
+                                onClick={() => {
+                                  setMenuCategory(menuCategory);
+                                  setIsAdd(false);
+                                  setAddCategoryTrigger(true);
+                                }}
+                              >
+                                <PinSVG />
+                              </IconButton>
 
-                      <IconButton onClick={() => handleDeleteCategory()}>
-                        <TrashSVG />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
+                              <IconButton
+                                onClick={() =>
+                                  handleDeleteCategory(menuCategory)
+                                }
+                              >
+                                <TrashSVG />
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    : ""}
                 </TableBody>
               </Table>
 
@@ -145,11 +206,11 @@ export default function CategoryTable() {
                   justifyContent={"space-between"}
                   alignItems={"center"}
                 >
-                  <IconButton>
+                  <IconButton onClick={() => handlePagination(0)}>
                     <ArrowBackIosNewIcon
                       fontSize="small"
                       sx={{
-                        color: "black",
+                        color: currentPage == 1 ? "" : "black",
                       }}
                     />
                   </IconButton>
@@ -157,7 +218,7 @@ export default function CategoryTable() {
                     sx={{
                       width: "20px",
                       height: "20px",
-                      color: "black",
+                      color: currentPage == 1 ? "#E4002B" : "black",
                       border: "solid 2px",
                       display: "flex",
                       justifyContent: "center",
@@ -166,13 +227,13 @@ export default function CategoryTable() {
                       fontWeight: "bold",
                     }}
                   >
-                    1
+                    {currentPage != 1 ? currentPage - 1 : 1}
                   </Box>
                   <Box
                     sx={{
                       width: "20px",
                       height: "20px",
-                      color: "#E4002B",
+                      color: currentPage == 1 ? "black" : "#E4002B",
                       border: "solid 2px",
                       display: "flex",
                       justifyContent: "center",
@@ -181,16 +242,22 @@ export default function CategoryTable() {
                       fontWeight: "bold",
                     }}
                   >
-                    2
+                    {currentPage != 1 ? currentPage : 2}
                   </Box>
-                  <IconButton>
-                    <ArrowForwardIosIcon fontSize="small" />
+                  <IconButton onClick={() => handlePagination(1)}>
+                    <ArrowForwardIosIcon
+                      fontSize="small"
+                      sx={{
+                        color:
+                          currentPage == Math.ceil(data.length / 5)
+                            ? ""
+                            : "black",
+                      }}
+                    />
                   </IconButton>
                 </Stack>
               </Stack>
             </Stack>
-
-            <Stack></Stack>
           </Box>
         </Stack>
       </Stack>

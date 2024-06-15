@@ -11,14 +11,47 @@ import {
   Typography,
 } from "@mui/material";
 import Table from "@mui/material/Table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import DetailsSVG from "../../../assets/svgs/DetailsSVG";
+import { IItem } from "../../../models/item.model";
+import { IOrder } from "../../../models/order.model";
 import OrderDetailsPopup from "../../popups/restaurnatCashier/OrderDetailsPopup";
 import StatusDropDown from "../../shared/StatusDropDown";
 
-export default function OrdersTable() {
+export default function OrdersTable({
+  data,
+  orders,
+  setOrders,
+  orderStatuses,
+  currentPage,
+  setCurrentPage,
+  handlePagination,
+}: any) {
   const [orderDetailsTrigger, setOrderDetailsTrigger] = useState(false);
+  const [order, setOrder] = useState<IOrder>();
+  const [items, setItems] = useState<IItem[]>([]);
+
+  const handleTotalPrice = (orderId: string) => {
+    const filteredItems = items.filter((item) => item.orderId === orderId);
+    let totalPrice = 0;
+
+    filteredItems.forEach((ele) => {
+      totalPrice += ele.productId.price * ele.quantity;
+    });
+
+    return totalPrice;
+  };
+
+  const handleDate = (date: string) => {
+    return new Date(date).toLocaleDateString();
+  };
+
+  useEffect(() => {
+    setCurrentPage(1);
+    setOrders(data?.orders.slice(0, 5));
+    setItems(data?.items);
+  }, [data]);
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -63,6 +96,9 @@ export default function OrdersTable() {
 
         <Stack>
           <OrderDetailsPopup
+            order={order}
+            items={items}
+            handleTotalPrice={handleTotalPrice}
             trigger={orderDetailsTrigger}
             setTrigger={setOrderDetailsTrigger}
           />
@@ -101,32 +137,43 @@ export default function OrdersTable() {
                 </TableHead>
 
                 <TableBody>
-                  <TableRow>
-                    <TableCell sx={tableBodyTextStyle}>
-                      Waleed Almenawy
-                    </TableCell>
-                    <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
-                      25-05-2024
-                    </TableCell>
-                    <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
-                      EGP 400
-                    </TableCell>
-                    <TableCell sx={tableBodyTextStyle}>
-                      <IconButton
-                        onClick={() => {
-                          setOrderDetailsTrigger(true);
-                        }}
-                      >
-                        <DetailsSVG />
-                      </IconButton>
-                    </TableCell>
-                    <TableCell sx={tableBodyTextStyle}>
-                      <StatusDropDown />
-                    </TableCell>
-                  </TableRow>
+                  {orders.length
+                    ? orders.map((order: IOrder) => (
+                        <TableRow>
+                          <TableCell sx={tableBodyTextStyle}>
+                            {order.userId.fullName}
+                          </TableCell>
+                          <TableCell
+                            sx={{ ...tableHeadTextStyle, ...hideContent }}
+                          >
+                            {handleDate(order.createdAt).split("/").join("-")}
+                          </TableCell>
+                          <TableCell
+                            sx={{ ...tableHeadTextStyle, ...hideContent }}
+                          >
+                            EGP {handleTotalPrice(order._id)}
+                          </TableCell>
+                          <TableCell sx={tableBodyTextStyle}>
+                            <IconButton
+                              onClick={() => {
+                                setOrder(order);
+                                setOrderDetailsTrigger(true);
+                              }}
+                            >
+                              <DetailsSVG />
+                            </IconButton>
+                          </TableCell>
+                          <TableCell sx={tableBodyTextStyle}>
+                            <StatusDropDown
+                              orderStatuses={orderStatuses}
+                              order={order}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    : ""}
                 </TableBody>
               </Table>
-
               <Stack width={"100%"} justifyContent={"center"} direction={"row"}>
                 <Stack
                   width={"120px"}
@@ -134,11 +181,11 @@ export default function OrdersTable() {
                   justifyContent={"space-between"}
                   alignItems={"center"}
                 >
-                  <IconButton>
+                  <IconButton onClick={() => handlePagination(0)}>
                     <ArrowBackIosNewIcon
                       fontSize="small"
                       sx={{
-                        color: "black",
+                        color: currentPage == 1 ? "" : "black",
                       }}
                     />
                   </IconButton>
@@ -146,7 +193,7 @@ export default function OrdersTable() {
                     sx={{
                       width: "20px",
                       height: "20px",
-                      color: "black",
+                      color: currentPage == 1 ? "#E4002B" : "black",
                       border: "solid 2px",
                       display: "flex",
                       justifyContent: "center",
@@ -155,13 +202,13 @@ export default function OrdersTable() {
                       fontWeight: "bold",
                     }}
                   >
-                    1
+                    {currentPage != 1 ? currentPage - 1 : 1}
                   </Box>
                   <Box
                     sx={{
                       width: "20px",
                       height: "20px",
-                      color: "#E4002B",
+                      color: currentPage == 1 ? "black" : "#E4002B",
                       border: "solid 2px",
                       display: "flex",
                       justifyContent: "center",
@@ -170,10 +217,18 @@ export default function OrdersTable() {
                       fontWeight: "bold",
                     }}
                   >
-                    2
+                    {currentPage != 1 ? currentPage : 2}
                   </Box>
-                  <IconButton>
-                    <ArrowForwardIosIcon fontSize="small" />
+                  <IconButton onClick={() => handlePagination(1)}>
+                    <ArrowForwardIosIcon
+                      fontSize="small"
+                      sx={{
+                        color:
+                          currentPage == Math.ceil(data?.orders.length / 5)
+                            ? ""
+                            : "black",
+                      }}
+                    />
                   </IconButton>
                 </Stack>
               </Stack>

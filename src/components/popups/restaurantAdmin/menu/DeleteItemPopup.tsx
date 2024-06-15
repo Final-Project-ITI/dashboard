@@ -1,8 +1,20 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
+import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
+import { CREATE_PRODUCT_URL } from "../../../../utils/URLs";
 
-export default function DeleteItemPopup({ trigger, setTrigger }: any) {
-  const handleDelete = () => {
-    console.log("delete");
+export default function DeleteItemPopup({
+  trigger,
+  setTrigger,
+  menuItem,
+}: any) {
+  const axiosPrivate = useAxiosPrivate();
+
+  const handleDelete = async () => {
+    const res = await axiosPrivate.delete(
+      CREATE_PRODUCT_URL + "/" + menuItem._id
+    );
+
+    setTrigger(false);
   };
   return (
     <>

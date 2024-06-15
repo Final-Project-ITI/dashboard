@@ -14,7 +14,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import AddIcon from "@mui/icons-material/Add";
 
-import icon from "../../../assets/logo.svg";
 import MainButton from "../../shared/MainButton";
 import AddRestaurantPopup from "../../popups/mainAdmin/AddRestaurantPopup";
 import { IUser } from "../../../models/user.model";

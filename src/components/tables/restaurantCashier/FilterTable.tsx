@@ -3,8 +3,21 @@ import MainButton from "../../shared/MainButton";
 import FilterSVG from "../../../assets/svgs/FilterSVG";
 import StatusFilter from "./filterComponents/StatusFilter";
 import DateFilter from "./filterComponents/DateFilter";
+import { IOrder } from "../../../models/order.model";
+import { useEffect, useState } from "react";
 
-export default function FilterTable() {
+export default function FilterTable({
+  data,
+  setData,
+  orders,
+  setOrders,
+  orderStatuses,
+  currentPage,
+  setCurrentPage,
+  handlePagination,
+  setStartDate,
+  setEndDate,
+}: any) {
   const titleStyle = {
     color: "#0A0A0A80",
     fontWeight: "bold",
@@ -12,6 +25,28 @@ export default function FilterTable() {
     marginLeft: { xl: "13px", md: 0 },
     marginBottom: "26px",
   };
+  const [copiedData, setCopiedData] = useState<IOrder[]>([]);
+  const handleFilterStatus = (statusId: string) => {
+    if (!statusId) {
+      setData((pre: any) => ({ orders: [...copiedData], items: pre.items }));
+    } else {
+      setData((pre: any) => ({
+        orders: copiedData.filter(
+          (order: IOrder) => order.statusId._id === statusId
+        ),
+        items: pre.items,
+      }));
+    }
+
+    setOrders(data.orders.slice(0, 5));
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    if (!copiedData.length) {
+      setCopiedData([...data.orders]);
+    }
+  }, [data]);
   return (
     <>
       <Stack
@@ -56,13 +91,16 @@ export default function FilterTable() {
 
           <Box marginTop={{ xl: "40px", md: 0 }}>
             <Typography sx={titleStyle}>Status</Typography>
-            <StatusFilter />
+            <StatusFilter
+              orderStatuses={orderStatuses}
+              handleFilterStatus={handleFilterStatus}
+            />
           </Box>
           <Box marginTop={{ xl: "40px", md: 0 }}>
             <Typography sx={titleStyle}>Date</Typography>
             <Stack direction={{ xl: "column", md: "row" }} spacing={"10px"}>
-              <DateFilter label="From" />
-              <DateFilter label="To" />
+              <DateFilter label="From" setDate={setStartDate} />
+              <DateFilter label="To" setDate={setEndDate} />
             </Stack>
           </Box>
         </Stack>

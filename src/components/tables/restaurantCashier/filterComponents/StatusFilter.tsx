@@ -3,27 +3,41 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
 import ArrowDown from "../../../../assets/svgs/ArrowDown";
+import { IOrderStatus } from "../../../../models/orderStatus.model";
 
-const options = [
-  "placed",
-  "confirmed",
-  "being prepared",
-  "ready for pickup",
-  "cancelled",
-];
-
-export default function StatusFilter() {
-  const [currentOption, setCurrentOption] = React.useState("placed");
+export default function StatusFilter({
+  orderStatuses,
+  handleFilterStatus,
+}: {
+  orderStatuses: IOrderStatus[];
+  handleFilterStatus: any;
+}) {
+  const [currentOption, setCurrentOption] = React.useState<IOrderStatus>({
+    _id: "",
+    status: "None",
+  });
+  const [options, setOptions] = React.useState<IOrderStatus[]>([]);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (option: string) => {
+  const handleClose = (option: IOrderStatus) => {
     setAnchorEl(null);
+    handleFilterStatus(option._id);
     setCurrentOption(option);
   };
+
+  React.useEffect(() => {
+    setOptions([
+      {
+        _id: "",
+        status: "None",
+      },
+      ...orderStatuses,
+    ]);
+  }, [orderStatuses]);
 
   return (
     <Box>
@@ -49,7 +63,7 @@ export default function StatusFilter() {
             color: "black",
           }}
         >
-          {currentOption}
+          {currentOption.status}
         </Typography>
         <ArrowDown />
       </Button>
@@ -64,8 +78,8 @@ export default function StatusFilter() {
       >
         {options.map((option) => (
           <MenuItem
-            key={option}
-            selected={option === currentOption}
+            key={option.status}
+            selected={option.status === currentOption.status}
             onClick={() => handleClose(option)}
           >
             <Typography
@@ -73,7 +87,7 @@ export default function StatusFilter() {
                 textTransform: "capitalize",
               }}
             >
-              {option}
+              {option.status}
             </Typography>
           </MenuItem>
         ))}
