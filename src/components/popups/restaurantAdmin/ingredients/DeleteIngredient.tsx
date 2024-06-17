@@ -1,6 +1,10 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
+
+/* -------- */
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
-import { INGREDIENT_URL } from "../../../../utils/URLs";
+
+/* -------- */
+import { INGREDIENT_URL } from "../../../../utils/urls";
 
 export default function DeleteIngredientPopup({
   trigger,
@@ -10,9 +14,7 @@ export default function DeleteIngredientPopup({
   const axiosPrivate = useAxiosPrivate();
 
   const handleDelete = async () => {
-    const res = await axiosPrivate.delete(
-      INGREDIENT_URL + "/" + ingredient._id
-    );
+    await axiosPrivate.delete(INGREDIENT_URL + "/" + ingredient._id);
   };
   return (
     <>

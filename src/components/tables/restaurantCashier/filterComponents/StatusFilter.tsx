@@ -1,9 +1,15 @@
 import { Box, Button, Typography } from "@mui/material";
+
+/* -------- */
+import * as React from "react";
+
+/* -------- */
+import { IOrderStatus } from "../../../../models/orderStatus.model";
+
+/* -------- */
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import * as React from "react";
 import ArrowDown from "../../../../assets/svgs/ArrowDown";
-import { IOrderStatus } from "../../../../models/orderStatus.model";
 
 export default function StatusFilter({
   orderStatuses,

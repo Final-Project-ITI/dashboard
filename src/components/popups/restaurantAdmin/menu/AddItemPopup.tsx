@@ -1,27 +1,20 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
+
+/* -------- */
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
+
+/* -------- */
 import { IIngredient } from "../../../../models/ingredient.model";
-import { CREATE_PRODUCT_URL } from "../../../../utils/URLs";
+import { IFormInputMenuItem } from "../../../../models/formInputs/formInputMenuItem.model";
+import { CREATE_PRODUCT_URL } from "../../../../utils/urls";
+import { DVMenuItem } from "../../../../utils/defaultValues";
+
+/* -------- */
 import { FormInputDropdown } from "../../../shared/formComponents/FormInputDropDown";
 import { FormInputTags } from "../../../shared/formComponents/FormInputTags";
 import { FormInputText } from "../../../shared/formComponents/FormInputText";
-
-interface IFormInput {
-  title: string;
-  price: string;
-  icon: any;
-  description: string;
-  category: string;
-}
-
-const defaultValues = {
-  title: "",
-  price: "",
-  description: "",
-  category: "",
-};
 
 export default function AddItemPopup({
   trigger,
@@ -32,12 +25,12 @@ export default function AddItemPopup({
   setIngredients,
   categories,
 }: any) {
-  const methods = useForm<IFormInput>({ defaultValues: defaultValues });
+  const methods = useForm<IFormInputMenuItem>({ defaultValues: DVMenuItem });
   const { handleSubmit, reset, control, setValue, register } = methods;
   const [tags, setTags] = useState<IIngredient[]>([]);
   const axiosPrivate = useAxiosPrivate();
 
-  const onSubmit = async (data: IFormInput) => {
+  const onSubmit = async (data: IFormInputMenuItem) => {
     const formData = new FormData();
 
     formData.append("title", data.title);
@@ -58,6 +51,14 @@ export default function AddItemPopup({
         formData
       );
     }
+
+    setValue("title", "");
+    setValue("price", "");
+    setValue("description", "");
+    setValue("category", "");
+    setValue("icon", "");
+    setTags([]);
+    setTrigger(false);
   };
 
   useEffect(() => {
@@ -65,8 +66,9 @@ export default function AddItemPopup({
       setValue("title", menuItem?.title);
       setValue("price", menuItem?.price);
       setValue("description", menuItem?.description);
-      setValue("category", menuItem?.menuCategoryId);
-      setTags(menuItem?.ingredientsIds);
+      setValue("category", menuItem?.menuCategoryId._id);
+      if (menuItem?.ingredientsIds.length) setTags(menuItem.ingredientsIds);
+      else setTags([]);
     }
   }, [menuItem]);
 

@@ -10,11 +10,16 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import icon from "../../../assets/logo.svg";
-import ExitSVG from "../../../assets/svgs/ExitSVG";
+
+/* -------- */
 import { useEffect, useState } from "react";
-import { IOrder } from "../../../models/order.model";
+
+/* -------- */
 import { IItem } from "../../../models/item.model";
+import { IOrder } from "../../../models/order.model";
+
+/* -------- */
+import ExitSVG from "../../../assets/svgs/ExitSVG";
 
 export default function OrderDetailsPopup({
   trigger,

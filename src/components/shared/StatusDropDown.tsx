@@ -1,12 +1,18 @@
 import { Box, Button, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import ArrowDown from "../../assets/svgs/ArrowDown";
+
+/* -------- */
 import { MouseEvent, useEffect, useState } from "react";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
+/* -------- */
 import { IOrderStatus } from "../../models/orderStatus.model";
 import { IOrder } from "../../models/order.model";
-import { GET_ORDERS_URL } from "../../utils/URLs";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { GET_ORDERS_URL } from "../../utils/urls";
+
+/* -------- */
+import ArrowDown from "../../assets/svgs/ArrowDown";
 
 export default function StatusDropDown({
   orderStatuses,

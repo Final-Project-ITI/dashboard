@@ -1,30 +1,23 @@
 import { Box, Stack, Button, Typography } from "@mui/material";
+
+/* -------- */
 import { useForm } from "react-hook-form";
-import { FormInputText } from "../../../shared/formComponents/FormInputText";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
-import { REGISTER_CASHIER_URL } from "../../../../utils/URLs";
 
-interface IFormInput {
-  fullName: string;
-  email: number | null;
-  password: string;
-}
+/* -------- */
+import { REGISTER_CASHIER_URL } from "../../../../utils/urls";
+import { DVAddCashier } from "../../../../utils/defaultValues";
 
-const defaultValues = {
-  fullName: "",
-  email: null,
-  password: "",
-};
+/* -------- */
+import { FormInputText } from "../../../shared/formComponents/FormInputText";
 
 export default function AddCashier({ trigger, setTrigger }: any) {
-  const methods = useForm<IFormInput>({ defaultValues: defaultValues });
+  const methods = useForm<IFormInputCashier>({ defaultValues: DVAddCashier });
   const { handleSubmit, reset, control } = methods;
   const axiosPrivate = useAxiosPrivate();
 
-  const onSubmit = async (data: IFormInput) => {
-    let res: any;
-
-    res = await axiosPrivate.post(REGISTER_CASHIER_URL, data);
+  const onSubmit = async (data: IFormInputCashier) => {
+    await axiosPrivate.post(REGISTER_CASHIER_URL, data);
   };
 
   const labelStyle = {

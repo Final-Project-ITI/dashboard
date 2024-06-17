@@ -1,17 +1,17 @@
-import { Box, Paper, Stack, Button, Typography, Input } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { FormInputText } from "../../../shared/formComponents/FormInputText";
+import { Box, Button, Stack, Typography } from "@mui/material";
+
+/* -------- */
 import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
-import { INGREDIENT_URL } from "../../../../utils/URLs";
 
-interface IFormInput {
-  name: string;
-}
+/* -------- */
+import { INGREDIENT_URL } from "../../../../utils/urls";
+import { IFormInputIngredient } from "../../../../models/formInputs/formInputIngredient.model";
+import { DVIngredient } from "../../../../utils/defaultValues";
 
-const defaultValues = {
-  name: "",
-};
+/* -------- */
+import { FormInputText } from "../../../shared/formComponents/FormInputText";
 
 export default function AddIngredient({
   trigger,
@@ -19,8 +19,10 @@ export default function AddIngredient({
   isAdd,
   ingredient,
 }: any) {
-  const methods = useForm<IFormInput>({ defaultValues: defaultValues });
-  const { handleSubmit, reset, control, setValue, watch } = methods;
+  const methods = useForm<IFormInputIngredient>({
+    defaultValues: DVIngredient,
+  });
+  const { handleSubmit, reset, control, setValue } = methods;
 
   const labelStyle = {
     fontSize: "16px",
@@ -29,7 +31,7 @@ export default function AddIngredient({
 
   const axiosPrivate = useAxiosPrivate();
 
-  const onSubmit = async (data: IFormInput) => {
+  const onSubmit = async (data: IFormInputIngredient) => {
     let res: any;
 
     if (isAdd) res = await axiosPrivate.post(INGREDIENT_URL, data);
@@ -39,6 +41,9 @@ export default function AddIngredient({
         data
       );
     }
+
+    setValue("name", "");
+    setTrigger(false);
   };
 
   useEffect(() => {

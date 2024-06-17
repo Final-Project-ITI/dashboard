@@ -1,33 +1,31 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
-import { useForm } from "react-hook-form";
 import axios from "../../api/axios";
-import { LoginFormInput } from "../loginInput/LoginFormInput";
-import { LOGIN_URL } from "../../utils/URLs";
-import useAuth from "../../hooks/useAuth";
-import { useCookies } from "react-cookie";
-import { jwtDecode } from "jwt-decode";
+import { Box, Button, Stack, Typography } from "@mui/material";
+
+/* -------- */
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import useAuth from "../../hooks/useAuth";
+
+/* -------- */
+import { jwtDecode } from "jwt-decode";
+import { LOGIN_URL } from "../../utils/urls";
 import { IPayload } from "../../models/payload.mode";
+import { IFormInputLogin } from "../../models/formInputs/formInputLogin.model";
 
-interface IFormInput {
-  email: string;
-  password: string;
-}
-
-const defaultValues = {
-  email: "",
-  password: "",
-};
+/* -------- */
+import { LoginFormInput } from "../shared/formComponents/loginInput/LoginFormInput";
+import { DVLogin } from "../../utils/defaultValues";
 
 export default function Login() {
-  const methods = useForm<IFormInput>({ defaultValues: defaultValues });
-  const { handleSubmit, reset, control, setValue, watch } = methods;
+  const methods = useForm<IFormInputLogin>({ defaultValues: DVLogin });
+  const { handleSubmit, control } = methods;
 
   const { setAuth }: any = useAuth();
   const [, setCookie] = useCookies();
   const navigate = useNavigate();
 
-  const onSubmit = async (loginData: IFormInput) => {
+  const onSubmit = async (loginData: IFormInputLogin) => {
     try {
       const res = await axios.post(LOGIN_URL, loginData);
       const token = await res.data.token;

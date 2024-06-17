@@ -1,6 +1,10 @@
-import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, IconButton, Stack, TextField } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
+/* -------- */
 import { ChangeEvent, useEffect, useState } from "react";
+
+/* -------- */
 import { IIngredient } from "../../../models/ingredient.model";
 
 export const FormInputTags = ({
@@ -24,6 +28,7 @@ export const FormInputTags = ({
       pre.filter((preIngredient) => preIngredient.name !== ingredient.name)
     );
     setSearchIngredients([]);
+    setSearchText("");
   };
 
   const handleRemoveIngredient = (ingredient: IIngredient) => {
@@ -100,6 +105,7 @@ export const FormInputTags = ({
         onChange={handleOnChange}
         onFocus={handleOnFocus}
         autoComplete="off"
+        value={searchText}
       />
       {searchIngredients.length ? (
         <Stack

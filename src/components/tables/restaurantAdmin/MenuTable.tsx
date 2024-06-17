@@ -1,6 +1,3 @@
-import AddIcon from "@mui/icons-material/Add";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {
   Box,
   IconButton,
@@ -12,24 +9,31 @@ import {
   Typography,
 } from "@mui/material";
 import Table from "@mui/material/Table";
+
+/* -------- */
 import { useContext, useEffect, useState } from "react";
-
-import AddItemPopup from "../../popups/restaurantAdmin/menu/AddItemPopup";
-import DeleteItemPopup from "../../popups/restaurantAdmin/menu/DeleteItemPopup";
-
-import PinSVG from "../../../assets/svgs/PinSVG";
-import TrashSVG from "../../../assets/svgs/TrashSVG";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+
+/* -------- */
+import { UserContext } from "../../../App";
+import { IIngredient } from "../../../models/ingredient.model";
 import { IProduct } from "../../../models/product.model";
 import {
   INGREDIENT_URL,
   MENU_CATEGORY_URL,
   PRODUCT_URL,
-} from "../../../utils/URLs";
+} from "../../../utils/urls";
+
+/* -------- */
+import AddItemPopup from "../../popups/restaurantAdmin/menu/AddItemPopup";
+import DeleteItemPopup from "../../popups/restaurantAdmin/menu/DeleteItemPopup";
+
+import PinSVG from "../../../assets/svgs/PinSVG";
+import TrashSVG from "../../../assets/svgs/TrashSVG";
 import MainButton from "../../shared/MainButton";
 
-import { Context } from "../../../App";
-import { IIngredient } from "../../../models/ingredient.model";
+import AddIcon from "@mui/icons-material/Add";
+import Pagination from "../../shared/Pagination";
 
 export default function MenuTable() {
   const [addItemTrigger, setAddItemTrigger] = useState(false);
@@ -44,7 +48,8 @@ export default function MenuTable() {
 
   const [categories, setCategories] = useState<IIngredient[]>([]);
   const [ingredients, setIngredients] = useState<IIngredient[]>([]);
-  const user = useContext(Context);
+
+  const { user } = useContext(UserContext);
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -99,29 +104,6 @@ export default function MenuTable() {
   const handleDeleteItem = (item: IProduct) => {
     setMenuItem({ ...item });
     setDeleteItemTrigger(true);
-  };
-
-  const handlePagination = async (direction: number) => {
-    const pageSize = 4;
-    let page = currentPage;
-
-    if (direction && currentPage == Math.ceil(data.length / pageSize)) return;
-    if (!direction && currentPage == 1) return;
-
-    setCurrentPage((pre) => {
-      if (direction) {
-        page++;
-        return ++pre;
-      } else {
-        page--;
-        return --pre;
-      }
-    });
-
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-
-    setMenuItems(data.slice(startIndex, endIndex));
   };
 
   useEffect(() => {
@@ -232,7 +214,6 @@ export default function MenuTable() {
                           <TableCell
                             sx={{
                               ...tableBodyTextStyle,
-                              display: { md: "table-cell", xs: "none" },
                             }}
                           >
                             <img
@@ -283,64 +264,13 @@ export default function MenuTable() {
                 </TableBody>
               </Table>
 
-              <Stack width={"100%"} justifyContent={"center"} direction={"row"}>
-                <Stack
-                  width={"120px"}
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                >
-                  <IconButton onClick={() => handlePagination(0)}>
-                    <ArrowBackIosNewIcon
-                      fontSize="small"
-                      sx={{
-                        color: currentPage == 1 ? "" : "black",
-                      }}
-                    />
-                  </IconButton>
-                  <Box
-                    sx={{
-                      width: "20px",
-                      height: "20px",
-                      color: currentPage == 1 ? "#E4002B" : "black",
-                      border: "solid 2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: "2px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {currentPage != 1 ? currentPage - 1 : 1}
-                  </Box>
-                  <Box
-                    sx={{
-                      width: "20px",
-                      height: "20px",
-                      color: currentPage == 1 ? "black" : "#E4002B",
-                      border: "solid 2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: "2px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {currentPage != 1 ? currentPage : 2}
-                  </Box>
-                  <IconButton onClick={() => handlePagination(1)}>
-                    <ArrowForwardIosIcon
-                      fontSize="small"
-                      sx={{
-                        color:
-                          currentPage == Math.ceil(data.length / 4)
-                            ? ""
-                            : "black",
-                      }}
-                    />
-                  </IconButton>
-                </Stack>
-              </Stack>
+              <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                pageSize={4}
+                data={data}
+                setItems={setMenuItems}
+              />
             </Stack>
           </Box>
         </Stack>

@@ -1,5 +1,3 @@
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {
   Box,
   IconButton,
@@ -11,13 +9,20 @@ import {
   Typography,
 } from "@mui/material";
 import Table from "@mui/material/Table";
+
+/* -------- */
 import { useEffect, useState } from "react";
 
-import DetailsSVG from "../../../assets/svgs/DetailsSVG";
+/* -------- */
 import { IItem } from "../../../models/item.model";
 import { IOrder } from "../../../models/order.model";
+
+/* -------- */
+import DetailsSVG from "../../../assets/svgs/DetailsSVG";
 import OrderDetailsPopup from "../../popups/restaurnatCashier/OrderDetailsPopup";
 import StatusDropDown from "../../shared/StatusDropDown";
+
+import Pagination from "../../shared/Pagination";
 
 export default function OrdersTable({
   data,
@@ -174,64 +179,13 @@ export default function OrdersTable({
                     : ""}
                 </TableBody>
               </Table>
-              <Stack width={"100%"} justifyContent={"center"} direction={"row"}>
-                <Stack
-                  width={"120px"}
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                >
-                  <IconButton onClick={() => handlePagination(0)}>
-                    <ArrowBackIosNewIcon
-                      fontSize="small"
-                      sx={{
-                        color: currentPage == 1 ? "" : "black",
-                      }}
-                    />
-                  </IconButton>
-                  <Box
-                    sx={{
-                      width: "20px",
-                      height: "20px",
-                      color: currentPage == 1 ? "#E4002B" : "black",
-                      border: "solid 2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: "2px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {currentPage != 1 ? currentPage - 1 : 1}
-                  </Box>
-                  <Box
-                    sx={{
-                      width: "20px",
-                      height: "20px",
-                      color: currentPage == 1 ? "black" : "#E4002B",
-                      border: "solid 2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: "2px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {currentPage != 1 ? currentPage : 2}
-                  </Box>
-                  <IconButton onClick={() => handlePagination(1)}>
-                    <ArrowForwardIosIcon
-                      fontSize="small"
-                      sx={{
-                        color:
-                          currentPage == Math.ceil(data?.orders.length / 5)
-                            ? ""
-                            : "black",
-                      }}
-                    />
-                  </IconButton>
-                </Stack>
-              </Stack>
+
+              <Pagination
+                handler={handlePagination}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                pageSize={4}
+              />
             </Stack>
           </Box>
         </Stack>

@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
 import {
   Box,
   IconButton,
@@ -10,19 +8,26 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import Table from "@mui/material/Table";
+import { useEffect, useState } from "react";
+
+/* -------- */
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+
+/* -------- */
+import { IMenuCategory } from "../../../models/menuCategory.model";
+import { MENU_CATEGORY_URL } from "../../../utils/urls";
+
+/* -------- */
 import AddIcon from "@mui/icons-material/Add";
 
-import MainButton from "../../shared/MainButton";
 import PinSVG from "../../../assets/svgs/PinSVG";
 import TrashSVG from "../../../assets/svgs/TrashSVG";
+import MainButton from "../../shared/MainButton";
 
 import AddCategory from "../../popups/restaurantAdmin/categories/AddCategory";
 import DeleteCategoryPopup from "../../popups/restaurantAdmin/categories/DeleteCategory";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import { IMenuCategory } from "../../../models/menuCategory.model";
-import { MENU_CATEGORY_URL } from "../../../utils/URLs";
+import Pagination from "../../shared/Pagination";
 
 export default function CategoryTable() {
   const [addCategoryTrigger, setAddCategoryTrigger] = useState(false);
@@ -58,29 +63,6 @@ export default function CategoryTable() {
       const res = await axiosPrivate.get(MENU_CATEGORY_URL);
       setData(res.data);
     } catch (e) {}
-  };
-
-  const handlePagination = async (direction: number) => {
-    const pageSize = 5;
-    let page = currentPage;
-
-    if (direction && currentPage == Math.ceil(data.length / pageSize)) return;
-    if (!direction && currentPage == 1) return;
-
-    setCurrentPage((pre) => {
-      if (direction) {
-        page++;
-        return ++pre;
-      } else {
-        page--;
-        return --pre;
-      }
-    });
-
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-
-    setMenuCategories(data.slice(startIndex, endIndex));
   };
 
   useEffect(() => {
@@ -199,64 +181,13 @@ export default function CategoryTable() {
                 </TableBody>
               </Table>
 
-              <Stack width={"100%"} justifyContent={"center"} direction={"row"}>
-                <Stack
-                  width={"120px"}
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                >
-                  <IconButton onClick={() => handlePagination(0)}>
-                    <ArrowBackIosNewIcon
-                      fontSize="small"
-                      sx={{
-                        color: currentPage == 1 ? "" : "black",
-                      }}
-                    />
-                  </IconButton>
-                  <Box
-                    sx={{
-                      width: "20px",
-                      height: "20px",
-                      color: currentPage == 1 ? "#E4002B" : "black",
-                      border: "solid 2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: "2px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {currentPage != 1 ? currentPage - 1 : 1}
-                  </Box>
-                  <Box
-                    sx={{
-                      width: "20px",
-                      height: "20px",
-                      color: currentPage == 1 ? "black" : "#E4002B",
-                      border: "solid 2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: "2px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {currentPage != 1 ? currentPage : 2}
-                  </Box>
-                  <IconButton onClick={() => handlePagination(1)}>
-                    <ArrowForwardIosIcon
-                      fontSize="small"
-                      sx={{
-                        color:
-                          currentPage == Math.ceil(data.length / 5)
-                            ? ""
-                            : "black",
-                      }}
-                    />
-                  </IconButton>
-                </Stack>
-              </Stack>
+              <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                pageSize={4}
+                data={data}
+                setItems={setMenuCategories}
+              />
             </Stack>
           </Box>
         </Stack>

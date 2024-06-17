@@ -1,34 +1,25 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
+
+/* -------- */
 import { useForm } from "react-hook-form";
-import { FormInputFile } from "../../shared/formComponents/FormInputFile";
-import { FormInputText } from "../../shared/formComponents/FormInputText";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import { CREATE_RESTAURANT_URL } from "../../../utils/URLs";
 
-interface IFormInput {
-  name: string;
-  email: string;
-  address: string;
-  description: string;
-  phone: string;
-  icon: any;
-  banner: any;
-}
+/* -------- */
+import { CREATE_RESTAURANT_URL } from "../../../utils/urls";
+import { DVAddRestaurant } from "../../../utils/defaultValues";
+import { IFormInputRestaurant } from "../../../models/formInputs/formInputRestaurant.model";
 
-const defaultValues = {
-  name: "",
-  email: "",
-  address: "",
-  description: "",
-  phone: "",
-};
+/* -------- */
+import { FormInputText } from "../../shared/formComponents/FormInputText";
 
 export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
-  const methods = useForm<IFormInput>({ defaultValues: defaultValues });
-  const { handleSubmit, reset, control, setValue, watch, register } = methods;
+  const methods = useForm<IFormInputRestaurant>({
+    defaultValues: DVAddRestaurant,
+  });
+  const { handleSubmit, reset, control, register } = methods;
   const axiosPrivate = useAxiosPrivate();
 
-  const onSubmit = async (data: IFormInput) => {
+  const onSubmit = async (data: IFormInputRestaurant) => {
     const formData = new FormData();
 
     formData.append("name", data.name);
@@ -39,7 +30,8 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
     formData.append("icon", data.icon[0]);
     formData.append("banner", data.banner[0]);
 
-    const res = await axiosPrivate.post(CREATE_RESTAURANT_URL, formData);
+    await axiosPrivate.post(CREATE_RESTAURANT_URL, formData);
+    setTrigger(false);
   };
 
   const labelStyle = {

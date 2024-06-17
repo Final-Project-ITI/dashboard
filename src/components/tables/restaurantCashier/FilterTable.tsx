@@ -1,10 +1,16 @@
 import { Box, Stack, Typography } from "@mui/material";
+
+/* -------- */
+import { useEffect, useState } from "react";
+
+/* -------- */
+import { IOrder } from "../../../models/order.model";
+
+/* -------- */
 import MainButton from "../../shared/MainButton";
 import FilterSVG from "../../../assets/svgs/FilterSVG";
 import StatusFilter from "./filterComponents/StatusFilter";
 import DateFilter from "./filterComponents/DateFilter";
-import { IOrder } from "../../../models/order.model";
-import { useEffect, useState } from "react";
 
 export default function FilterTable({
   data,

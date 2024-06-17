@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
 import {
   Box,
   IconButton,
@@ -10,18 +8,25 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import Table from "@mui/material/Table";
+import { useEffect, useState } from "react";
+
+/* -------- */
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+
+/* -------- */
+import { IIngredient } from "../../../models/ingredient.model";
+import { INGREDIENT_URL } from "../../../utils/urls";
+
+/* -------- */
 import AddIcon from "@mui/icons-material/Add";
 
-import MainButton from "../../shared/MainButton";
 import PinSVG from "../../../assets/svgs/PinSVG";
 import TrashSVG from "../../../assets/svgs/TrashSVG";
 import AddIngredient from "../../popups/restaurantAdmin/ingredients/AddIngredient";
 import DeleteIngredientPopup from "../../popups/restaurantAdmin/ingredients/DeleteIngredient";
-import { IIngredient } from "../../../models/ingredient.model";
-import { INGREDIENT_URL } from "../../../utils/URLs";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import MainButton from "../../shared/MainButton";
+import Pagination from "../../shared/Pagination";
 
 export default function IngredientsTable() {
   const [addIngredientTrigger, setAddIngredientTrigger] = useState(false);
@@ -45,29 +50,6 @@ export default function IngredientsTable() {
       const res = await axiosPrivate.get(INGREDIENT_URL);
       setData(res.data);
     } catch (e) {}
-  };
-
-  const handlePagination = async (direction: number) => {
-    const pageSize = 5;
-    let page = currentPage;
-
-    if (direction && currentPage == Math.ceil(data.length / pageSize)) return;
-    if (!direction && currentPage == 1) return;
-
-    setCurrentPage((pre) => {
-      if (direction) {
-        page++;
-        return ++pre;
-      } else {
-        page--;
-        return --pre;
-      }
-    });
-
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-
-    setIngredients(data.slice(startIndex, endIndex));
   };
 
   const tableHeadTextStyle = {
@@ -200,61 +182,13 @@ export default function IngredientsTable() {
                 </TableBody>
               </Table>
 
-              <Stack width={"100%"} justifyContent={"center"} direction={"row"}>
-                <Stack
-                  width={"120px"}
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                >
-                  <IconButton onClick={() => handlePagination(0)}>
-                    <ArrowBackIosNewIcon
-                      fontSize="small"
-                      sx={{
-                        color: currentPage == 1 ? "" : "black",
-                      }}
-                    />
-                  </IconButton>
-                  <Box
-                    sx={{
-                      width: "20px",
-                      height: "20px",
-                      color: currentPage == 1 ? "#E4002B" : "black",
-                      border: "solid 2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: "2px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {currentPage != 1 ? currentPage - 1 : 1}
-                  </Box>
-                  <Box
-                    sx={{
-                      width: "20px",
-                      height: "20px",
-                      color: currentPage == 1 ? "black" : "#E4002B",
-                      border: "solid 2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: "2px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {currentPage != 1 ? currentPage : 2}
-                  </Box>
-                  <IconButton onClick={() => handlePagination(1)}>
-                    <ArrowForwardIosIcon
-                      fontSize="small"
-                      sx={{
-                        color: currentPage == 1 ? "black" : "",
-                      }}
-                    />
-                  </IconButton>
-                </Stack>
-              </Stack>
+              <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                pageSize={4}
+                data={data}
+                setItems={setIngredients}
+              />
             </Stack>
           </Box>
         </Stack>

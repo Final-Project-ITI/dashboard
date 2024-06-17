@@ -12,6 +12,8 @@ export default function MainButton({ width, Icon, text, handler, state }: any) {
       color: "white",
     },
     alignSelf: "flex-start",
+    paddingLeft: "20px",
+    paddingRight: "20px",
   };
 
   return (

@@ -1,6 +1,10 @@
-import { Controller } from "react-hook-form";
 import { TextField } from "@mui/material";
-import { FormInputProps } from "../shared/formComponents/FormInputProps";
+
+/* -------- */
+import { Controller } from "react-hook-form";
+
+/* -------- */
+import { FormInputProps } from "../FormInputProps";
 
 export const LoginFormInput = ({ name, control, type }: FormInputProps) => {
   const borderStyle = {

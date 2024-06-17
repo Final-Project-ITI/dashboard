@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
 import {
   Box,
-  IconButton,
   Stack,
   TableBody,
   TableCell,
@@ -10,15 +7,21 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import AddIcon from "@mui/icons-material/Add";
+import Table from "@mui/material/Table";
 
-import MainButton from "../../shared/MainButton";
-import AddRestaurantPopup from "../../popups/mainAdmin/AddRestaurantPopup";
-import { IUser } from "../../../models/user.model";
+/* -------- */
+import { useEffect, useState } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import { RESTAURANTS_ADMINS_URL } from "../../../utils/URLs";
+
+/* -------- */
+import { IUser } from "../../../models/user.model";
+import { RESTAURANTS_ADMINS_URL } from "../../../utils/urls";
+
+/* -------- */
+import AddIcon from "@mui/icons-material/Add";
+import AddRestaurantPopup from "../../popups/mainAdmin/AddRestaurantPopup";
+import MainButton from "../../shared/MainButton";
+import Pagination from "../../shared/Pagination";
 
 export default function RestaurantsTable() {
   const [addRestaurantTrigger, setAddRestaurantTrigger] = useState(false);
@@ -100,7 +103,7 @@ export default function RestaurantsTable() {
           </Typography>
 
           <MainButton
-            width={"200px"}
+            width={"220px"}
             text={"Add Restaurant"}
             Icon={AddIcon}
             handler={() => {
@@ -202,61 +205,11 @@ export default function RestaurantsTable() {
                 </TableBody>
               </Table>
 
-              <Stack width={"100%"} justifyContent={"center"} direction={"row"}>
-                <Stack
-                  width={"120px"}
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                >
-                  <IconButton onClick={() => handlePagination(0)}>
-                    <ArrowBackIosNewIcon
-                      fontSize="small"
-                      sx={{
-                        color: currentPage == 1 ? "" : "black",
-                      }}
-                    />
-                  </IconButton>
-                  <Box
-                    sx={{
-                      width: "20px",
-                      height: "20px",
-                      color: currentPage == 1 ? "#E4002B" : "black",
-                      border: "solid 2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: "2px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {currentPage != 1 ? currentPage - 1 : 1}
-                  </Box>
-                  <Box
-                    sx={{
-                      width: "20px",
-                      height: "20px",
-                      color: currentPage == 1 ? "black" : "#E4002B",
-                      border: "solid 2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: "2px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {currentPage != 1 ? currentPage : 2}
-                  </Box>
-                  <IconButton onClick={() => handlePagination(1)}>
-                    <ArrowForwardIosIcon
-                      fontSize="small"
-                      sx={{
-                        color: "black",
-                      }}
-                    />
-                  </IconButton>
-                </Stack>
-              </Stack>
+              <Pagination
+                handler={handlePagination}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
             </Stack>
           </Box>
         </Stack>

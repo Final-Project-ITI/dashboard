@@ -13,12 +13,7 @@ import { createContext, useEffect, useState } from "react";
 import IsNotAuthGuard from "./guards/IsNotAuthGuard.tsx";
 import { IUser } from "./models/user.model.ts";
 
-export const Context = createContext<IUser>({
-  _id: "",
-  email: "",
-  fullName: "",
-  image: "",
-});
+export const UserContext = createContext({});
 
 function App() {
   const refreshToken = useRefreshToken();
@@ -35,7 +30,7 @@ function App() {
 
   return (
     <>
-      <Context.Provider value={user}>
+      <UserContext.Provider value={{ user, setUser }}>
         <Routes>
           {/* Auth */}
           <Route element={<IsNotAuthGuard />}>
@@ -49,10 +44,7 @@ function App() {
 
           {/* Restaurant Admin */}
           <Route element={<IsAuthGuard role="restaurantAdmin" />}>
-            <Route
-              path="/restaurantAdmin"
-              element={<RestaurantAdmin setUser={setUser} />}
-            >
+            <Route path="/restaurantAdmin" element={<RestaurantAdmin />}>
               <Route path="menu" element={<MenuTable />} />
               <Route path="cashier" element={<CashierTable />} />
               <Route path="ingredients" element={<IngredientsTable />} />
@@ -72,7 +64,7 @@ function App() {
 
           {/* <Route path="*" element={<IsAuthGuard role={""} />} /> */}
         </Routes>
-      </Context.Provider>
+      </UserContext.Provider>
     </>
   );
 }

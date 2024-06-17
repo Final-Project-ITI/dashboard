@@ -1,18 +1,16 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
+
+/* -------- */
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
-import { MENU_CATEGORY_URL } from "../../../../utils/URLs";
+
+/* -------- */
+import { MENU_CATEGORY_URL } from "../../../../utils/urls";
+import { DVCategory } from "../../../../utils/defaultValues";
+
+/* -------- */
 import { FormInputText } from "../../../shared/formComponents/FormInputText";
-
-interface IFormInput {
-  name: string;
-  icon: any;
-}
-
-const defaultValues = {
-  name: "",
-};
 
 export default function AddCategory({
   trigger,
@@ -20,25 +18,27 @@ export default function AddCategory({
   isAdd,
   menuCategory,
 }: any) {
-  const methods = useForm<IFormInput>({ defaultValues: defaultValues });
-  const { handleSubmit, reset, control, setValue, watch, register } = methods;
+  const methods = useForm<IFormInputCategory>({ defaultValues: DVCategory });
+  const { handleSubmit, reset, control, setValue, register } = methods;
   const axiosPrivate = useAxiosPrivate();
 
-  const onSubmit = async (data: IFormInput) => {
+  const onSubmit = async (data: IFormInputCategory) => {
     const formData = new FormData();
 
     formData.append("name", data.name);
     formData.append("icon", data.icon[0]);
 
-    let res: any;
-
-    if (isAdd) res = await axiosPrivate.post(MENU_CATEGORY_URL, formData);
+    if (isAdd) await axiosPrivate.post(MENU_CATEGORY_URL, formData);
     else {
-      res = await axiosPrivate.patch(
+      await axiosPrivate.patch(
         MENU_CATEGORY_URL + "/" + menuCategory?._id,
         formData
       );
     }
+
+    setValue("name", "");
+    setValue("icon", "");
+    setTrigger(false);
   };
 
   const labelStyle = {
