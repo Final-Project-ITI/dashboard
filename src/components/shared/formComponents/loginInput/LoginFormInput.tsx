@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 
 /* -------- */
 import { Controller } from "react-hook-form";
@@ -6,7 +6,13 @@ import { Controller } from "react-hook-form";
 /* -------- */
 import { FormInputProps } from "../FormInputProps";
 
-export const LoginFormInput = ({ name, control, type }: FormInputProps) => {
+export const LoginFormInput = ({
+  name,
+  control,
+  type,
+  register,
+  validation,
+}: FormInputProps) => {
   const borderStyle = {
     "& .MuiInputBase-root": {
       borderRadius: "50px",
@@ -33,20 +39,30 @@ export const LoginFormInput = ({ name, control, type }: FormInputProps) => {
       name={name}
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
-        <TextField
-          sx={{
-            backgroundColor: "#F3ECE4",
-            borderRadius: "50px",
-            ...borderStyle,
-          }}
-          helperText={error ? error.message : null}
-          size="small"
-          error={!!error}
-          onChange={onChange}
-          value={value}
-          fullWidth
-          inputProps={{ type }}
-        />
+        <>
+          <TextField
+            {...register(name, validation)}
+            sx={{
+              backgroundColor: "#F3ECE4",
+              borderRadius: "50px",
+              ...borderStyle,
+            }}
+            size="small"
+            error={!!error}
+            onChange={onChange}
+            value={value}
+            fullWidth
+            inputProps={{ type }}
+          />
+
+          {error ? (
+            <Typography color={"#D74339"} marginLeft={"16px"} fontSize={"12px"}>
+              {error.message}
+            </Typography>
+          ) : (
+            ""
+          )}
+        </>
       )}
     />
   );

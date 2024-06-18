@@ -1,61 +1,50 @@
-import axios from "../../api/axios";
 import { Box, Button, Stack, Typography } from "@mui/material";
 
 /* -------- */
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import useAuth from "../../hooks/useAuth";
+import useLogin from "../../hooks/api/useLogin";
 
 /* -------- */
-import { jwtDecode } from "jwt-decode";
-import { LOGIN_URL } from "../../utils/urls";
-import { IPayload } from "../../models/payload.mode";
 import { IFormInputLogin } from "../../models/formInputs/formInputLogin.model";
+import { regEmail } from "../../regex/regex";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 /* -------- */
-import { LoginFormInput } from "../shared/formComponents/loginInput/LoginFormInput";
 import { DVLogin } from "../../utils/defaultValues";
+import { LoginFormInput } from "../shared/formComponents/loginInput/LoginFormInput";
 
 export default function Login() {
-  const methods = useForm<IFormInputLogin>({ defaultValues: DVLogin });
-  const { handleSubmit, control } = methods;
+  const {
+    handleSubmit,
+    control,
+    register,
+    formState: { isDirty, isValid },
+  } = useForm<IFormInputLogin>({
+    defaultValues: DVLogin,
+    mode: "onChange",
+  });
 
-  const { setAuth }: any = useAuth();
-  const [, setCookie] = useCookies();
-  const navigate = useNavigate();
-
-  const onSubmit = async (loginData: IFormInputLogin) => {
-    try {
-      const res = await axios.post(LOGIN_URL, loginData);
-      const token = await res.data.token;
-      const userData: IPayload = jwtDecode(token);
-      setAuth({ token });
-
-      setCookie("token", token);
-
-      switch (userData.role.name) {
-        case "admin":
-          navigate("/", { replace: true });
-          break;
-        case "restaurantAdmin":
-          navigate("/restaurantAdmin", { replace: true });
-          break;
-        case "restaurantCashier":
-          navigate("/restaurantCashier", { replace: true });
-          break;
-        default:
-          throw new Error("unauthorized");
-      }
-    } catch (err: any) {
-      console.log(err.message);
-    }
-  };
+  const [onSubmit, error] = useLogin();
 
   const labelStyle = {
     fontSize: "16px",
     marginBottom: "8px",
   };
+
+  useEffect(() => {
+    toast.error(error?.message, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  }, [error]);
 
   return (
     <Stack
@@ -87,37 +76,68 @@ export default function Login() {
         >
           Log In
         </Typography>
-        <Stack spacing={"8px"}>
-          <Box>
-            <Typography sx={labelStyle}>E-Mail</Typography>
-            <LoginFormInput name="email" control={control} type="email" />
-          </Box>
+        <form>
+          <Stack spacing={"8px"}>
+            <Box>
+              <Typography sx={labelStyle}>E-Mail</Typography>
+              <LoginFormInput
+                name="email"
+                control={control}
+                type="email"
+                register={register}
+                validation={{
+                  required: {
+                    value: true,
+                    message: "email is required",
+                  },
+                  pattern: {
+                    value: regEmail,
+                    message: "invalid email",
+                  },
+                }}
+              />
+            </Box>
 
-          <Box>
-            <Typography sx={labelStyle}>Password</Typography>
-            <LoginFormInput name="password" control={control} type="password" />
-          </Box>
-        </Stack>
+            <Box>
+              <Typography sx={labelStyle}>Password</Typography>
+              <LoginFormInput
+                name="password"
+                control={control}
+                type="password"
+                register={register}
+                validation={{
+                  required: {
+                    value: true,
+                    message: "password is required",
+                  },
+                }}
+              />
+            </Box>
+          </Stack>
 
-        <Stack
-          marginTop={"24px"}
-          spacing={"40px"}
-          width={"100%"}
-          justifyContent={"center"}
-          direction={"row"}
-        >
-          <Button
-            onClick={handleSubmit(onSubmit)}
-            variant={"contained"}
-            fullWidth
-            style={{
-              borderRadius: "50px",
-            }}
+          <Stack
+            marginTop={"24px"}
+            spacing={"40px"}
+            width={"100%"}
+            justifyContent={"center"}
+            direction={"row"}
           >
-            Log In
-          </Button>
-        </Stack>
+            <Button
+              onClick={handleSubmit(onSubmit)}
+              variant={"contained"}
+              fullWidth
+              disabled={!isDirty || !isValid}
+              style={{
+                borderRadius: "50px",
+              }}
+              type="submit"
+            >
+              Log In
+            </Button>
+          </Stack>
+        </form>
       </Box>
+      <ToastContainer />
     </Stack>
   );
 }

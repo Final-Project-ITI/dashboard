@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { IFormInputRestaurant } from "../../models/formInputs/formInputRestaurant.model";
-import { CREATE_RESTAURANT_URL } from "../../utils/urls";
-import useAxiosPrivate from "../useAxiosPrivate";
+import useAxiosPrivate from "../../useAxiosPrivate";
+import { IFormInputRestaurant } from "../../../models/formInputs/formInputRestaurant.model";
+import { CREATE_RESTAURANT_URL } from "../../../utils/urls";
 
 const useAddRestaurant = ({ setTrigger }: any): [any, boolean, Error] => {
   const axiosPrivate = useAxiosPrivate();

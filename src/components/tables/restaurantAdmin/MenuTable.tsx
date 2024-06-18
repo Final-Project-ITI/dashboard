@@ -12,44 +12,41 @@ import Table from "@mui/material/Table";
 
 /* -------- */
 import { useContext, useEffect, useState } from "react";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import useMenu from "../../../hooks/api/restaurantAdmin/manu/useMenu";
 
 /* -------- */
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { UserContext } from "../../../App";
-import { IIngredient } from "../../../models/ingredient.model";
 import { IProduct } from "../../../models/product.model";
-import {
-  INGREDIENT_URL,
-  MENU_CATEGORY_URL,
-  PRODUCT_URL,
-} from "../../../utils/urls";
 
 /* -------- */
-import AddItemPopup from "../../popups/restaurantAdmin/menu/AddItemPopup";
-import DeleteItemPopup from "../../popups/restaurantAdmin/menu/DeleteItemPopup";
+import AddItemPopup from "../../popups/restaurantAdmin/menuItems/AddItemPopup";
+import DeleteItemPopup from "../../popups/restaurantAdmin/menuItems/DeleteItemPopup";
 
 import PinSVG from "../../../assets/svgs/PinSVG";
 import TrashSVG from "../../../assets/svgs/TrashSVG";
 import MainButton from "../../shared/MainButton";
 
 import AddIcon from "@mui/icons-material/Add";
+import useItemIngredients from "../../../hooks/api/restaurantAdmin/ingredients/useItemIngredients";
+import useMenuCategory from "../../../hooks/api/restaurantAdmin/menuCategories/useMenuCategory";
 import Pagination from "../../shared/Pagination";
+import { DVProduct } from "../../../utils/defaultValues";
 
 export default function MenuTable() {
   const [addItemTrigger, setAddItemTrigger] = useState(false);
   const [deleteItemTrigger, setDeleteItemTrigger] = useState(false);
-  const axiosPrivate = useAxiosPrivate();
   const [isAdd, setIsAdd] = useState(false);
+  const { user } = useContext(UserContext);
 
-  const [data, setData] = useState<IProduct[]>([]);
+  const [data, isLoading] = useMenu({ user });
   const [menuItems, setMenuItems] = useState<IProduct[]>([]);
   const [menuItem, setMenuItem] = useState<IProduct>();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [categories, setCategories] = useState<IIngredient[]>([]);
-  const [ingredients, setIngredients] = useState<IIngredient[]>([]);
-
-  const { user } = useContext(UserContext);
+  const [categories] = useMenuCategory();
+  const [ingredients, setIngredients] = useItemIngredients({ menuItem, isAdd });
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -65,41 +62,7 @@ export default function MenuTable() {
     borderBottom: "none",
   };
 
-  useEffect(() => {
-    handleGetMenu();
-  }, [user]);
-
-  const handleGetMenu = async () => {
-    try {
-      const res = await axiosPrivate.get(
-        PRODUCT_URL + "/" + user.restaurantId?._id
-      );
-      setData(res.data);
-    } catch (e) {}
-  };
-
-  const handleGetIngredients = async () => {
-    try {
-      const res = await axiosPrivate.get(INGREDIENT_URL);
-
-      const ingredientsIds = menuItem?.ingredientsIds.map(
-        (ingredient: IIngredient) => ingredient._id
-      );
-
-      setIngredients(
-        res.data.filter(
-          (ingredient: IIngredient) => !ingredientsIds?.includes(ingredient._id)
-        )
-      );
-    } catch (e) {}
-  };
-
-  const handleGetMenuCategories = async () => {
-    try {
-      const res = await axiosPrivate.get(MENU_CATEGORY_URL);
-      setCategories(res.data);
-    } catch (e) {}
-  };
+  const skeletonRows = [0, 0, 0, 0];
 
   const handleDeleteItem = (item: IProduct) => {
     setMenuItem({ ...item });
@@ -107,13 +70,8 @@ export default function MenuTable() {
   };
 
   useEffect(() => {
-    handleGetMenuCategories();
     setMenuItems(data.slice(0, 4));
   }, [data]);
-
-  useEffect(() => {
-    handleGetIngredients();
-  }, [menuItem]);
 
   return (
     <>
@@ -143,8 +101,7 @@ export default function MenuTable() {
             Icon={AddIcon}
             handler={() => {
               setIsAdd(true);
-              handleGetIngredients();
-              handleGetMenuCategories();
+              setMenuItem(DVProduct);
               setAddItemTrigger(true);
             }}
             state={true}
@@ -189,78 +146,94 @@ export default function MenuTable() {
             <Stack justifyContent={"space-between"} height={"85%"}>
               <Table>
                 <TableHead>
-                  <TableCell sx={tableHeadTextStyle}>Item Name</TableCell>
-                  <TableCell sx={tableHeadTextStyle}>Icon</TableCell>
-                  <TableCell
-                    sx={{
-                      ...tableHeadTextStyle,
-                      textAlign: "start",
-                      display: { md: "table-cell", xs: "none" },
-                    }}
-                  >
-                    Ingredients
-                  </TableCell>
-                  <TableCell sx={tableHeadTextStyle}>Price</TableCell>
-                  <TableCell sx={tableHeadTextStyle}>Action</TableCell>
+                  <TableRow>
+                    <TableCell sx={tableHeadTextStyle}>Item Name</TableCell>
+                    <TableCell sx={tableHeadTextStyle}>Icon</TableCell>
+                    <TableCell
+                      sx={{
+                        ...tableHeadTextStyle,
+                        textAlign: "start",
+                        display: { md: "table-cell", xs: "none" },
+                      }}
+                    >
+                      Ingredients
+                    </TableCell>
+                    <TableCell sx={tableHeadTextStyle}>Price</TableCell>
+                    <TableCell sx={tableHeadTextStyle}>Action</TableCell>
+                  </TableRow>
                 </TableHead>
 
                 <TableBody>
-                  {menuItems.length
-                    ? menuItems.map((item) => (
-                        <TableRow>
-                          <TableCell sx={tableBodyTextStyle}>
-                            {item.title}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              ...tableBodyTextStyle,
-                            }}
-                          >
-                            <img
-                              src={item.icon}
-                              title="icon"
-                              style={{
-                                objectFit: "cover",
-                                width: "64px",
-                                height: "64px",
-                                borderRadius: "50px",
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              ...tableBodyTextStyle,
-                              width: "200px",
-                              textAlign: "start",
-                              display: { md: "table-cell", xs: "none" },
-                            }}
-                          >
-                            {item.ingredientsIds.map(
-                              (ingredient) => ingredient.name + ", "
-                            )}
-                          </TableCell>
-                          <TableCell sx={tableBodyTextStyle}>
-                            EGP {item.price}
-                          </TableCell>
-                          <TableCell sx={tableBodyTextStyle}>
-                            <IconButton
-                              onClick={() => {
-                                setIsAdd(false);
-                                handleGetIngredients();
-                                setMenuItem({ ...item });
-                                setAddItemTrigger(true);
-                              }}
-                            >
-                              <PinSVG />
-                            </IconButton>
-
-                            <IconButton onClick={() => handleDeleteItem(item)}>
-                              <TrashSVG />
-                            </IconButton>
+                  {isLoading ? (
+                    <SkeletonTheme
+                      baseColor="transparent"
+                      highlightColor="#0A0A0A80"
+                    >
+                      {skeletonRows.map((e, i) => (
+                        <TableRow key={i}>
+                          <TableCell colSpan={5}>
+                            <Skeleton height={60} />
                           </TableCell>
                         </TableRow>
-                      ))
-                    : ""}
+                      ))}
+                    </SkeletonTheme>
+                  ) : menuItems.length ? (
+                    menuItems.map((item) => (
+                      <TableRow key={item._id}>
+                        <TableCell sx={tableBodyTextStyle}>
+                          {item.title}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            ...tableBodyTextStyle,
+                          }}
+                        >
+                          <img
+                            src={item.icon}
+                            title="icon"
+                            style={{
+                              objectFit: "cover",
+                              width: "64px",
+                              height: "64px",
+                              borderRadius: "50px",
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            ...tableBodyTextStyle,
+                            width: "200px",
+                            textAlign: "start",
+                            display: { md: "table-cell", xs: "none" },
+                          }}
+                        >
+                          {item.ingredientsIds.map(
+                            (ingredient) => ingredient.name + ", "
+                          )}
+                        </TableCell>
+                        <TableCell sx={tableBodyTextStyle}>
+                          EGP {item.price}
+                        </TableCell>
+                        <TableCell sx={tableBodyTextStyle}>
+                          <IconButton
+                            onClick={() => {
+                              setIsAdd(false);
+                              setMenuItem({ ...item });
+                              setAddItemTrigger(true);
+                            }}
+                          >
+                            <PinSVG />
+                          </IconButton>
+
+                          <IconButton onClick={() => handleDeleteItem(item)}>
+                            <TrashSVG />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    ""
+                  )}
                 </TableBody>
               </Table>
 

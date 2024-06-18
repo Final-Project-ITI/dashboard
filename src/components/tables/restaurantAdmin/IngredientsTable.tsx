@@ -12,11 +12,12 @@ import Table from "@mui/material/Table";
 import { useEffect, useState } from "react";
 
 /* -------- */
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import useIngredients from "../../../hooks/api/restaurantAdmin/ingredients/useIngredients";
 
 /* -------- */
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { IIngredient } from "../../../models/ingredient.model";
-import { INGREDIENT_URL } from "../../../utils/urls";
 
 /* -------- */
 import AddIcon from "@mui/icons-material/Add";
@@ -32,9 +33,6 @@ export default function IngredientsTable() {
   const [addIngredientTrigger, setAddIngredientTrigger] = useState(false);
   const [deleteItemTrigger, setDeleteCategoryTrigger] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
-  const [data, setData] = useState<IIngredient[]>([]);
-
-  const axiosPrivate = useAxiosPrivate();
 
   const [ingredients, setIngredients] = useState<IIngredient[]>([]);
   const [ingredient, setIngredient] = useState<IIngredient>();
@@ -45,12 +43,7 @@ export default function IngredientsTable() {
     setDeleteCategoryTrigger(true);
   };
 
-  const handleGetIngredients = async () => {
-    try {
-      const res = await axiosPrivate.get(INGREDIENT_URL);
-      setData(res.data);
-    } catch (e) {}
-  };
+  const [data, isLoading] = useIngredients();
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -66,9 +59,7 @@ export default function IngredientsTable() {
     borderBottom: "none",
   };
 
-  useEffect(() => {
-    handleGetIngredients();
-  }, []);
+  const skeletonRows = [0, 0, 0, 0, 0];
 
   useEffect(() => {
     setIngredients(data.slice(0, 5));
@@ -97,7 +88,7 @@ export default function IngredientsTable() {
           </Typography>
 
           <MainButton
-            width={"200px"}
+            width={"220px"}
             text={"Add Ingredient"}
             Icon={AddIcon}
             handler={() => {
@@ -143,49 +134,64 @@ export default function IngredientsTable() {
             <Stack justifyContent={"space-between"} height={"85%"}>
               <Table>
                 <TableHead>
-                  <TableCell sx={tableHeadTextStyle}>Ingredient</TableCell>
-                  <TableCell sx={tableHeadTextStyle}>Action</TableCell>
+                  <TableRow>
+                    <TableCell sx={tableHeadTextStyle}>Ingredient</TableCell>
+                    <TableCell sx={tableHeadTextStyle}>Action</TableCell>
+                  </TableRow>
                 </TableHead>
 
                 <TableBody>
-                  {ingredients.length
-                    ? ingredients.map((ingredient) => {
-                        return (
-                          <TableRow>
-                            <TableCell sx={tableBodyTextStyle}>
-                              {ingredient.name}
-                            </TableCell>
+                  {isLoading ? (
+                    <SkeletonTheme
+                      baseColor="transparent"
+                      highlightColor="#0A0A0A80"
+                    >
+                      {skeletonRows.map((e, i) => (
+                        <TableRow key={i}>
+                          <TableCell colSpan={5}>
+                            <Skeleton height={40} />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </SkeletonTheme>
+                  ) : ingredients.length ? (
+                    ingredients.map((ingredient) => {
+                      return (
+                        <TableRow key={ingredient._id}>
+                          <TableCell sx={tableBodyTextStyle}>
+                            {ingredient.name}
+                          </TableCell>
 
-                            <TableCell sx={tableBodyTextStyle}>
-                              <IconButton
-                                onClick={() => {
-                                  setIngredient(ingredient);
-                                  setIsAdd(false);
-                                  setAddIngredientTrigger(true);
-                                }}
-                              >
-                                <PinSVG />
-                              </IconButton>
+                          <TableCell sx={tableBodyTextStyle}>
+                            <IconButton
+                              onClick={() => {
+                                setIngredient({ ...ingredient });
+                                setIsAdd(false);
+                                setAddIngredientTrigger(true);
+                              }}
+                            >
+                              <PinSVG />
+                            </IconButton>
 
-                              <IconButton
-                                onClick={() =>
-                                  handleDeleteIngredient(ingredient)
-                                }
-                              >
-                                <TrashSVG />
-                              </IconButton>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
-                    : ""}
+                            <IconButton
+                              onClick={() => handleDeleteIngredient(ingredient)}
+                            >
+                              <TrashSVG />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  ) : (
+                    ""
+                  )}
                 </TableBody>
               </Table>
 
               <Pagination
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
-                pageSize={4}
+                pageSize={5}
                 data={data}
                 setItems={setIngredients}
               />

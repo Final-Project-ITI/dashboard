@@ -11,6 +11,7 @@ import Table from "@mui/material/Table";
 
 /* -------- */
 import { useEffect, useState } from "react";
+import useRestaurantsAdmins from "../../../hooks/api/mainAdmin/useRestaurants";
 
 /* -------- */
 import { IUser } from "../../../models/user.model";
@@ -19,7 +20,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 /* -------- */
 import AddIcon from "@mui/icons-material/Add";
-import useRestaurantsAdmins from "../../../hooks/api/useRestaurants";
 import AddRestaurantPopup from "../../popups/mainAdmin/AddRestaurantPopup";
 import MainButton from "../../shared/MainButton";
 import Pagination from "../../shared/Pagination";

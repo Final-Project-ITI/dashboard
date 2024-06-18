@@ -13,7 +13,6 @@ export default function Pagination({
   setItems,
 }: any) {
   const handlePagination = async (direction: number) => {
-    console.log(direction);
     let page = currentPage;
 
     if (direction && currentPage == Math.ceil(data.length / pageSize)) return;

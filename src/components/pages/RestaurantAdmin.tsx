@@ -9,49 +9,49 @@ import CategorySVG from "../../assets/svgs/CategorySVG";
 import MenuSVG from "../../assets/svgs/MenuSVG";
 import PersonSVG from "../../assets/svgs/PersonSVG";
 import TomatoSVG from "../../assets/svgs/TomatoSVG";
-import MainButton from "../shared/MainButton";
+import { IMainButton } from "../../models/mainButton.model";
 import NavBar from "../shared/NavBar";
 
 export default function RestaurantAdmin({ setUser }: any) {
   const navigate = useNavigate();
 
-  const navBtns = [
-    <MainButton
-      width={{ xl: "100%" }}
-      text={"Menu"}
-      Icon={MenuSVG}
-      handler={() => {
+  const navBtns: IMainButton[] = [
+    {
+      width: { xl: "100%" },
+      text: "Menu",
+      Icon: MenuSVG,
+      state: location.pathname.split("/")[2] === "menu",
+      handler: () => {
         navigate("menu");
-      }}
-      state={location.pathname.split("/")[2] === "menu"}
-    ></MainButton>,
-    <MainButton
-      width={{ xl: "100%" }}
-      text={"Cashier"}
-      Icon={PersonSVG}
-      handler={() => {
+      },
+    },
+    {
+      width: { xl: "100%" },
+      text: "Cashier",
+      Icon: PersonSVG,
+      state: location.pathname.split("/")[2] === "cashier",
+      handler: () => {
         navigate("cashier");
-      }}
-      state={location.pathname.split("/")[2] === "cashier"}
-    ></MainButton>,
-    <MainButton
-      width={{ xl: "100%" }}
-      text={"Ingredients"}
-      Icon={TomatoSVG}
-      handler={() => {
+      },
+    },
+    {
+      width: { xl: "100%" },
+      text: "Ingredients",
+      Icon: TomatoSVG,
+      state: location.pathname.split("/")[2] === "ingredients",
+      handler: () => {
         navigate("ingredients");
-      }}
-      state={location.pathname.split("/")[2] === "ingredients"}
-    ></MainButton>,
-    <MainButton
-      width={{ xl: "100%" }}
-      text={"Categories"}
-      Icon={CategorySVG}
-      handler={() => {
-        navigate("category");
-      }}
-      state={location.pathname.split("/")[2] === "category"}
-    ></MainButton>,
+      },
+    },
+    {
+      width: { xl: "100%" },
+      text: "Categories",
+      Icon: CategorySVG,
+      state: location.pathname.split("/")[2] === "menuCategory",
+      handler: () => {
+        navigate("menuCategory");
+      },
+    },
   ];
 
   return (

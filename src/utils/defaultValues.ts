@@ -12,16 +12,21 @@ export const DVAddRestaurant = {
 
 export const DVAddCashier = {
   fullName: "",
-  email: null,
+  email: "",
   password: "",
 };
 
 export const DVCategory = {
+  _id: "",
   name: "",
+  icon: "",
+  restaurantId: "",
 };
 
 export const DVIngredient = {
+  _id: "",
   name: "",
+  restaurantId: "",
 };
 
 export const DVMenuItem = {
@@ -47,4 +52,15 @@ export const DVUser = {
   email: "",
   image: "",
   restaurantId: DVRestaurant,
+};
+
+export const DVProduct = {
+  _id: "",
+  title: "",
+  price: 0,
+  description: "",
+  icon: "",
+  restaurantId: "",
+  menuCategoryId: "",
+  ingredientsIds: [DVIngredient],
 };

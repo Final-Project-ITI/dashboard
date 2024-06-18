@@ -1,14 +1,17 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 /* -------- */
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
+import useAddEditIngredient from "../../../../hooks/api/restaurantAdmin/ingredients/useAddEditIngredient";
 
 /* -------- */
-import { INGREDIENT_URL } from "../../../../utils/urls";
+import "react-toastify/dist/ReactToastify.css";
 import { IFormInputIngredient } from "../../../../models/formInputs/formInputIngredient.model";
 import { DVIngredient } from "../../../../utils/defaultValues";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 /* -------- */
 import { FormInputText } from "../../../shared/formComponents/FormInputText";
@@ -19,32 +22,41 @@ export default function AddIngredient({
   isAdd,
   ingredient,
 }: any) {
-  const methods = useForm<IFormInputIngredient>({
+  const {
+    handleSubmit,
+    reset,
+    control,
+    register,
+    setValue,
+    formState: { isDirty, isValid },
+  } = useForm<IFormInputIngredient>({
     defaultValues: DVIngredient,
+    mode: "onChange",
   });
-  const { handleSubmit, reset, control, setValue } = methods;
+
+  const [onSubmit, isLoading, error] = useAddEditIngredient({
+    setTrigger,
+    ingredient,
+    isAdd,
+  });
 
   const labelStyle = {
     fontSize: "16px",
     marginBottom: "8px",
   };
 
-  const axiosPrivate = useAxiosPrivate();
-
-  const onSubmit = async (data: IFormInputIngredient) => {
-    let res: any;
-
-    if (isAdd) res = await axiosPrivate.post(INGREDIENT_URL, data);
-    else {
-      res = await axiosPrivate.patch(
-        INGREDIENT_URL + "/" + ingredient?._id,
-        data
-      );
-    }
-
-    setValue("name", "");
-    setTrigger(false);
-  };
+  useEffect(() => {
+    toast.error(error?.message, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  }, [error]);
 
   useEffect(() => {
     if (!isAdd) {
@@ -76,60 +88,77 @@ export default function AddIngredient({
               padding: "24px 109px 32px 109px",
             }}
           >
-            <Typography
-              sx={{
-                fontSize: "24px",
-                fontWeight: "bold",
-                marginBottom: "16px",
-              }}
-            >
-              Ingredients
-            </Typography>
-            <Stack spacing={"8px"}>
-              <Box>
-                <Typography sx={labelStyle}>ingredient</Typography>
-                <FormInputText
-                  name="name"
-                  control={control}
-                  label="Ingredient"
-                  type="text"
-                />
-              </Box>
-            </Stack>
-
-            <Stack
-              marginTop={"24px"}
-              spacing={"40px"}
-              width={"100%"}
-              justifyContent={"center"}
-              direction={"row"}
-            >
-              <Button
-                onClick={() => {
-                  reset();
-                  setTrigger(false);
-                }}
-                variant={"outlined"}
+            <form>
+              <Typography
                 sx={{
-                  width: "96px",
+                  fontSize: "24px",
+                  fontWeight: "bold",
+                  marginBottom: "16px",
                 }}
               >
-                {" "}
-                Cancel{" "}
-              </Button>
+                Ingredients
+              </Typography>
+              <Stack spacing={"8px"}>
+                <Box>
+                  <Typography sx={labelStyle}>ingredient</Typography>
+                  <FormInputText
+                    type="text"
+                    register={register}
+                    validation={{
+                      required: {
+                        value: true,
+                        message: "ingredient name is required",
+                      },
+                      maxLength: {
+                        value: 25,
+                        message: "maximum 35 characters",
+                      },
+                    }}
+                    name="name"
+                    control={control}
+                    label="Ingredient"
+                  />
+                </Box>
+              </Stack>
 
-              <Button
-                onClick={handleSubmit(onSubmit)}
-                variant={"contained"}
-                sx={{
-                  width: "96px",
-                }}
+              <Stack
+                marginTop={"24px"}
+                spacing={"40px"}
+                width={"100%"}
+                justifyContent={"center"}
+                direction={"row"}
               >
-                {" "}
-                {isAdd ? "Add" : "Save"}{" "}
-              </Button>
-            </Stack>
+                <Button
+                  onClick={() => {
+                    reset();
+                    setTrigger(false);
+                  }}
+                  variant={"outlined"}
+                  sx={{
+                    width: "96px",
+                  }}
+                >
+                  {" "}
+                  Cancel{" "}
+                </Button>
+
+                <LoadingButton
+                  onClick={handleSubmit(onSubmit)}
+                  variant={"contained"}
+                  sx={{
+                    width: "96px",
+                  }}
+                  loading={isLoading}
+                  disabled={!isDirty || !isValid}
+                  type="submit"
+                >
+                  {" "}
+                  {isAdd ? "Add" : "Save"}{" "}
+                </LoadingButton>
+              </Stack>
+            </form>
           </Box>
+          <ToastContainer />
         </Stack>
       ) : (
         ""

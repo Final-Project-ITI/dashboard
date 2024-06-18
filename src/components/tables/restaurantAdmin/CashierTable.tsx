@@ -11,22 +11,22 @@ import Table from "@mui/material/Table";
 
 /* -------- */
 import { useEffect, useState } from "react";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 /* -------- */
 import { IUser } from "../../../models/user.model";
-import { RESTAURANTS_CAHSIERS_URL } from "../../../utils/urls";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 /* -------- */
 import AddIcon from "@mui/icons-material/Add";
+import useCashiers from "../../../hooks/api/restaurantAdmin/cashiers/useCashiers";
 import AddCashier from "../../popups/restaurantAdmin/cashier/AddCashier";
 import MainButton from "../../shared/MainButton";
 import Pagination from "../../shared/Pagination";
 
 export default function CashierTable() {
   const [addCashierTrigger, setAddCashierTrigger] = useState(false);
-  const axiosPrivate = useAxiosPrivate();
-  const [data, setData] = useState<IUser[]>([]);
+  const [data, isLoading] = useCashiers();
   const [cashiers, setCashiers] = useState<IUser[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -44,16 +44,7 @@ export default function CashierTable() {
     borderBottom: "none",
   };
 
-  const handleGetCashiers = async () => {
-    try {
-      const res = await axiosPrivate.get(RESTAURANTS_CAHSIERS_URL);
-      setData(res.data);
-    } catch (e) {}
-  };
-
-  useEffect(() => {
-    handleGetCashiers();
-  }, []);
+  const skeletonRows = [0, 0, 0, 0, 0, 0, 0];
 
   useEffect(() => {
     setCashiers(data.slice(0, 7));
@@ -82,7 +73,7 @@ export default function CashierTable() {
           </Typography>
 
           <MainButton
-            width={"156px"}
+            width={"200px"}
             text={"Add Cashier"}
             Icon={AddIcon}
             handler={() => {
@@ -121,32 +112,49 @@ export default function CashierTable() {
             <Stack justifyContent={"space-between"} height={"85%"}>
               <Table>
                 <TableHead>
-                  <TableCell sx={tableHeadTextStyle}>Cashier Name</TableCell>
-                  <TableCell sx={tableHeadTextStyle}>E-Mail</TableCell>
+                  <TableRow>
+                    <TableCell sx={tableHeadTextStyle}>Cashier Name</TableCell>
+                    <TableCell sx={tableHeadTextStyle}>E-Mail</TableCell>
+                  </TableRow>
                 </TableHead>
 
                 <TableBody>
-                  {cashiers.length
-                    ? cashiers.map((cashier) => {
-                        return (
-                          <TableRow>
-                            <TableCell sx={tableBodyTextStyle}>
-                              {cashier.fullName}
-                            </TableCell>
-                            <TableCell sx={tableBodyTextStyle}>
-                              {cashier.email}
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
-                    : ""}
+                  {isLoading ? (
+                    <SkeletonTheme
+                      baseColor="transparent"
+                      highlightColor="#0A0A0A80"
+                    >
+                      {skeletonRows.map((e, i) => (
+                        <TableRow key={i}>
+                          <TableCell colSpan={5}>
+                            <Skeleton height={20} />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </SkeletonTheme>
+                  ) : cashiers.length ? (
+                    cashiers.map((cashier) => {
+                      return (
+                        <TableRow key={cashier._id}>
+                          <TableCell sx={tableBodyTextStyle}>
+                            {cashier.fullName}
+                          </TableCell>
+                          <TableCell sx={tableBodyTextStyle}>
+                            {cashier.email}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  ) : (
+                    ""
+                  )}
                 </TableBody>
               </Table>
 
               <Pagination
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
-                pageSize={4}
+                pageSize={7}
                 data={data}
                 setItems={setCashiers}
               />

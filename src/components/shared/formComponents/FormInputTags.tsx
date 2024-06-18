@@ -62,7 +62,6 @@ export const FormInputTags = ({
   return (
     <Stack
       backgroundColor={"#E8DCCC"}
-      fullWidth
       padding={"10px"}
       position={"relative"}
       borderRadius={"4px"}
@@ -83,6 +82,7 @@ export const FormInputTags = ({
               marginRight: "5px",
               marginTop: "5px",
             }}
+            key={tag._id}
           >
             {tag.name}
             <IconButton onClick={() => handleRemoveIngredient(tag)}>
@@ -136,6 +136,7 @@ export const FormInputTags = ({
                 },
                 textAlign: "left",
               }}
+              key={ingredient._id}
               style={{ justifyContent: "flex-start" }}
               onClick={() => handleSelectIngredient(ingredient)}
             >

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { IUser } from "../../models/user.model";
-import { DVUser } from "../../utils/defaultValues";
-import useAxiosPrivate from "../useAxiosPrivate";
-import { RESTAURANTS_ADMINS_URL } from "../../utils/urls";
+import { IUser } from "../../../models/user.model";
+import useAxiosPrivate from "../../useAxiosPrivate";
+import { DVUser } from "../../../utils/defaultValues";
+import { RESTAURANTS_ADMINS_URL } from "../../../utils/urls";
 
 const useRestaurantsAdmins = (): [IUser[], boolean, Error] => {
   const [data, setData] = useState<IUser[]>([DVUser]);

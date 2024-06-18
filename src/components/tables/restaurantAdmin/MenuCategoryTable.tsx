@@ -9,14 +9,15 @@ import {
   Typography,
 } from "@mui/material";
 import Table from "@mui/material/Table";
+
+/* -------- */
 import { useEffect, useState } from "react";
+import useMenuCategory from "../../../hooks/api/restaurantAdmin/menuCategories/useMenuCategory";
 
 /* -------- */
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-
-/* -------- */
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { IMenuCategory } from "../../../models/menuCategory.model";
-import { MENU_CATEGORY_URL } from "../../../utils/urls";
 
 /* -------- */
 import AddIcon from "@mui/icons-material/Add";
@@ -25,16 +26,16 @@ import PinSVG from "../../../assets/svgs/PinSVG";
 import TrashSVG from "../../../assets/svgs/TrashSVG";
 import MainButton from "../../shared/MainButton";
 
-import AddCategory from "../../popups/restaurantAdmin/categories/AddCategory";
-import DeleteCategoryPopup from "../../popups/restaurantAdmin/categories/DeleteCategory";
+import AddCategory from "../../popups/restaurantAdmin/menuCategories/AddMenuCategory";
+import DeleteCategoryPopup from "../../popups/restaurantAdmin/menuCategories/DeleteMenuCategory";
 import Pagination from "../../shared/Pagination";
 
-export default function CategoryTable() {
+export default function MenuCategoryTable() {
   const [addCategoryTrigger, setAddCategoryTrigger] = useState(false);
   const [deleteCategoryTrigger, setDeleteCategoryTrigger] = useState(false);
-  const axiosPrivate = useAxiosPrivate();
   const [isAdd, setIsAdd] = useState(false);
-  const [data, setData] = useState<IMenuCategory[]>([]);
+
+  const [data, isLoading] = useMenuCategory();
   const [menuCategories, setMenuCategories] = useState<IMenuCategory[]>([]);
   const [menuCategory, setMenuCategory] = useState<IMenuCategory>();
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,21 +54,12 @@ export default function CategoryTable() {
     borderBottom: "none",
   };
 
+  const skeletonRows = [0, 0, 0, 0, 0];
+
   const handleDeleteCategory = (item: IMenuCategory) => {
     setMenuCategory(item);
     setDeleteCategoryTrigger(true);
   };
-
-  const handleGetMenuCategories = async () => {
-    try {
-      const res = await axiosPrivate.get(MENU_CATEGORY_URL);
-      setData(res.data);
-    } catch (e) {}
-  };
-
-  useEffect(() => {
-    handleGetMenuCategories();
-  }, []);
 
   useEffect(() => {
     setMenuCategories(data.slice(0, 5));
@@ -142,42 +134,57 @@ export default function CategoryTable() {
             <Stack justifyContent={"space-between"} height={"85%"}>
               <Table>
                 <TableHead>
-                  <TableCell sx={tableHeadTextStyle}>Category</TableCell>
-                  <TableCell sx={tableHeadTextStyle}>Action</TableCell>
+                  <TableRow>
+                    <TableCell sx={tableHeadTextStyle}>Category</TableCell>
+                    <TableCell sx={tableHeadTextStyle}>Action</TableCell>
+                  </TableRow>
                 </TableHead>
 
                 <TableBody>
-                  {menuCategories.length
-                    ? menuCategories.map((menuCategory) => {
-                        return (
-                          <TableRow>
-                            <TableCell sx={tableBodyTextStyle}>
-                              {menuCategory.name}
-                            </TableCell>
+                  {isLoading ? (
+                    <SkeletonTheme
+                      baseColor="transparent"
+                      highlightColor="#0A0A0A80"
+                    >
+                      {skeletonRows.map((e, i) => (
+                        <TableRow key={i}>
+                          <TableCell colSpan={5}>
+                            <Skeleton height={40} />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </SkeletonTheme>
+                  ) : menuCategories.length ? (
+                    menuCategories.map((menuCategory) => {
+                      return (
+                        <TableRow key={menuCategory._id}>
+                          <TableCell sx={tableBodyTextStyle}>
+                            {menuCategory.name}
+                          </TableCell>
 
-                            <TableCell sx={tableBodyTextStyle}>
-                              <IconButton
-                                onClick={() => {
-                                  setMenuCategory(menuCategory);
-                                  setIsAdd(false);
-                                  setAddCategoryTrigger(true);
-                                }}
-                              >
-                                <PinSVG />
-                              </IconButton>
+                          <TableCell sx={tableBodyTextStyle}>
+                            <IconButton
+                              onClick={() => {
+                                setMenuCategory({ ...menuCategory });
+                                setIsAdd(false);
+                                setAddCategoryTrigger(true);
+                              }}
+                            >
+                              <PinSVG />
+                            </IconButton>
 
-                              <IconButton
-                                onClick={() =>
-                                  handleDeleteCategory(menuCategory)
-                                }
-                              >
-                                <TrashSVG />
-                              </IconButton>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
-                    : ""}
+                            <IconButton
+                              onClick={() => handleDeleteCategory(menuCategory)}
+                            >
+                              <TrashSVG />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  ) : (
+                    ""
+                  )}
                 </TableBody>
               </Table>
 

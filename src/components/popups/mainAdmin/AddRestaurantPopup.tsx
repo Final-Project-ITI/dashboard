@@ -4,16 +4,16 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 /* -------- */
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import useAddRestaurant from "../../../hooks/api/mainAdmin/useAddRestaurant";
 
 /* -------- */
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IFormInputRestaurant } from "../../../models/formInputs/formInputRestaurant.model";
-import { regEmail, regFullName, regPhone } from "../../../regex/regex";
+import { regEmail, regPhone } from "../../../regex/regex";
 import { DVAddRestaurant } from "../../../utils/defaultValues";
 
 /* -------- */
-import useAddRestaurant from "../../../hooks/api/useAddRestaurant";
 import { FormInputText } from "../../shared/formComponents/FormInputText";
 
 export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
@@ -22,13 +22,17 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
     reset,
     control,
     register,
-    getValues,
+    watch,
     formState: { isDirty, isValid },
   } = useForm<IFormInputRestaurant>({
     defaultValues: DVAddRestaurant,
+    mode: "onChange",
   });
 
   const [onSubmit, isLoading, error] = useAddRestaurant({ setTrigger });
+
+  const icon = watch("icon", false);
+  const banner = watch("banner", false);
 
   const labelStyle = {
     fontSize: "16px",
@@ -90,11 +94,7 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
                     validation={{
                       required: {
                         value: true,
-                        message: "full name is required",
-                      },
-                      pattern: {
-                        value: regFullName,
-                        message: "invalid full name",
+                        message: "restaurant name is required",
                       },
                     }}
                     name="name"
@@ -204,9 +204,7 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
                     fullWidth
                     color="secondary"
                   >
-                    {getValues("icon")?.length
-                      ? getValues("icon")[0]?.name
-                      : "Choose Icon"}
+                    {icon?.length ? icon[0]?.name : "Choose Icon"}
                     <input
                       {...register("icon", { required: true })}
                       name="icon"
@@ -225,9 +223,7 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
                     fullWidth
                     color="secondary"
                   >
-                    {getValues("banner")?.length
-                      ? getValues("banner")[0]?.name
-                      : "Choose Banner"}
+                    {banner?.length ? banner[0]?.name : "Choose Banner"}
                     <input
                       {...register("banner", { required: true })}
                       name="banner"

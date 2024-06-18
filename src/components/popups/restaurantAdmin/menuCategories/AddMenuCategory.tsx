@@ -1,33 +1,45 @@
+import LoadingButton from "@mui/lab/LoadingButton";
 import { Box, Button, Stack, Typography } from "@mui/material";
 
 /* -------- */
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import useAddCashier from "../../../../hooks/api/restaurantAdmin/cashiers/useAddCashier";
+import useAddEditMenuCategory from "../../../../hooks/api/restaurantAdmin/menuCategories/useAddEditMenuCategory";
 
 /* -------- */
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { regEmail, regFullName } from "../../../../regex/regex";
-import { DVAddCashier } from "../../../../utils/defaultValues";
+import { DVCategory } from "../../../../utils/defaultValues";
 
 /* -------- */
-import LoadingButton from "@mui/lab/LoadingButton";
 import { FormInputText } from "../../../shared/formComponents/FormInputText";
 
-export default function AddCashier({ trigger, setTrigger }: any) {
+export default function AddCategory({
+  trigger,
+  setTrigger,
+  isAdd,
+  menuCategory,
+}: any) {
   const {
     handleSubmit,
     reset,
     control,
     register,
+    setValue,
+    watch,
     formState: { isDirty, isValid },
-  } = useForm<IFormInputCashier>({
-    defaultValues: DVAddCashier,
+  } = useForm<IFormInputCategory>({
+    defaultValues: DVCategory,
     mode: "onChange",
   });
 
-  const [onSubmit, isLoading, error] = useAddCashier({ setTrigger });
+  const icon = watch("icon", false);
+
+  const [onSubmit, isLoading, error] = useAddEditMenuCategory({
+    setTrigger,
+    menuCategory,
+    isAdd,
+  });
 
   const labelStyle = {
     fontSize: "16px",
@@ -46,6 +58,12 @@ export default function AddCashier({ trigger, setTrigger }: any) {
       transition: Bounce,
     });
   }, [error]);
+
+  useEffect(() => {
+    if (!isAdd) {
+      setValue("name", menuCategory?.name);
+    }
+  }, [menuCategory]);
 
   return (
     <>
@@ -79,68 +97,47 @@ export default function AddCashier({ trigger, setTrigger }: any) {
                   marginBottom: "16px",
                 }}
               >
-                Add Item
+                Categories
               </Typography>
               <Stack spacing={"8px"}>
                 <Box>
-                  <Typography sx={labelStyle}>Cashier Name</Typography>
+                  <Typography sx={labelStyle}>Category</Typography>
                   <FormInputText
                     type="text"
                     register={register}
                     validation={{
                       required: {
                         value: true,
-                        message: "cashier name is required",
+                        message: "category name is required",
                       },
-                      pattern: {
-                        value: regFullName,
-                        message: "invalid cashier name",
+                      maxLength: {
+                        value: 25,
+                        message: "maximum 35 characters",
                       },
                     }}
-                    name="fullName"
+                    name="name"
                     control={control}
-                    label="Add Cashier Name"
+                    label="Category"
                   />
                 </Box>
+
                 <Box>
-                  <Typography sx={labelStyle}>E-Mail</Typography>
-                  <FormInputText
-                    register={register}
-                    validation={{
-                      required: {
-                        value: true,
-                        message: "email is required",
-                      },
-                      pattern: {
-                        value: regEmail,
-                        message: "invalid email",
-                      },
-                    }}
-                    name="email"
-                    control={control}
-                    label="Email"
-                    type="email"
-                  />
-                </Box>
-                <Box>
-                  <Typography sx={labelStyle}>Password</Typography>
-                  <FormInputText
-                    register={register}
-                    validation={{
-                      required: {
-                        value: true,
-                        message: "password is required",
-                      },
-                      minLength: {
-                        value: 7,
-                        message: "password must be minimum 7 characters",
-                      },
-                    }}
-                    name="password"
-                    control={control}
-                    label="Password"
-                    type="password"
-                  />
+                  <Typography sx={labelStyle}>Icon</Typography>
+                  <Button
+                    variant="contained"
+                    component="label"
+                    fullWidth
+                    color="secondary"
+                  >
+                    {icon?.length ? icon[0]?.name : "Choose Icon"}
+                    <input
+                      {...register("icon", { required: true })}
+                      name="icon"
+                      type="file"
+                      accept="image/png, image/gif, image/jpeg"
+                      hidden
+                    />
+                  </Button>
                 </Box>
               </Stack>
 
@@ -176,7 +173,7 @@ export default function AddCashier({ trigger, setTrigger }: any) {
                   type="submit"
                 >
                   {" "}
-                  Add{" "}
+                  {isAdd ? "Add" : "Save"}{" "}
                 </LoadingButton>
               </Stack>
             </form>

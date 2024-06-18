@@ -19,7 +19,7 @@ export default function NavBar({ Buttons, title }: any) {
   const navigate = useNavigate();
   const { setAuth }: any = useAuth();
   const [, , removeCookie] = useCookies();
-  const [user, setUser, isLoading, error] = useUser();
+  const [user, setUser, isLoading] = useUser();
 
   const handleLogout = () => {
     setAuth({
@@ -131,6 +131,7 @@ export default function NavBar({ Buttons, title }: any) {
           display: { xl: "none", xs: "block" },
         }}
         direction={"row"}
+        justifyContent={"space-between"}
       >
         {Buttons.map((btn: IMainButton) => (
           <MainButton
