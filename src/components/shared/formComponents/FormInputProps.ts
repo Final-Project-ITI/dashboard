@@ -6,5 +6,7 @@ export interface FormInputProps {
   label?: string;
   type?: string;
   setValue?: any;
+  register?: any;
+  validation?: any;
   categories?: IMenuCategory[];
 }

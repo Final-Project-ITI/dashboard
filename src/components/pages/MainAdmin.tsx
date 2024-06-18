@@ -3,18 +3,13 @@ import { Stack } from "@mui/material";
 
 /* -------- */
 import PersonSVG from "../../assets/svgs/PersonSVG";
-import MainButton from "../shared/MainButton";
 import NavBar from "../shared/NavBar";
 import RestaurantsTable from "../tables/mainAdmin/RestaurantsTable";
+import { IMainButton } from "../../models/mainButton.model";
 
 export default function MainAdmin() {
-  const navBtns = [
-    <MainButton
-      width={"100%"}
-      text={"Restaurants"}
-      Icon={PersonSVG}
-      state={true}
-    ></MainButton>,
+  const navBtns: IMainButton[] = [
+    { text: "Restaurants", Icon: PersonSVG, state: true, width: "100%" },
   ];
 
   return (

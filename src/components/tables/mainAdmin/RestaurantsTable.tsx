@@ -11,56 +11,29 @@ import Table from "@mui/material/Table";
 
 /* -------- */
 import { useEffect, useState } from "react";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 /* -------- */
 import { IUser } from "../../../models/user.model";
-import { RESTAURANTS_ADMINS_URL } from "../../../utils/urls";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 /* -------- */
 import AddIcon from "@mui/icons-material/Add";
+import useRestaurantsAdmins from "../../../hooks/api/useRestaurants";
 import AddRestaurantPopup from "../../popups/mainAdmin/AddRestaurantPopup";
 import MainButton from "../../shared/MainButton";
 import Pagination from "../../shared/Pagination";
 
 export default function RestaurantsTable() {
   const [addRestaurantTrigger, setAddRestaurantTrigger] = useState(false);
+  const [data, isLoading] = useRestaurantsAdmins();
   const [restaurants, setRestaurants] = useState<IUser[]>([]);
-  const axiosPrivate = useAxiosPrivate();
   const [currentPage, setCurrentPage] = useState(1);
-
-  const handleGetRestuarants = async (page = 1) => {
-    try {
-      const { data } = await axiosPrivate.get(RESTAURANTS_ADMINS_URL + page);
-      setRestaurants(data);
-    } catch (e) {}
-  };
-
-  const handlePagination = async (direction: number) => {
-    if (!direction && currentPage == 1) return;
-
-    const { data } = await axiosPrivate.get(
-      `${RESTAURANTS_ADMINS_URL}${
-        direction ? currentPage + 1 : currentPage - 1
-      }`
-    );
-
-    if (data.length) {
-      setCurrentPage((pre) => {
-        if (direction) {
-          return ++pre;
-        } else {
-          return --pre;
-        }
-      });
-
-      setRestaurants(data);
-    }
-  };
+  const skeletonRows = [0, 0, 0, 0, 0];
 
   useEffect(() => {
-    handleGetRestuarants();
-  }, []);
+    setRestaurants(data.slice(0, 4));
+  }, [data]);
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -141,74 +114,95 @@ export default function RestaurantsTable() {
             <Stack justifyContent={"space-between"} height={"85%"}>
               <Table>
                 <TableHead>
-                  <TableCell sx={tableHeadTextStyle}>Restaurant Name</TableCell>
-                  <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
-                    Icon
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      ...tableHeadTextStyle,
-                      ...hideContent,
-                      textAlign: "start",
-                    }}
-                  >
-                    Address
-                  </TableCell>
-                  <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
-                    Phone
-                  </TableCell>
-                  <TableCell sx={tableHeadTextStyle}>Admin</TableCell>
+                  <TableRow>
+                    <TableCell sx={tableHeadTextStyle}>
+                      Restaurant Name
+                    </TableCell>
+                    <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
+                      Icon
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        ...tableHeadTextStyle,
+                        ...hideContent,
+                        textAlign: "start",
+                      }}
+                    >
+                      Address
+                    </TableCell>
+                    <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
+                      Phone
+                    </TableCell>
+                    <TableCell sx={tableHeadTextStyle}>Admin</TableCell>
+                  </TableRow>
                 </TableHead>
 
                 <TableBody>
-                  {restaurants.map((admin) => {
-                    return (
-                      <TableRow>
-                        <TableCell sx={tableBodyTextStyle}>
-                          {admin.restaurantId?.name}
-                        </TableCell>
-                        <TableCell
-                          sx={{ ...tableHeadTextStyle, ...hideContent }}
-                        >
-                          <img
-                            src={admin.restaurantId?.icon}
-                            title="icon"
-                            style={{
-                              objectFit: "cover",
-                              width: "64px",
-                              height: "64px",
-                              borderRadius: "50%",
+                  {isLoading ? (
+                    <SkeletonTheme
+                      baseColor="transparent"
+                      highlightColor="#0A0A0A80"
+                    >
+                      {skeletonRows.map((e, i) => (
+                        <TableRow key={i}>
+                          <TableCell colSpan={5}>
+                            <Skeleton height={50} />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </SkeletonTheme>
+                  ) : (
+                    restaurants.map((admin) => {
+                      return (
+                        <TableRow key={admin._id}>
+                          <TableCell sx={tableBodyTextStyle}>
+                            {admin.restaurantId?.name}
+                          </TableCell>
+                          <TableCell
+                            sx={{ ...tableHeadTextStyle, ...hideContent }}
+                          >
+                            <img
+                              src={admin.restaurantId?.icon}
+                              title="icon"
+                              style={{
+                                objectFit: "cover",
+                                width: "64px",
+                                height: "64px",
+                                borderRadius: "50%",
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              ...tableBodyTextStyle,
+                              ...hideContent,
+                              width: "200px",
+                              textAlign: "start",
                             }}
-                          />
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            ...tableBodyTextStyle,
-                            ...hideContent,
-                            width: "200px",
-                            textAlign: "start",
-                          }}
-                        >
-                          {admin.restaurantId?.address}
-                        </TableCell>
-                        <TableCell
-                          sx={{ ...tableHeadTextStyle, ...hideContent }}
-                        >
-                          {admin.restaurantId?.phone}
-                        </TableCell>
-                        <TableCell sx={tableBodyTextStyle}>
-                          {admin.email}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                          >
+                            {admin.restaurantId?.address}
+                          </TableCell>
+                          <TableCell
+                            sx={{ ...tableHeadTextStyle, ...hideContent }}
+                          >
+                            {admin.restaurantId?.phone}
+                          </TableCell>
+                          <TableCell sx={tableBodyTextStyle}>
+                            {admin.email}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  )}
                 </TableBody>
               </Table>
 
               <Pagination
-                handler={handlePagination}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
+                pageSize={4}
+                data={data}
+                setItems={setRestaurants}
               />
             </Stack>
           </Box>

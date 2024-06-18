@@ -1,26 +1,25 @@
 import { Box, Stack, Typography } from "@mui/material";
 
 /* -------- */
-import { useContext, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
+/* -------- */
+import "react-loading-skeleton/dist/skeleton.css";
+import { IMainButton } from "../../models/mainButton.model";
+import MainButton from "./MainButton";
 
 /* -------- */
 import icon from "../../assets/logo.svg";
-
-/* -------- */
-import { UserContext } from "../../App";
-import { USER_URL } from "../../utils/urls";
-import MainButton from "./MainButton";
+import useUser from "../../hooks/api/useUser";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 export default function NavBar({ Buttons, title }: any) {
   const navigate = useNavigate();
   const { setAuth }: any = useAuth();
   const [, , removeCookie] = useCookies();
-  const axiosPrivate = useAxiosPrivate();
-  const { user, setUser } = useContext(UserContext);
+  const [user, setUser, isLoading, error] = useUser();
 
   const handleLogout = () => {
     setAuth({
@@ -30,17 +29,6 @@ export default function NavBar({ Buttons, title }: any) {
     removeCookie("token");
     navigate("/login", { replace: true });
   };
-
-  const handleGetUserData = async () => {
-    try {
-      const { data } = await axiosPrivate.get(USER_URL);
-      setUser(data);
-    } catch (e) {}
-  };
-
-  useEffect(() => {
-    handleGetUserData();
-  }, []);
 
   return (
     <Stack
@@ -82,43 +70,59 @@ export default function NavBar({ Buttons, title }: any) {
             handler={handleLogout}
           ></MainButton>
         </Stack>
+        <SkeletonTheme baseColor="transparent" highlightColor="#0A0A0A80">
+          <Box order={{ xl: 1, xs: 2 }} width={{ xl: "100%" }}>
+            <Typography
+              sx={{
+                fontSize: "24px",
+                fontWeight: "bold",
+                marginBottom: "8px",
+                marginLeft: { xl: "26px" },
+                textAlign: { xl: "start", xs: "center" },
+              }}
+            >
+              {isLoading ? <Skeleton /> : user?.fullName}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "20px",
+                fontWeight: "bold",
+                color: "#0A0A0A80",
+                marginLeft: { xl: "26px" },
+                textAlign: { xl: "start", xs: "center" },
+              }}
+            >
+              {title ? (
+                title
+              ) : isLoading ? (
+                <Skeleton />
+              ) : (
+                user?.restaurantId?.name.toUpperCase()
+              )}
+            </Typography>
 
-        <Box order={{ xl: 1, xs: 2 }} width={{ xl: "100%" }}>
-          <Typography
-            sx={{
-              fontSize: "24px",
-              fontWeight: "bold",
-              marginBottom: "8px",
-              marginLeft: { xl: "36px" },
-              textAlign: { xl: "start", xs: "center" },
-            }}
-          >
-            {user?.fullName}
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: "20px",
-              fontWeight: "bold",
-              color: "#0A0A0A80",
-              marginLeft: { xl: "36px" },
-              textAlign: { xl: "start", xs: "center" },
-            }}
-          >
-            {title ? title : user?.restaurantId?.name.toUpperCase()}
-          </Typography>
-
-          <Stack
-            spacing={"16px"}
-            order={{ xl: 2, xs: 4 }}
-            width={"100%"}
-            marginTop={{ xl: "80px" }}
-            sx={{
-              display: { xl: "block", xs: "none" },
-            }}
-          >
-            {Buttons.map((btn: any) => btn)}
-          </Stack>
-        </Box>
+            <Stack
+              spacing={"16px"}
+              order={{ xl: 2, xs: 4 }}
+              width={"100%"}
+              marginTop={{ xl: "80px" }}
+              sx={{
+                display: { xl: "block", xs: "none" },
+              }}
+            >
+              {Buttons.map((btn: IMainButton) => (
+                <MainButton
+                  width={btn.width}
+                  text={btn.text}
+                  Icon={btn.Icon}
+                  handler={btn.handler}
+                  state={btn.state}
+                  key={btn.text}
+                />
+              ))}
+            </Stack>
+          </Box>
+        </SkeletonTheme>
       </Stack>
       <Stack
         spacing={"16px"}
@@ -128,7 +132,16 @@ export default function NavBar({ Buttons, title }: any) {
         }}
         direction={"row"}
       >
-        {Buttons.map((btn: any) => btn)}
+        {Buttons.map((btn: IMainButton) => (
+          <MainButton
+            width={btn.width}
+            text={btn.text}
+            Icon={btn.Icon}
+            handler={btn.handler}
+            state={btn.state}
+            key={btn.text}
+          />
+        ))}
       </Stack>
     </Stack>
   );

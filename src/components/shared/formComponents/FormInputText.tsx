@@ -11,13 +11,16 @@ export const FormInputText = ({
   control,
   label,
   type,
+  register,
+  validation,
 }: FormInputProps) => {
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, value }, fieldState: { error } }) => (
+      render={({ field: { onChange, value = "" }, fieldState: { error } }) => (
         <TextField
+          {...register(name, validation)}
           sx={{
             backgroundColor: "#E8DCCC",
           }}
@@ -29,6 +32,7 @@ export const FormInputText = ({
           fullWidth
           label={label}
           inputProps={{ type }}
+          name={name}
         />
       )}
     />

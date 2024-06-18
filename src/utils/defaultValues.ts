@@ -4,8 +4,10 @@ export const DVLogin = {
 };
 
 export const DVAddRestaurant = {
-  email: "",
-  password: "",
+  name: "",
+  description: "",
+  address: "",
+  phone: "",
 };
 
 export const DVAddCashier = {
@@ -27,4 +29,22 @@ export const DVMenuItem = {
   price: "",
   description: "",
   category: "",
+};
+
+export const DVRestaurant = {
+  _id: "",
+  name: "",
+  icon: "",
+  banner: "",
+  description: "",
+  address: "",
+  phone: "",
+};
+
+export const DVUser = {
+  _id: "",
+  fullName: "",
+  email: "",
+  image: "",
+  restaurantId: DVRestaurant,
 };

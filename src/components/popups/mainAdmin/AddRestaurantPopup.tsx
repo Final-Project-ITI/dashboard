@@ -1,43 +1,52 @@
+import LoadingButton from "@mui/lab/LoadingButton";
 import { Box, Button, Stack, Typography } from "@mui/material";
 
 /* -------- */
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 /* -------- */
-import { CREATE_RESTAURANT_URL } from "../../../utils/urls";
-import { DVAddRestaurant } from "../../../utils/defaultValues";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { IFormInputRestaurant } from "../../../models/formInputs/formInputRestaurant.model";
+import { regEmail, regFullName, regPhone } from "../../../regex/regex";
+import { DVAddRestaurant } from "../../../utils/defaultValues";
 
 /* -------- */
+import useAddRestaurant from "../../../hooks/api/useAddRestaurant";
 import { FormInputText } from "../../shared/formComponents/FormInputText";
 
 export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
-  const methods = useForm<IFormInputRestaurant>({
+  const {
+    handleSubmit,
+    reset,
+    control,
+    register,
+    getValues,
+    formState: { isDirty, isValid },
+  } = useForm<IFormInputRestaurant>({
     defaultValues: DVAddRestaurant,
   });
-  const { handleSubmit, reset, control, register } = methods;
-  const axiosPrivate = useAxiosPrivate();
 
-  const onSubmit = async (data: IFormInputRestaurant) => {
-    const formData = new FormData();
-
-    formData.append("name", data.name);
-    formData.append("description", data.description);
-    formData.append("email", data.email);
-    formData.append("address", data.address);
-    formData.append("phone", data.phone);
-    formData.append("icon", data.icon[0]);
-    formData.append("banner", data.banner[0]);
-
-    await axiosPrivate.post(CREATE_RESTAURANT_URL, formData);
-    setTrigger(false);
-  };
+  const [onSubmit, isLoading, error] = useAddRestaurant({ setTrigger });
 
   const labelStyle = {
     fontSize: "16px",
     marginBottom: "8px",
   };
+
+  useEffect(() => {
+    toast.error(error?.message, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  }, [error]);
 
   return (
     <>
@@ -77,6 +86,17 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
                 <Box>
                   <Typography sx={labelStyle}>Restaurant Name</Typography>
                   <FormInputText
+                    register={register}
+                    validation={{
+                      required: {
+                        value: true,
+                        message: "full name is required",
+                      },
+                      pattern: {
+                        value: regFullName,
+                        message: "invalid full name",
+                      },
+                    }}
                     name="name"
                     control={control}
                     label="Restaurant Name"
@@ -87,6 +107,17 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
                 <Box>
                   <Typography sx={labelStyle}>Email</Typography>
                   <FormInputText
+                    register={register}
+                    validation={{
+                      required: {
+                        value: true,
+                        message: "email is required",
+                      },
+                      pattern: {
+                        value: regEmail,
+                        message: "invalid email",
+                      },
+                    }}
                     name="email"
                     control={control}
                     label="Email"
@@ -97,6 +128,21 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
                 <Box>
                   <Typography sx={labelStyle}>Address</Typography>
                   <FormInputText
+                    register={register}
+                    validation={{
+                      required: {
+                        value: true,
+                        message: "address is required",
+                      },
+                      maxLength: {
+                        value: 100,
+                        message: "maximum 100 character",
+                      },
+                      minLength: {
+                        value: 20,
+                        message: "minimum 20 character",
+                      },
+                    }}
                     name="address"
                     control={control}
                     label="Address"
@@ -107,6 +153,21 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
                 <Box>
                   <Typography sx={labelStyle}>Description</Typography>
                   <FormInputText
+                    register={register}
+                    validation={{
+                      required: {
+                        value: true,
+                        message: "description is required",
+                      },
+                      maxLength: {
+                        value: 100,
+                        message: "maximum 255 character",
+                      },
+                      minLength: {
+                        value: 20,
+                        message: "minimum 20 character",
+                      },
+                    }}
                     name="description"
                     control={control}
                     label="Description"
@@ -117,6 +178,17 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
                 <Box>
                   <Typography sx={labelStyle}>Phone</Typography>
                   <FormInputText
+                    register={register}
+                    validation={{
+                      required: {
+                        value: true,
+                        message: "phone is required",
+                      },
+                      pattern: {
+                        value: regPhone,
+                        message: "invalid phone",
+                      },
+                    }}
                     name="phone"
                     control={control}
                     label="Phone"
@@ -132,11 +204,14 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
                     fullWidth
                     color="secondary"
                   >
-                    Choose File
+                    {getValues("icon")?.length
+                      ? getValues("icon")[0]?.name
+                      : "Choose Icon"}
                     <input
-                      {...register("icon")}
+                      {...register("icon", { required: true })}
                       name="icon"
                       type="file"
+                      accept="image/png, image/gif, image/jpeg"
                       hidden
                     />
                   </Button>
@@ -150,51 +225,59 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
                     fullWidth
                     color="secondary"
                   >
-                    Choose File
+                    {getValues("banner")?.length
+                      ? getValues("banner")[0]?.name
+                      : "Choose Banner"}
                     <input
-                      {...register("banner")}
+                      {...register("banner", { required: true })}
                       name="banner"
                       type="file"
+                      accept="image/png, image/gif, image/jpeg"
                       hidden
                     />
                   </Button>
                 </Box>
+
+                <Stack
+                  marginTop={"24px"}
+                  spacing={"40px"}
+                  width={"100%"}
+                  justifyContent={"center"}
+                  direction={"row"}
+                >
+                  <Button
+                    onClick={() => {
+                      reset();
+                      setTrigger(false);
+                    }}
+                    variant={"outlined"}
+                    sx={{
+                      width: "96px",
+                    }}
+                  >
+                    {" "}
+                    Cancel{" "}
+                  </Button>
+
+                  <LoadingButton
+                    onClick={handleSubmit(onSubmit)}
+                    variant={"contained"}
+                    sx={{
+                      width: "96px",
+                    }}
+                    loading={isLoading}
+                    disabled={!isDirty || !isValid}
+                    type="submit"
+                  >
+                    {" "}
+                    Add{" "}
+                  </LoadingButton>
+                </Stack>
               </form>
             </Stack>
-
-            <Stack
-              marginTop={"24px"}
-              spacing={"40px"}
-              width={"100%"}
-              justifyContent={"center"}
-              direction={"row"}
-            >
-              <Button
-                onClick={() => {
-                  reset();
-                  setTrigger(false);
-                }}
-                variant={"outlined"}
-                sx={{
-                  width: "96px",
-                }}
-              >
-                {" "}
-                Cancel{" "}
-              </Button>
-
-              <Button
-                onClick={handleSubmit(onSubmit)}
-                variant={"contained"}
-                sx={{
-                  width: "96px",
-                }}
-              >
-                {" "}
-                Add{" "}
-              </Button>
-            </Stack>
           </Box>
+
+          <ToastContainer />
         </Stack>
       ) : (
         ""

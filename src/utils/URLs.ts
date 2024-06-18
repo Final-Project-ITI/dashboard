@@ -6,7 +6,7 @@ export const REGISTER_CASHIER_URL = "/authentication/admin/register/cashier";
 
 /* Restaurants */
 export const RESTAURANT_URL = "/restaurant";
-export const RESTAURANTS_ADMINS_URL = "/user/restaurantsAdmins/?page=";
+export const RESTAURANTS_ADMINS_URL = "/user/restaurantsAdmins";
 export const RESTAURANTS_CAHSIERS_URL = "/user/restaurantCashiers";
 export const CREATE_RESTAURANT_URL = "/restaurant/authorization/register";
 
