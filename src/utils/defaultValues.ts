@@ -64,3 +64,37 @@ export const DVProduct = {
   menuCategoryId: "",
   ingredientsIds: [DVIngredient],
 };
+
+export const DVAddrees = {
+  _id: "",
+  userId: DVUser,
+  details: "",
+};
+
+export const DVPhone = {
+  _id: "",
+  userId: DVUser,
+  phoneNumber: "",
+};
+
+export const DVOrderStatus = {
+  _id: "",
+  status: "",
+};
+
+export const DVOrder = {
+  _id: "",
+  addressId: DVAddrees,
+  phoneId: DVPhone,
+  statusId: DVOrderStatus,
+  restaurantId: DVRestaurant,
+  userId: DVUser,
+  createdAt: "",
+};
+
+export const DVItem = {
+  _id: "",
+  productId: DVProduct,
+  quantity: 0,
+  orderId: "",
+};

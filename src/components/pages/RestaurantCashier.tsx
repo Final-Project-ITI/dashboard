@@ -2,107 +2,34 @@ import { Stack } from "@mui/material";
 
 /* -------- */
 import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useFilteredOrders from "../../hooks/api/restaurantCashier/useFilteredOrders";
+import useOrderStatueses from "../../hooks/api/restaurantCashier/useOrderStatueses";
+import useOrders from "../../hooks/api/restaurantCashier/useOrders";
 
 /* -------- */
-import { IItem } from "../../models/item.model";
+import { IMainButton } from "../../models/mainButton.model";
 import { IOrder } from "../../models/order.model";
-import { IOrderStatus } from "../../models/orderStatus.model";
-import { GET_ORDERS_URL, GET_ORDER_STATUESES } from "../../utils/urls";
 
 /* -------- */
 import PhoneSVG from "../../assets/svgs/PhoneSVG";
-import MainButton from "../shared/MainButton";
 import NavBar from "../shared/NavBar";
 import FilterTable from "../tables/restaurantCashier/FilterTable";
 import OrdersTable from "../tables/restaurantCashier/OrdersTable";
 
 export default function RestaurantCashier() {
-  const axiosPrivate = useAxiosPrivate();
-  const { setAuth }: any = useAuth();
-  const navigate = useNavigate();
-  const [, , removeCookie] = useCookies();
-  const [data, setData] = useState<{ orders: IOrder[]; items: IItem[] }>({
-    orders: [],
-    items: [],
-  });
+  const [data, setData, isLoading, setIsLoading, error, setError] = useOrders();
+  const [orderStatuses] = useOrderStatueses();
+
   const [orders, setOrders] = useState<IOrder[]>([]);
-  const [orderStatuses, setOrderStatuses] = useState<IOrderStatus[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const navBtns = [
-    <MainButton
-      width={"100%"}
-      text={"cashier"}
-      Icon={PhoneSVG}
-      state={true}
-    ></MainButton>,
+  useFilteredOrders({ startDate, endDate, setData, setIsLoading, setError });
+
+  const navBtns: IMainButton[] = [
+    { text: "Cashier", Icon: PhoneSVG, state: true, width: "100%" },
   ];
-
-  const handleGetOrders = async () => {
-    try {
-      const res = await axiosPrivate.get(GET_ORDERS_URL);
-      setData(res.data);
-    } catch (e) {}
-  };
-
-  const handleGetFilteredOrdersByDate = async () => {
-    try {
-      const res = await axiosPrivate.get(
-        GET_ORDERS_URL +
-          "/filter?startDate=" +
-          startDate +
-          "&endDate=" +
-          endDate
-      );
-      setData(res.data);
-    } catch (e) {}
-  };
-
-  const handleGetOrderStatueses = async () => {
-    try {
-      const res = await axiosPrivate.get(GET_ORDER_STATUESES);
-      setOrderStatuses(res.data);
-    } catch (e) {}
-  };
-
-  const handlePagination = async (direction: number) => {
-    const pageSize = 5;
-    let page = currentPage;
-
-    if (direction && currentPage == Math.ceil(data.orders.length / pageSize))
-      return;
-    if (!direction && currentPage == 1) return;
-
-    setCurrentPage((pre) => {
-      if (direction) {
-        page++;
-        return ++pre;
-      } else {
-        page--;
-        return --pre;
-      }
-    });
-
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-
-    setOrders(data.orders.slice(startIndex, endIndex));
-  };
-
-  useEffect(() => {
-    handleGetOrders();
-    handleGetOrderStatueses();
-  }, []);
-
-  useEffect(() => {
-    handleGetFilteredOrdersByDate();
-  }, [startDate, endDate]);
 
   return (
     <Stack height={"100vh"} direction={{ xl: "row", xs: "column" }}>
@@ -125,17 +52,15 @@ export default function RestaurantCashier() {
           orderStatuses={orderStatuses}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
-          handlePagination={handlePagination}
+          isLoading={isLoading}
+          error={error}
         />
         <FilterTable
           data={data}
           setData={setData}
-          orders={orders}
           setOrders={setOrders}
           orderStatuses={orderStatuses}
-          currentPage={currentPage}
           setCurrentPage={setCurrentPage}
-          handlePagination={handlePagination}
           setStartDate={setStartDate}
           setEndDate={setEndDate}
         />

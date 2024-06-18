@@ -15,12 +15,9 @@ import DateFilter from "./filterComponents/DateFilter";
 export default function FilterTable({
   data,
   setData,
-  orders,
   setOrders,
   orderStatuses,
-  currentPage,
   setCurrentPage,
-  handlePagination,
   setStartDate,
   setEndDate,
 }: any) {
@@ -32,7 +29,9 @@ export default function FilterTable({
     marginBottom: "26px",
   };
   const [copiedData, setCopiedData] = useState<IOrder[]>([]);
+
   const handleFilterStatus = (statusId: string) => {
+    console.log(copiedData);
     if (!statusId) {
       setData((pre: any) => ({ orders: [...copiedData], items: pre.items }));
     } else {
@@ -49,10 +48,11 @@ export default function FilterTable({
   };
 
   useEffect(() => {
-    if (!copiedData.length) {
+    if (!copiedData[0]?._id) {
       setCopiedData([...data.orders]);
     }
   }, [data]);
+
   return (
     <>
       <Stack
@@ -71,6 +71,7 @@ export default function FilterTable({
               fontSize: "28px",
               fontWeight: "bold",
               visibility: "hidden",
+              display: { xl: "block", xs: "none" },
             }}
           >
             Cashier
