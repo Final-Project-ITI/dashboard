@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
 
 /* -------- */
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useFilteredOrders from "../../hooks/api/restaurantCashier/useFilteredOrders";
 import useOrderStatueses from "../../hooks/api/restaurantCashier/useOrderStatueses";
 import useOrders from "../../hooks/api/restaurantCashier/useOrders";
@@ -15,9 +15,18 @@ import PhoneSVG from "../../assets/svgs/PhoneSVG";
 import NavBar from "../shared/NavBar";
 import FilterTable from "../tables/restaurantCashier/FilterTable";
 import OrdersTable from "../tables/restaurantCashier/OrdersTable";
+import socket from "../../utils/socket";
+import { UserContext } from "../../App";
+import NewOrderPopup from "../popups/restaurnatCashier/NewOrderPopup";
 
 export default function RestaurantCashier() {
-  const [data, setData, isLoading, setIsLoading, error, setError] = useOrders();
+  const [newOrders, setNewOrders] = useState(0);
+  const [refreshOrders, setRefreshOrders] = useState(false);
+  const [trigger, setTrigger] = useState(false);
+
+  const [data, setData, isLoading, setIsLoading, error, setError] = useOrders({
+    refreshOrders,
+  });
   const [orderStatuses] = useOrderStatueses();
 
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -25,7 +34,27 @@ export default function RestaurantCashier() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
+  const { user } = useContext(UserContext);
+  let counter = newOrders;
+
   useFilteredOrders({ startDate, endDate, setData, setIsLoading, setError });
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to the server");
+    });
+
+    socket.emit("join-restaurant", user.restaurantId?._id);
+
+    socket.on("new-order-res", () => {
+      setTrigger(true);
+      setNewOrders(++counter);
+    });
+
+    return () => {
+      socket.off("connect");
+    };
+  }, [user]);
 
   const navBtns: IMainButton[] = [
     { text: "Cashier", Icon: PhoneSVG, state: true, width: "100%" },
@@ -33,6 +62,13 @@ export default function RestaurantCashier() {
 
   return (
     <Stack height={"100vh"} direction={{ xl: "row", xs: "column" }}>
+      <NewOrderPopup
+        trigger={trigger}
+        setTrigger={setTrigger}
+        newOrders={newOrders}
+        setNewOrders={setNewOrders}
+        setRefreshOrders={setRefreshOrders}
+      />
       <NavBar Buttons={navBtns} />
 
       <Stack

@@ -5,7 +5,9 @@ import { DVItem, DVOrder } from "../../../utils/defaultValues";
 import { GET_ORDERS_URL } from "../../../utils/urls";
 import useAxiosPrivate from "../../useAxiosPrivate";
 
-const useOrders = (): [
+const useOrders = ({
+  refreshOrders,
+}: any): [
   { orders: IOrder[]; items: IItem[] },
   any,
   boolean,
@@ -25,6 +27,7 @@ const useOrders = (): [
   useEffect(() => {
     (async function () {
       try {
+        setIsLoading(true);
         const res = await axiosPrivate.get(GET_ORDERS_URL);
         setData(res.data);
         setIsLoading(false);
@@ -32,7 +35,7 @@ const useOrders = (): [
         setError(err.response);
       }
     })();
-  }, []);
+  }, [refreshOrders]);
 
   return [data, setData, isLoading, setIsLoading, error, setError];
 };

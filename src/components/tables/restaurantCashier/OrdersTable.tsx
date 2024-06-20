@@ -26,6 +26,7 @@ import StatusDropDown from "../../shared/StatusDropDown";
 
 import Pagination from "../../shared/Pagination";
 import { DVOrder } from "../../../utils/defaultValues";
+import socket from "../../../utils/socket";
 
 export default function OrdersTable({
   data,
@@ -206,8 +207,9 @@ export default function OrdersTable({
               <Pagination
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
-                pageSize={4}
+                pageSize={5}
                 data={data.orders}
+                setItems={setOrders}
               />
             </Stack>
           </Box>
