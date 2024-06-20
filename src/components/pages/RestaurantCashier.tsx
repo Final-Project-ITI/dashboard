@@ -35,6 +35,7 @@ export default function RestaurantCashier() {
   const [endDate, setEndDate] = useState("");
 
   const { user } = useContext(UserContext);
+
   let counter = newOrders;
 
   useFilteredOrders({ startDate, endDate, setData, setIsLoading, setError });
