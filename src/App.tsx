@@ -12,6 +12,9 @@ import useRefreshToken from "./hooks/useRefreshToken.tsx";
 import { createContext, useEffect, useState } from "react";
 import IsNotAuthGuard from "./guards/IsNotAuthGuard.tsx";
 import { IUser } from "./models/user.model.ts";
+import RestaurantsTable from "./components/tables/mainAdmin/RestaurantsTable.tsx";
+import CategoryTable from "./components/tables/mainAdmin/CategoryTable.tsx";
+import DeliveryTable from "./components/tables/mainAdmin/DeliveryTable.tsx";
 
 export const UserContext = createContext({});
 
@@ -39,7 +42,16 @@ function App() {
 
           {/* Main Admin */}
           <Route element={<IsAuthGuard role="admin" />}>
-            <Route path="/" element={<MainAdmin />} />
+            <Route path="/" element={<MainAdmin />}>
+              <Route path="restaurants" element={<RestaurantsTable />} />
+              <Route path="category" element={<CategoryTable />} />
+              <Route path="delivery" element={<DeliveryTable />} />
+
+              {/* Redirection */}
+
+              <Route path="" element={<Navigate to="restaurants" />} />
+              <Route path="*" element={<Navigate to="restaurants" />} />
+            </Route>
           </Route>
 
           {/* Restaurant Admin */}

@@ -2,14 +2,44 @@
 import { Stack } from "@mui/material";
 
 /* -------- */
-import PersonSVG from "../../assets/svgs/PersonSVG";
-import NavBar from "../shared/NavBar";
-import RestaurantsTable from "../tables/mainAdmin/RestaurantsTable";
+import { Outlet, useNavigate } from "react-router-dom";
+import CategorySVG from "../../assets/svgs/CategorySVG";
+import HomeSVG from "../../assets/svgs/HomeSVG";
+import MotorCycleSVG from "../../assets/svgs/MotorCycleSVG";
 import { IMainButton } from "../../models/mainButton.model";
+import NavBar from "../shared/NavBar";
 
 export default function MainAdmin() {
+  const navigate = useNavigate();
+
   const navBtns: IMainButton[] = [
-    { text: "Restaurants", Icon: PersonSVG, state: true, width: "100%" },
+    {
+      width: { xl: "100%" },
+      text: "Restaurants",
+      Icon: HomeSVG,
+      state: location.pathname.split("/")[1] === "restaurants",
+      handler: () => {
+        navigate("restaurants");
+      },
+    },
+    {
+      width: { xl: "100%" },
+      text: "Categories",
+      Icon: CategorySVG,
+      state: location.pathname.split("/")[1] === "category",
+      handler: () => {
+        navigate("category");
+      },
+    },
+    {
+      width: { xl: "100%" },
+      text: "Delivery",
+      Icon: MotorCycleSVG,
+      state: location.pathname.split("/")[1] === "delivery",
+      handler: () => {
+        navigate("delivery");
+      },
+    },
   ];
 
   return (
@@ -24,7 +54,7 @@ export default function MainAdmin() {
         justifyContent={"center"}
         alignItems={"center"}
       >
-        <RestaurantsTable />
+        <Outlet />
       </Stack>
     </Stack>
   );

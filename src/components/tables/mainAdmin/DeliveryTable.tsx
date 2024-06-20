@@ -24,7 +24,7 @@ import AddRestaurantPopup from "../../popups/mainAdmin/AddRestaurantPopup";
 import MainButton from "../../shared/MainButton";
 import Pagination from "../../shared/Pagination";
 
-export default function RestaurantsTable() {
+export default function DeliveryTable() {
   const [addRestaurantTrigger, setAddRestaurantTrigger] = useState(false);
   const [data, isLoading] = useRestaurantsAdmins();
   const [restaurants, setRestaurants] = useState<IUser[]>([]);
@@ -108,7 +108,7 @@ export default function RestaurantsTable() {
                 marginLeft: "40px",
               }}
             >
-              Categories
+              Delivery
             </Typography>
 
             <Stack justifyContent={"space-between"} height={"85%"}>
