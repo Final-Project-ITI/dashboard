@@ -4,7 +4,7 @@ import useAxiosPrivate from "../../useAxiosPrivate";
 import { DVUser } from "../../../utils/defaultValues";
 import { RESTAURANTS_ADMINS_URL } from "../../../utils/urls";
 
-const useRestaurantsAdmins = (): [IUser[], boolean, Error] => {
+const useRestaurantsAdmins = (): [IUser[], any, boolean, Error] => {
   const [data, setData] = useState<IUser[]>([DVUser]);
   const axiosPrivate = useAxiosPrivate();
 
@@ -26,7 +26,7 @@ const useRestaurantsAdmins = (): [IUser[], boolean, Error] => {
     })();
   }, []);
 
-  return [data, isLoading, error];
+  return [data, setData, isLoading, error];
 };
 
 export default useRestaurantsAdmins;

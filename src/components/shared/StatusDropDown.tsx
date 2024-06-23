@@ -13,6 +13,7 @@ import { GET_ORDERS_URL } from "../../utils/urls";
 
 /* -------- */
 import ArrowDown from "../../assets/svgs/ArrowDown";
+import socket from "../../utils/socket";
 
 export default function StatusDropDown({
   orderStatuses,
@@ -39,14 +40,19 @@ export default function StatusDropDown({
   };
 
   const handleUpdateOrderStatus = async (statusId: string) => {
-    await axiosPrivate.patch(GET_ORDERS_URL + "/" + order._id, {
+    const res = await axiosPrivate.patch(GET_ORDERS_URL + "/" + order._id, {
       statusId,
+      userId: order.userId._id,
     });
+
+    socket.emit("change-order-status", order.userId._id, res.data._id);
   };
 
   useEffect(() => {
     setCurrentOption(order.statusId);
   }, [order]);
+
+  useEffect(() => {}, []);
 
   return (
     <Box>

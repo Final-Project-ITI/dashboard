@@ -2,7 +2,7 @@ import { useState } from "react";
 import useAxiosPrivate from "../../../useAxiosPrivate";
 import { REGISTER_CASHIER_URL } from "../../../../utils/urls";
 
-const useAddCashier = ({ setTrigger }: any): [any, boolean, Error] => {
+const useAddCashier = ({ setTrigger, setData }: any): [any, boolean, Error] => {
   const axiosPrivate = useAxiosPrivate();
 
   const [error, setError] = useState<any>();
@@ -14,6 +14,10 @@ const useAddCashier = ({ setTrigger }: any): [any, boolean, Error] => {
     try {
       await axiosPrivate.post(REGISTER_CASHIER_URL, data);
 
+      setData((pre: any) => [
+        { fullName: data.fullName, email: data.email },
+        ...pre,
+      ]);
       setTrigger(false);
       setIsLoading(false);
     } catch (err: any) {

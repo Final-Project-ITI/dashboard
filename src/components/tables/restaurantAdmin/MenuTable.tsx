@@ -40,7 +40,7 @@ export default function MenuTable() {
   const [isAdd, setIsAdd] = useState(false);
   const { user } = useContext(UserContext);
 
-  const [data, isLoading] = useMenu({ user });
+  const [data, setData, isLoading] = useMenu({ user });
   const [menuItems, setMenuItems] = useState<IProduct[]>([]);
   const [menuItem, setMenuItem] = useState<IProduct>();
   const [currentPage, setCurrentPage] = useState(1);
@@ -117,11 +117,13 @@ export default function MenuTable() {
             ingredients={ingredients}
             setIngredients={setIngredients}
             categories={categories}
+            setData={setData}
           />
           <DeleteItemPopup
             trigger={deleteItemTrigger}
             setTrigger={setDeleteItemTrigger}
             menuItem={menuItem}
+            setData={setData}
           />
           <Box
             sx={{

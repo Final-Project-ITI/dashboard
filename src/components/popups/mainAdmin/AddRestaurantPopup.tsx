@@ -16,7 +16,11 @@ import { DVAddRestaurant } from "../../../utils/defaultValues";
 /* -------- */
 import { FormInputText } from "../../shared/formComponents/FormInputText";
 
-export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
+export default function AddRestaurantPopup({
+  setData,
+  trigger,
+  setTrigger,
+}: any) {
   const {
     handleSubmit,
     reset,
@@ -29,7 +33,11 @@ export default function AddRestaurantPopup({ trigger, setTrigger }: any) {
     mode: "onChange",
   });
 
-  const [onSubmit, isLoading, error] = useAddRestaurant({ setTrigger });
+  const [onSubmit, isLoading, error] = useAddRestaurant({
+    setTrigger,
+    setData,
+    reset,
+  });
 
   const icon = watch("icon", false);
   const banner = watch("banner", false);

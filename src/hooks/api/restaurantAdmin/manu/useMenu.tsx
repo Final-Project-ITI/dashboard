@@ -4,7 +4,7 @@ import { DVProduct } from "../../../../utils/defaultValues";
 import { PRODUCT_URL } from "../../../../utils/urls";
 import useAxiosPrivate from "../../../useAxiosPrivate";
 
-const useMenu = ({ user }: any): [IProduct[], boolean, Error] => {
+const useMenu = ({ user }: any): [IProduct[], any, boolean, Error] => {
   const [data, setData] = useState<IProduct[]>([DVProduct]);
   const axiosPrivate = useAxiosPrivate();
 
@@ -27,7 +27,7 @@ const useMenu = ({ user }: any): [IProduct[], boolean, Error] => {
     })();
   }, [user]);
 
-  return [data, isLoading, error];
+  return [data, setData, isLoading, error];
 };
 
 export default useMenu;

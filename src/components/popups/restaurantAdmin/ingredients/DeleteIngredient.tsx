@@ -10,11 +10,18 @@ export default function DeleteIngredientPopup({
   trigger,
   setTrigger,
   ingredient,
+  setData,
 }: any) {
   const axiosPrivate = useAxiosPrivate();
 
   const handleDelete = async () => {
     await axiosPrivate.delete(INGREDIENT_URL + "/" + ingredient._id);
+
+    setData((pre: any) =>
+      pre.filter((item: any) => item._id !== ingredient._id)
+    );
+
+    setTrigger(false);
   };
   return (
     <>

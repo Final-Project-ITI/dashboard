@@ -43,7 +43,7 @@ export default function IngredientsTable() {
     setDeleteCategoryTrigger(true);
   };
 
-  const [data, isLoading] = useIngredients();
+  const [data, setData, isLoading] = useIngredients();
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -105,11 +105,13 @@ export default function IngredientsTable() {
             setTrigger={setAddIngredientTrigger}
             isAdd={isAdd}
             ingredient={ingredient}
+            setData={setData}
           />
           <DeleteIngredientPopup
             trigger={deleteItemTrigger}
             setTrigger={setDeleteCategoryTrigger}
             ingredient={ingredient}
+            setData={setData}
           />
           <Box
             sx={{

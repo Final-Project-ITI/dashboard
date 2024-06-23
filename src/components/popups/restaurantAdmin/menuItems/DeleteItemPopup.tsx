@@ -10,11 +10,14 @@ export default function DeleteItemPopup({
   trigger,
   setTrigger,
   menuItem,
+  setData,
 }: any) {
   const axiosPrivate = useAxiosPrivate();
 
   const handleDelete = async () => {
     await axiosPrivate.delete(CREATE_PRODUCT_URL + "/" + menuItem._id);
+    setData((pre: any) => pre.filter((item: any) => item._id !== menuItem._id));
+
     setTrigger(false);
   };
   return (

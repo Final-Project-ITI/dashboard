@@ -26,6 +26,7 @@ export default function AddItemPopup({
   ingredients,
   setIngredients,
   categories,
+  setData,
 }: any) {
   const {
     handleSubmit,
@@ -49,6 +50,7 @@ export default function AddItemPopup({
     isAdd,
     tags,
     setTags,
+    setData,
   });
 
   const labelStyle = {

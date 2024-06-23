@@ -3,7 +3,11 @@ import useAxiosPrivate from "../../useAxiosPrivate";
 import { IFormInputRestaurant } from "../../../models/formInputs/formInputRestaurant.model";
 import { CREATE_RESTAURANT_URL } from "../../../utils/urls";
 
-const useAddRestaurant = ({ setTrigger }: any): [any, boolean, Error] => {
+const useAddRestaurant = ({
+  setTrigger,
+  setData,
+  reset,
+}: any): [any, boolean, Error] => {
   const axiosPrivate = useAxiosPrivate();
 
   const [error, setError] = useState<any>();
@@ -23,7 +27,14 @@ const useAddRestaurant = ({ setTrigger }: any): [any, boolean, Error] => {
       formData.append("icon", data.icon[0]);
       formData.append("banner", data.banner[0]);
 
-      await axiosPrivate.post(CREATE_RESTAURANT_URL, formData);
+      const res = await axiosPrivate.post(CREATE_RESTAURANT_URL, formData);
+
+      console.log(res.data);
+      setData((pre: any) => [
+        { restaurantId: res.data, email: data.email },
+        ...pre,
+      ]);
+      reset();
       setTrigger(false);
       setIsLoading(false);
     } catch (err: any) {

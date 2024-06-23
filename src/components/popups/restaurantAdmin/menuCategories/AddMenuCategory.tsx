@@ -19,6 +19,7 @@ export default function AddCategory({
   setTrigger,
   isAdd,
   menuCategory,
+  setData,
 }: any) {
   const {
     handleSubmit,
@@ -39,6 +40,7 @@ export default function AddCategory({
     setTrigger,
     menuCategory,
     isAdd,
+    setData,
   });
 
   const labelStyle = {

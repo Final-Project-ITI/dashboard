@@ -10,6 +10,7 @@ const useAddEditMenuItem = ({
   isAdd,
   tags,
   setTags,
+  setData,
 }: any): [any, boolean, Error] => {
   const axiosPrivate = useAxiosPrivate();
 
@@ -33,12 +34,18 @@ const useAddEditMenuItem = ({
 
       let res: any;
 
-      if (isAdd) res = await axiosPrivate.post(CREATE_PRODUCT_URL, formData);
-      else {
+      if (isAdd) {
+        res = await axiosPrivate.post(CREATE_PRODUCT_URL, formData);
+
+        res.data.ingredientsIds = [...tags];
+        setData((pre: any) => [...pre, res.data]);
+      } else {
         res = await axiosPrivate.patch(
           CREATE_PRODUCT_URL + "/" + menuItem?._id,
           formData
         );
+
+        console.log(res.data);
       }
 
       setTags([]);

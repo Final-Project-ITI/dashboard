@@ -4,7 +4,7 @@ import { DVIngredient } from "../../../../utils/defaultValues";
 import { INGREDIENT_URL } from "../../../../utils/urls";
 import useAxiosPrivate from "../../../useAxiosPrivate";
 
-const useIngredients = (): [IIngredient[], boolean, Error] => {
+const useIngredients = (): [IIngredient[], any, boolean, Error] => {
   const [data, setData] = useState<IIngredient[]>([DVIngredient]);
   const axiosPrivate = useAxiosPrivate();
 
@@ -23,7 +23,7 @@ const useIngredients = (): [IIngredient[], boolean, Error] => {
     })();
   }, []);
 
-  return [data, isLoading, error];
+  return [data, setData, isLoading, error];
 };
 
 export default useIngredients;

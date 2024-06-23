@@ -6,7 +6,6 @@ import useAxiosPrivate from "../../../useAxiosPrivate";
 
 const useItemIngredients = ({
   menuItem,
-  isAdd,
 }: any): [IIngredient[], any, boolean, Error] => {
   const [data, setData] = useState<IIngredient[]>([DVCategory]);
   const axiosPrivate = useAxiosPrivate();

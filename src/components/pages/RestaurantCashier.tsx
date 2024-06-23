@@ -45,7 +45,7 @@ export default function RestaurantCashier() {
       console.log("Connected to the server");
     });
 
-    socket.emit("join-restaurant", user.restaurantId?._id);
+    socket.emit("join-room", user.restaurantId?._id);
 
     socket.on("new-order-res", () => {
       setTrigger(true);

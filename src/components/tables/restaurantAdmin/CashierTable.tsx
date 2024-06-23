@@ -26,7 +26,7 @@ import Pagination from "../../shared/Pagination";
 
 export default function CashierTable() {
   const [addCashierTrigger, setAddCashierTrigger] = useState(false);
-  const [data, isLoading] = useCashiers();
+  const [data, setData, isLoading] = useCashiers();
   const [cashiers, setCashiers] = useState<IUser[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -85,6 +85,7 @@ export default function CashierTable() {
 
         <Stack>
           <AddCashier
+            setData={setData}
             trigger={addCashierTrigger}
             setTrigger={setAddCashierTrigger}
           />

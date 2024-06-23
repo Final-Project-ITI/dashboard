@@ -35,7 +35,7 @@ export default function MenuCategoryTable() {
   const [deleteCategoryTrigger, setDeleteCategoryTrigger] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
 
-  const [data, isLoading] = useMenuCategory();
+  const [data, setData, isLoading] = useMenuCategory();
   const [menuCategories, setMenuCategories] = useState<IMenuCategory[]>([]);
   const [menuCategory, setMenuCategory] = useState<IMenuCategory>();
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,7 +62,7 @@ export default function MenuCategoryTable() {
   };
 
   useEffect(() => {
-    setMenuCategories(data.slice(0, 5));
+    setMenuCategories(data.slice(0, 4));
   }, [data]);
 
   return (
@@ -105,11 +105,13 @@ export default function MenuCategoryTable() {
             setTrigger={setAddCategoryTrigger}
             isAdd={isAdd}
             menuCategory={menuCategory}
+            setData={setData}
           />
           <DeleteCategoryPopup
             trigger={deleteCategoryTrigger}
             setTrigger={setDeleteCategoryTrigger}
             menuCategory={menuCategory}
+            setData={setData}
           />
           <Box
             sx={{
@@ -135,6 +137,7 @@ export default function MenuCategoryTable() {
               <Table>
                 <TableHead>
                   <TableRow>
+                    <TableCell sx={tableHeadTextStyle}>Icon</TableCell>
                     <TableCell sx={tableHeadTextStyle}>Category</TableCell>
                     <TableCell sx={tableHeadTextStyle}>Action</TableCell>
                   </TableRow>
@@ -158,6 +161,22 @@ export default function MenuCategoryTable() {
                     menuCategories.map((menuCategory) => {
                       return (
                         <TableRow key={menuCategory._id}>
+                          <TableCell
+                            sx={{
+                              ...tableBodyTextStyle,
+                            }}
+                          >
+                            <img
+                              src={menuCategory.icon}
+                              title="icon"
+                              style={{
+                                objectFit: "cover",
+                                width: "64px",
+                                height: "64px",
+                                borderRadius: "50px",
+                              }}
+                            />
+                          </TableCell>
                           <TableCell sx={tableBodyTextStyle}>
                             {menuCategory.name}
                           </TableCell>

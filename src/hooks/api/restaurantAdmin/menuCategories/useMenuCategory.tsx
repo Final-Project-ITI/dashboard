@@ -4,7 +4,7 @@ import { DVCategory } from "../../../../utils/defaultValues";
 import { MENU_CATEGORY_URL } from "../../../../utils/urls";
 import useAxiosPrivate from "../../../useAxiosPrivate";
 
-const useMenuCategory = (): [IMenuCategory[], boolean, Error] => {
+const useMenuCategory = (): [IMenuCategory[], any, boolean, Error] => {
   const [data, setData] = useState<IMenuCategory[]>([DVCategory]);
   const axiosPrivate = useAxiosPrivate();
 
@@ -23,7 +23,7 @@ const useMenuCategory = (): [IMenuCategory[], boolean, Error] => {
     })();
   }, []);
 
-  return [data, isLoading, error];
+  return [data, setData, isLoading, error];
 };
 
 export default useMenuCategory;

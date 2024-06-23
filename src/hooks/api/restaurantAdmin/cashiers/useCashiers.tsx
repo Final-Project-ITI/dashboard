@@ -4,7 +4,7 @@ import { DVUser } from "../../../../utils/defaultValues";
 import { RESTAURANTS_CAHSIERS_URL } from "../../../../utils/urls";
 import useAxiosPrivate from "../../../useAxiosPrivate";
 
-const useCashiers = (): [IUser[], boolean, Error] => {
+const useCashiers = (): [IUser[], any, boolean, Error] => {
   const [data, setData] = useState<IUser[]>([DVUser]);
   const axiosPrivate = useAxiosPrivate();
 
@@ -26,7 +26,7 @@ const useCashiers = (): [IUser[], boolean, Error] => {
     })();
   }, []);
 
-  return [data, isLoading, error];
+  return [data, setData, isLoading, error];
 };
 
 export default useCashiers;

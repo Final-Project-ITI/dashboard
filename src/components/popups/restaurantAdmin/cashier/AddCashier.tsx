@@ -15,7 +15,7 @@ import { DVAddCashier } from "../../../../utils/defaultValues";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { FormInputText } from "../../../shared/formComponents/FormInputText";
 
-export default function AddCashier({ trigger, setTrigger }: any) {
+export default function AddCashier({ setData, trigger, setTrigger }: any) {
   const {
     handleSubmit,
     reset,
@@ -27,7 +27,7 @@ export default function AddCashier({ trigger, setTrigger }: any) {
     mode: "onChange",
   });
 
-  const [onSubmit, isLoading, error] = useAddCashier({ setTrigger });
+  const [onSubmit, isLoading, error] = useAddCashier({ setTrigger, setData });
 
   const labelStyle = {
     fontSize: "16px",

@@ -21,6 +21,7 @@ export default function AddIngredient({
   setTrigger,
   isAdd,
   ingredient,
+  setData,
 }: any) {
   const {
     handleSubmit,
@@ -38,6 +39,8 @@ export default function AddIngredient({
     setTrigger,
     ingredient,
     isAdd,
+    reset,
+    setData,
   });
 
   const labelStyle = {

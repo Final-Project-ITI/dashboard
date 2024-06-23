@@ -3,6 +3,7 @@ import { Box, IconButton, Stack } from "@mui/material";
 /* -------- */
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { useEffect } from "react";
 
 export default function Pagination({
   handler,
@@ -33,6 +34,10 @@ export default function Pagination({
 
     setItems(data.slice(startIndex, endIndex));
   };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [data]);
 
   return (
     <Stack width={"100%"} justifyContent={"center"} direction={"row"}>

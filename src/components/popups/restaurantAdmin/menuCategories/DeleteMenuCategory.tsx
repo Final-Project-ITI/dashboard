@@ -10,11 +10,18 @@ export default function DeleteCategoryPopup({
   trigger,
   setTrigger,
   menuCategory,
+  setData,
 }: any) {
   const axiosPrivate = useAxiosPrivate();
 
   const handleDelete = async () => {
     await axiosPrivate.delete(MENU_CATEGORY_URL + "/" + menuCategory._id);
+
+    setData((pre: any) =>
+      pre.filter((item: any) => item._id !== menuCategory._id)
+    );
+
+    setTrigger(false);
   };
 
   return (

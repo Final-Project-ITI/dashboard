@@ -26,7 +26,7 @@ import Pagination from "../../shared/Pagination";
 
 export default function RestaurantsTable() {
   const [addRestaurantTrigger, setAddRestaurantTrigger] = useState(false);
-  const [data, isLoading] = useRestaurantsAdmins();
+  const [data, setData, isLoading] = useRestaurantsAdmins();
   const [restaurants, setRestaurants] = useState<IUser[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const skeletonRows = [0, 0, 0, 0, 0];
@@ -52,6 +52,10 @@ export default function RestaurantsTable() {
   const hideContent = {
     display: { md: "table-cell", xs: "none" },
   };
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <>
@@ -88,6 +92,7 @@ export default function RestaurantsTable() {
 
         <Stack>
           <AddRestaurantPopup
+            setData={setData}
             trigger={addRestaurantTrigger}
             setTrigger={setAddRestaurantTrigger}
           />
