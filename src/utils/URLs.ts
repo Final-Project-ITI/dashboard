@@ -23,3 +23,6 @@ export const INGREDIENT_URL = "/ingredients";
 /* Orders */
 export const GET_ORDERS_URL = "/orders/cashier";
 export const GET_ORDER_STATUESES = "/orderStatuses";
+
+/*ResturantCategory */
+export const RESTAURANT_CATEGORY_URL = "/restaurantCategory";

@@ -45,6 +45,12 @@ export const DVRestaurant = {
   address: "",
   phone: "",
 };
+export const DVRestaurantCategory = {
+  _id: "",
+  title: "",
+  icon: "",
+  description: "",
+};
 
 export const DVUser = {
   _id: "",

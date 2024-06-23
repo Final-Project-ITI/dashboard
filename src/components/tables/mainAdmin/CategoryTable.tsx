@@ -1,5 +1,6 @@
 import {
   Box,
+  IconButton,
   Stack,
   TableBody,
   TableCell,
@@ -8,32 +9,39 @@ import {
   Typography,
 } from "@mui/material";
 import Table from "@mui/material/Table";
-
-/* -------- */
 import { useEffect, useState } from "react";
-import useRestaurantsAdmins from "../../../hooks/api/mainAdmin/useRestaurants";
 
 /* -------- */
-import { IUser } from "../../../models/user.model";
+import useRestaurantsCategory from "../../../hooks/api/mainAdmin/useResturantCategory";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { IRestaurantCategory } from "../../../models/restaurantCategory.model";
 
 /* -------- */
 import AddIcon from "@mui/icons-material/Add";
+
+import PinSVG from "../../../assets/svgs/PinSVG";
+import TrashSVG from "../../../assets/svgs/TrashSVG";
 import AddRestaurantPopup from "../../popups/mainAdmin/AddRestaurantPopup";
+import DeleteIngredientPopup from "../../popups/restaurantAdmin/ingredients/DeleteIngredient";
 import MainButton from "../../shared/MainButton";
 import Pagination from "../../shared/Pagination";
 
 export default function CategoryTable() {
-  const [addRestaurantTrigger, setAddRestaurantTrigger] = useState(false);
-  const [data, isLoading] = useRestaurantsAdmins();
-  const [restaurants, setRestaurants] = useState<IUser[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const skeletonRows = [0, 0, 0, 0, 0];
+  const [addCategoryTrigger, setAddCategoryTrigger] = useState(false);
+  const [deleteCategoryTrigger, setDeleteCategoryTrigger] = useState(false);
+  const [isAdd, setIsAdd] = useState(false);
 
-  useEffect(() => {
-    setRestaurants(data.slice(0, 4));
-  }, [data]);
+  const [categories, setCategories] = useState<IRestaurantCategory[]>([]);
+  const [category, setCategory] = useState<IRestaurantCategory>();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handleDeleteCategory = (item: IRestaurantCategory) => {
+    setCategory(item);
+    setDeleteCategoryTrigger(true);
+  };
+
+  const [data, isLoading] = useRestaurantsCategory();
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -49,9 +57,11 @@ export default function CategoryTable() {
     borderBottom: "none",
   };
 
-  const hideContent = {
-    display: { md: "table-cell", xs: "none" },
-  };
+  const skeletonRows = [0, 0, 0, 0, 0];
+
+  useEffect(() => {
+    setCategories(data.slice(0, 5));
+  }, [data]);
 
   return (
     <>
@@ -72,15 +82,16 @@ export default function CategoryTable() {
               fontWeight: "bold",
             }}
           >
-            Admin
+            Categories
           </Typography>
 
           <MainButton
             width={"220px"}
-            text={"Add Restaurant"}
+            text={"Add Category"}
             Icon={AddIcon}
             handler={() => {
-              setAddRestaurantTrigger(true);
+              setIsAdd(true);
+              setAddCategoryTrigger(true);
             }}
             state={true}
           ></MainButton>
@@ -88,8 +99,15 @@ export default function CategoryTable() {
 
         <Stack>
           <AddRestaurantPopup
-            trigger={addRestaurantTrigger}
-            setTrigger={setAddRestaurantTrigger}
+            trigger={addCategoryTrigger}
+            setTrigger={setAddCategoryTrigger}
+            isAdd={isAdd}
+            category={category}
+          />
+          <DeleteIngredientPopup
+            trigger={deleteCategoryTrigger}
+            setTrigger={setDeleteCategoryTrigger}
+            category={category}
           />
           <Box
             sx={{
@@ -108,32 +126,32 @@ export default function CategoryTable() {
                 marginLeft: "40px",
               }}
             >
-              Restaurants
+              Categories
             </Typography>
 
             <Stack justifyContent={"space-between"} height={"85%"}>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={tableHeadTextStyle}>
-                      Restaurant Name
-                    </TableCell>
-                    <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
-                      Icon
-                    </TableCell>
+                    <TableCell sx={tableHeadTextStyle}>ID</TableCell>
                     <TableCell
                       sx={{
                         ...tableHeadTextStyle,
-                        ...hideContent,
-                        textAlign: "start",
+                        display: { md: "table-cell", xs: "none" },
                       }}
                     >
-                      Address
+                      Icon
                     </TableCell>
-                    <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
-                      Phone
+                    <TableCell sx={tableHeadTextStyle}>Title</TableCell>
+                    <TableCell
+                      sx={{
+                        ...tableHeadTextStyle,
+                        display: { md: "table-cell", xs: "none" },
+                      }}
+                    >
+                      Description
                     </TableCell>
-                    <TableCell sx={tableHeadTextStyle}>Admin</TableCell>
+                    <TableCell sx={tableHeadTextStyle}>Action</TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -146,53 +164,65 @@ export default function CategoryTable() {
                       {skeletonRows.map((e, i) => (
                         <TableRow key={i}>
                           <TableCell colSpan={5}>
-                            <Skeleton height={50} />
+                            <Skeleton height={40} />
                           </TableCell>
                         </TableRow>
                       ))}
                     </SkeletonTheme>
-                  ) : (
-                    restaurants.map((admin) => {
-                      return (
-                        <TableRow key={admin._id}>
-                          <TableCell sx={tableBodyTextStyle}>
-                            {admin.restaurantId?.name}
-                          </TableCell>
-                          <TableCell
-                            sx={{ ...tableHeadTextStyle, ...hideContent }}
-                          >
-                            <img
-                              src={admin.restaurantId?.icon}
-                              title="icon"
-                              style={{
-                                objectFit: "cover",
-                                width: "64px",
-                                height: "64px",
-                                borderRadius: "50%",
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              ...tableBodyTextStyle,
-                              ...hideContent,
-                              width: "200px",
-                              textAlign: "start",
+                  ) : categories.length ? (
+                    categories.map((category) => (
+                      <TableRow key={category._id}>
+                        <TableCell sx={tableBodyTextStyle}>
+                          {category._id}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            ...tableBodyTextStyle,
+                            display: { md: "table-cell", xs: "none" },
+                          }}
+                        >
+                          <img
+                            src={category?.icon}
+                            alt="icon"
+                            style={{
+                              objectFit: "cover",
+                              width: "64px",
+                              height: "64px",
+                              borderRadius: "50%",
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell sx={tableBodyTextStyle}>
+                          {category.title}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            ...tableBodyTextStyle,
+                            display: { md: "table-cell", xs: "none" },
+                          }}
+                        >
+                          {category.description}
+                        </TableCell>
+                        <TableCell sx={tableBodyTextStyle}>
+                          <IconButton
+                            onClick={() => {
+                              setCategory({ ...category });
+                              setIsAdd(false);
+                              setAddCategoryTrigger(true);
                             }}
                           >
-                            {admin.restaurantId?.address}
-                          </TableCell>
-                          <TableCell
-                            sx={{ ...tableHeadTextStyle, ...hideContent }}
+                            <PinSVG />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => handleDeleteCategory(category)}
                           >
-                            {admin.restaurantId?.phone}
-                          </TableCell>
-                          <TableCell sx={tableBodyTextStyle}>
-                            {admin.email}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })
+                            <TrashSVG />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    ""
                   )}
                 </TableBody>
               </Table>
@@ -200,9 +230,9 @@ export default function CategoryTable() {
               <Pagination
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
-                pageSize={4}
+                pageSize={5}
                 data={data}
-                setItems={setRestaurants}
+                setItems={setCategories}
               />
             </Stack>
           </Box>
