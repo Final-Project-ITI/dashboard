@@ -23,10 +23,13 @@ import AddIcon from "@mui/icons-material/Add";
 import AddRestaurantPopup from "../../popups/mainAdmin/AddRestaurantPopup";
 import MainButton from "../../shared/MainButton";
 import Pagination from "../../shared/Pagination";
+import useRestaurantsCategory from "../../../hooks/api/mainAdmin/useResturantCategory";
 
 export default function RestaurantsTable() {
   const [addRestaurantTrigger, setAddRestaurantTrigger] = useState(false);
   const [data, setData, isLoading] = useRestaurantsAdmins();
+  const [restaurantCategories, setRestaurantCategories] =
+    useRestaurantsCategory();
   const [restaurants, setRestaurants] = useState<IUser[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const skeletonRows = [0, 0, 0, 0, 0];
@@ -95,6 +98,8 @@ export default function RestaurantsTable() {
             setData={setData}
             trigger={addRestaurantTrigger}
             setTrigger={setAddRestaurantTrigger}
+            restaurantCategories={restaurantCategories}
+            setRestaurantCategories={setRestaurantCategories}
           />
           <Box
             sx={{

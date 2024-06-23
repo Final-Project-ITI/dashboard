@@ -5,7 +5,12 @@ import { DVRestaurantCategory } from "../../../utils/defaultValues";
 import { RESTAURANT_CATEGORY_URL } from "../../../utils/urls";
 import { IRestaurantCategory } from "../../../models/restaurantCategory.model";
 
-const useRestaurantsCategory = (): [IRestaurantCategory[], boolean, Error] => {
+const useRestaurantsCategory = (): [
+  IRestaurantCategory[],
+  any,
+  boolean,
+  Error
+] => {
   const [data, setData] = useState<IRestaurantCategory[]>([
     DVRestaurantCategory,
   ]);
@@ -29,7 +34,7 @@ const useRestaurantsCategory = (): [IRestaurantCategory[], boolean, Error] => {
     })();
   }, []);
 
-  return [data, isLoading, error];
+  return [data, setData, isLoading, error];
 };
 
 export default useRestaurantsCategory;

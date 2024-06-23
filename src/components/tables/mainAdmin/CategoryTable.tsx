@@ -9,10 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 import Table from "@mui/material/Table";
-import { useEffect, useState } from "react";
 
 /* -------- */
+import { useEffect, useState } from "react";
 import useRestaurantsCategory from "../../../hooks/api/mainAdmin/useResturantCategory";
+
+/* -------- */
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { IRestaurantCategory } from "../../../models/restaurantCategory.model";
@@ -22,26 +24,24 @@ import AddIcon from "@mui/icons-material/Add";
 
 import PinSVG from "../../../assets/svgs/PinSVG";
 import TrashSVG from "../../../assets/svgs/TrashSVG";
-import AddRestaurantPopup from "../../popups/mainAdmin/AddRestaurantPopup";
-import DeleteIngredientPopup from "../../popups/restaurantAdmin/ingredients/DeleteIngredient";
 import MainButton from "../../shared/MainButton";
+
+import AddRestaurantCategory from "../../popups/mainAdmin/restaurantCategory/AddRestaurantCategory";
+import DeleteRestaurantCategoryPopup from "../../popups/mainAdmin/restaurantCategory/DeleteRestaurantCategoryPopup";
 import Pagination from "../../shared/Pagination";
 
-export default function CategoryTable() {
+export default function MenuCategoryTable() {
   const [addCategoryTrigger, setAddCategoryTrigger] = useState(false);
   const [deleteCategoryTrigger, setDeleteCategoryTrigger] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
 
-  const [categories, setCategories] = useState<IRestaurantCategory[]>([]);
-  const [category, setCategory] = useState<IRestaurantCategory>();
+  const [data, setData, isLoading] = useRestaurantsCategory();
+  const [restaurantCategories, setRestaurantCategories] = useState<
+    IRestaurantCategory[]
+  >([]);
+  const [restaurantCategory, setRestaurantCategory] =
+    useState<IRestaurantCategory>();
   const [currentPage, setCurrentPage] = useState(1);
-
-  const handleDeleteCategory = (item: IRestaurantCategory) => {
-    setCategory(item);
-    setDeleteCategoryTrigger(true);
-  };
-
-  const [data, isLoading] = useRestaurantsCategory();
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -57,10 +57,19 @@ export default function CategoryTable() {
     borderBottom: "none",
   };
 
-  const skeletonRows = [0, 0, 0, 0, 0];
+  const hideContent = {
+    display: { md: "table-cell", xs: "none" },
+  };
+
+  const skeletonRows = [0, 0, 0];
+
+  const handleDeleteCategory = (item: IRestaurantCategory) => {
+    setRestaurantCategory(item);
+    setDeleteCategoryTrigger(true);
+  };
 
   useEffect(() => {
-    setCategories(data.slice(0, 5));
+    setRestaurantCategories(data.slice(0, 3));
   }, [data]);
 
   return (
@@ -86,7 +95,7 @@ export default function CategoryTable() {
           </Typography>
 
           <MainButton
-            width={"220px"}
+            width={"200px"}
             text={"Add Category"}
             Icon={AddIcon}
             handler={() => {
@@ -98,16 +107,18 @@ export default function CategoryTable() {
         </Stack>
 
         <Stack>
-          <AddRestaurantPopup
+          <AddRestaurantCategory
             trigger={addCategoryTrigger}
             setTrigger={setAddCategoryTrigger}
             isAdd={isAdd}
-            category={category}
+            restaurantCategory={restaurantCategory}
+            setData={setData}
           />
-          <DeleteIngredientPopup
+          <DeleteRestaurantCategoryPopup
             trigger={deleteCategoryTrigger}
             setTrigger={setDeleteCategoryTrigger}
-            category={category}
+            restaurantCategory={restaurantCategory}
+            setData={setData}
           />
           <Box
             sx={{
@@ -133,20 +144,13 @@ export default function CategoryTable() {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={tableHeadTextStyle}>ID</TableCell>
-                    <TableCell
-                      sx={{
-                        ...tableHeadTextStyle,
-                        display: { md: "table-cell", xs: "none" },
-                      }}
-                    >
-                      Icon
-                    </TableCell>
                     <TableCell sx={tableHeadTextStyle}>Title</TableCell>
+                    <TableCell sx={tableHeadTextStyle}>Icon</TableCell>
                     <TableCell
                       sx={{
                         ...tableHeadTextStyle,
-                        display: { md: "table-cell", xs: "none" },
+                        ...hideContent,
+                        textAlign: "start",
                       }}
                     >
                       Description
@@ -163,64 +167,68 @@ export default function CategoryTable() {
                     >
                       {skeletonRows.map((e, i) => (
                         <TableRow key={i}>
-                          <TableCell colSpan={5}>
-                            <Skeleton height={40} />
+                          <TableCell colSpan={4}>
+                            <Skeleton height={90} />
                           </TableCell>
                         </TableRow>
                       ))}
                     </SkeletonTheme>
-                  ) : categories.length ? (
-                    categories.map((category) => (
-                      <TableRow key={category._id}>
-                        <TableCell sx={tableBodyTextStyle}>
-                          {category._id}
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            ...tableBodyTextStyle,
-                            display: { md: "table-cell", xs: "none" },
-                          }}
-                        >
-                          <img
-                            src={category?.icon}
-                            alt="icon"
-                            style={{
-                              objectFit: "cover",
-                              width: "64px",
-                              height: "64px",
-                              borderRadius: "50%",
-                            }}
-                          />
-                        </TableCell>
-                        <TableCell sx={tableBodyTextStyle}>
-                          {category.title}
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            ...tableBodyTextStyle,
-                            display: { md: "table-cell", xs: "none" },
-                          }}
-                        >
-                          {category.description}
-                        </TableCell>
-                        <TableCell sx={tableBodyTextStyle}>
-                          <IconButton
-                            onClick={() => {
-                              setCategory({ ...category });
-                              setIsAdd(false);
-                              setAddCategoryTrigger(true);
+                  ) : restaurantCategories.length ? (
+                    restaurantCategories.map((resCat) => {
+                      return (
+                        <TableRow key={resCat._id}>
+                          <TableCell sx={tableBodyTextStyle}>
+                            {resCat.title}
+                          </TableCell>
+
+                          <TableCell
+                            sx={{
+                              ...tableBodyTextStyle,
                             }}
                           >
-                            <PinSVG />
-                          </IconButton>
-                          <IconButton
-                            onClick={() => handleDeleteCategory(category)}
+                            <img
+                              src={resCat.icon}
+                              title="icon"
+                              style={{
+                                objectFit: "cover",
+                                width: "64px",
+                                height: "64px",
+                                borderRadius: "50px",
+                              }}
+                            />
+                          </TableCell>
+
+                          <TableCell
+                            sx={{
+                              ...tableBodyTextStyle,
+                              ...hideContent,
+                              width: "200px",
+                              textAlign: "start",
+                            }}
                           >
-                            <TrashSVG />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))
+                            {resCat.description}
+                          </TableCell>
+
+                          <TableCell sx={tableBodyTextStyle}>
+                            <IconButton
+                              onClick={() => {
+                                setRestaurantCategory({ ...resCat });
+                                setIsAdd(false);
+                                setAddCategoryTrigger(true);
+                              }}
+                            >
+                              <PinSVG />
+                            </IconButton>
+
+                            <IconButton
+                              onClick={() => handleDeleteCategory(resCat)}
+                            >
+                              <TrashSVG />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
                   ) : (
                     ""
                   )}
@@ -230,9 +238,9 @@ export default function CategoryTable() {
               <Pagination
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
-                pageSize={5}
+                pageSize={3}
                 data={data}
-                setItems={setCategories}
+                setItems={setRestaurantCategories}
               />
             </Stack>
           </Box>

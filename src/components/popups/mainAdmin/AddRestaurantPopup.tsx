@@ -2,7 +2,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { Box, Button, Stack, Typography } from "@mui/material";
 
 /* -------- */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useAddRestaurant from "../../../hooks/api/mainAdmin/useAddRestaurant";
 
@@ -15,11 +15,15 @@ import { DVAddRestaurant } from "../../../utils/defaultValues";
 
 /* -------- */
 import { FormInputText } from "../../shared/formComponents/FormInputText";
+import { IRestaurantCategory } from "../../../models/restaurantCategory.model";
+import { FormInputCategories } from "../../shared/formComponents/FormInputCategories";
 
 export default function AddRestaurantPopup({
   setData,
   trigger,
   setTrigger,
+  restaurantCategories,
+  setRestaurantCategories,
 }: any) {
   const {
     handleSubmit,
@@ -32,11 +36,15 @@ export default function AddRestaurantPopup({
     defaultValues: DVAddRestaurant,
     mode: "onChange",
   });
+  const [tags, setTags] = useState<IRestaurantCategory[]>([]);
 
   const [onSubmit, isLoading, error] = useAddRestaurant({
     setTrigger,
     setData,
     reset,
+    tags,
+    setTags,
+    setRestaurantCategories,
   });
 
   const icon = watch("icon", false);
@@ -205,6 +213,16 @@ export default function AddRestaurantPopup({
                 </Box>
 
                 <Box>
+                  <Typography sx={labelStyle}>Categories</Typography>
+                  <FormInputCategories
+                    restaurantCategories={restaurantCategories}
+                    setRestaurantCategories={setRestaurantCategories}
+                    tags={tags}
+                    setTags={setTags}
+                  />
+                </Box>
+
+                <Box>
                   <Typography sx={labelStyle}>Icon</Typography>
                   <Button
                     variant="contained"
@@ -270,7 +288,7 @@ export default function AddRestaurantPopup({
                       width: "96px",
                     }}
                     loading={isLoading}
-                    disabled={!isDirty || !isValid}
+                    disabled={!isDirty || !isValid || !tags.length}
                     type="submit"
                   >
                     {" "}

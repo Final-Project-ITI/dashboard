@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { IUser } from "../../models/user.model";
-import { USER_URL } from "../../utils/urls";
 import useAxiosPrivate from "../useAxiosPrivate";
+import { USER_URL } from "../../utils/urls";
 
 const useUser = (): [IUser, any, boolean, Error] => {
   const { user, setUser } = useContext(UserContext);
