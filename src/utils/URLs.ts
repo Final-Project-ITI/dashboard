@@ -26,3 +26,9 @@ export const GET_ORDER_STATUESES = "/orderStatuses";
 
 /*ResturantCategory */
 export const RESTAURANT_CATEGORY_URL = "/restaurantCategory";
+
+/* deliveryman */
+export const DELIVERY_MAN_URL = "/deliveryman";
+
+/* delivery */
+export const DELIVERY_URL = "/delivery";

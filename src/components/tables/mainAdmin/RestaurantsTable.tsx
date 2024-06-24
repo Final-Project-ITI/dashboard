@@ -57,7 +57,7 @@ export default function RestaurantsTable() {
   };
 
   useEffect(() => {
-    console.log(data);
+    // console.log(data);
   }, [data]);
 
   return (

@@ -1,3 +1,4 @@
+import { IItem } from './../models/item.model';
 export const DVLogin = {
   email: "",
   password: "",
@@ -103,4 +104,33 @@ export const DVItem = {
   productId: DVProduct,
   quantity: 0,
   orderId: "",
+};
+
+export const DVDeliveryman = {
+  _id: "",
+  userId: DVUser,
+  currentlyDeliver: {
+    _id: "",
+    orderId: "",
+    deliveryManId: "",
+    assignedAt: null,
+    deliverdAt: null,
+  },
+  status: "offline",
+};
+
+export const DVDelivery = {
+  _id: "",
+  orderId: DVOrder,
+  deliveryManId: {
+    _id: "",
+    userId: "",
+    currentlyDeliver: "",
+    status: "offline",
+  },
+  assignedAt: null,
+  deliverdAt: null,
+  restaurant:DVRestaurant,
+  items:[DVItem],
+  total:0
 };
