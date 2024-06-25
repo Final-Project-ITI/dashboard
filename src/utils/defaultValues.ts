@@ -109,13 +109,13 @@ export const DVItem = {
 export const DVDeliveryman = {
   _id: "",
   userId: DVUser,
-  currentlyDeliver: {
+  currentlyDeliver: [{
     _id: "",
     orderId: "",
     deliveryManId: "",
     assignedAt: null,
     deliverdAt: null,
-  },
+  }],
   status: "offline",
 };
 
@@ -134,3 +134,8 @@ export const DVDelivery = {
   items:[DVItem],
   total:0
 };
+
+export const DVAddDelivery={
+  email:"",
+  phone:""
+}

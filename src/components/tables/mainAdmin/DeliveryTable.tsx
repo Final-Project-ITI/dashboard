@@ -97,6 +97,7 @@ export default function DeliveryTable() {
           <AddDeliverymanPopup
             trigger={addDeliverymanTrigger}
             setTrigger={setAddDeliverymanTrigger}
+            setData={setData}
           />
           {deliveryHistoryTrigger&&deliveryHistoryId&&<DeliveryHistoryPopup
           trigger={deliveryHistoryTrigger}
@@ -182,7 +183,7 @@ export default function DeliveryTable() {
                           <TableCell
                             sx={{ ...tableBodyTextStyle, ...hideContent }}
                           >
-                            {deliveryman.userId?._id}
+                            {deliveryman.phoneId?.phoneNumber}
                           </TableCell>
                           <TableCell
                             sx={{
@@ -231,7 +232,7 @@ export default function DeliveryTable() {
                             </Box>
                           </TableCell>
                           <TableCell sx={tableBodyTextStyle}>
-                            {deliveryman.currentlyDeliver?<Box
+                            {deliveryman.currentlyDeliver?.length?<Box
                               sx={{
                                 height: "30px",
                                 width: "30px",

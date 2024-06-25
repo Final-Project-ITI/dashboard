@@ -4,26 +4,22 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 /* -------- */
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import useAddRestaurant from "../../../../hooks/api/mainAdmin/useAddRestaurant";
 
 /* -------- */
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { IFormInputRestaurant } from "../../../../models/formInputs/formInputRestaurant.model";
 import { regEmail, regPhone } from "../../../../regex/regex";
-import { DVAddRestaurant } from "../../../../utils/defaultValues";
+import { DVAddDelivery } from "../../../../utils/defaultValues";
 
 /* -------- */
 import { FormInputText } from "../../../shared/formComponents/FormInputText";
-import { IRestaurantCategory } from "../../../../models/restaurantCategory.model";
-import { FormInputCategories } from "../../../shared/formComponents/FormInputCategories";
+import useAddDeliveryMan from "../../../../hooks/api/mainAdmin/useAddDeliveryman";
+import { IFormInputDeliveryMan } from "../../../../models/formInputs/formInputDeliveryMan.model";
 
 export default function AddDeliverymanPopup({
   setData,
   trigger,
   setTrigger,
-  restaurantCategories,
-  setRestaurantCategories,
 }: any) {
   const {
     handleSubmit,
@@ -32,23 +28,17 @@ export default function AddDeliverymanPopup({
     register,
     watch,
     formState: { isDirty, isValid },
-  } = useForm<IFormInputRestaurant>({
-    defaultValues: DVAddRestaurant,
+  } = useForm<IFormInputDeliveryMan>({
+    defaultValues: DVAddDelivery,
     mode: "onChange",
   });
-  const [tags, setTags] = useState<IRestaurantCategory[]>([]);
 
-  const [onSubmit, isLoading, error] = useAddRestaurant({
+  const [onSubmit, isLoading, error] = useAddDeliveryMan({
     setTrigger,
     setData,
     reset,
-    tags,
-    setTags,
-    setRestaurantCategories,
   });
 
-  const icon = watch("icon", false);
-  const banner = watch("banner", false);
 
   const labelStyle = {
     fontSize: "16px",
@@ -85,7 +75,7 @@ export default function AddDeliverymanPopup({
           alignItems={"center"}
         >
           <Box
-            width={{ xl: "35%", md: "55%", xs: "85%" }}
+            width={{ xl: "520px", md: "55%", xs: "85%" }}
             sx={{
               backgroundColor: "#F3ECE4",
               borderRadius: "15px",
@@ -99,27 +89,10 @@ export default function AddDeliverymanPopup({
                 marginBottom: "16px",
               }}
             >
-              Add Restaurant
+              Add delivery man
             </Typography>
             <Stack spacing={"8px"}>
               <form>
-                <Box>
-                  <Typography sx={labelStyle}>Restaurant Name</Typography>
-                  <FormInputText
-                    register={register}
-                    validation={{
-                      required: {
-                        value: true,
-                        message: "restaurant name is required",
-                      },
-                    }}
-                    name="name"
-                    control={control}
-                    label="Restaurant Name"
-                    type="text"
-                  />
-                </Box>
-
                 <Box>
                   <Typography sx={labelStyle}>Email</Typography>
                   <FormInputText
@@ -141,55 +114,7 @@ export default function AddDeliverymanPopup({
                   />
                 </Box>
 
-                <Box>
-                  <Typography sx={labelStyle}>Address</Typography>
-                  <FormInputText
-                    register={register}
-                    validation={{
-                      required: {
-                        value: true,
-                        message: "address is required",
-                      },
-                      maxLength: {
-                        value: 100,
-                        message: "maximum 100 character",
-                      },
-                      minLength: {
-                        value: 20,
-                        message: "minimum 20 character",
-                      },
-                    }}
-                    name="address"
-                    control={control}
-                    label="Address"
-                    type="text"
-                  />
-                </Box>
 
-                <Box>
-                  <Typography sx={labelStyle}>Description</Typography>
-                  <FormInputText
-                    register={register}
-                    validation={{
-                      required: {
-                        value: true,
-                        message: "description is required",
-                      },
-                      maxLength: {
-                        value: 100,
-                        message: "maximum 255 character",
-                      },
-                      minLength: {
-                        value: 20,
-                        message: "minimum 20 character",
-                      },
-                    }}
-                    name="description"
-                    control={control}
-                    label="Description"
-                    type="text"
-                  />
-                </Box>
 
                 <Box>
                   <Typography sx={labelStyle}>Phone</Typography>
@@ -210,54 +135,6 @@ export default function AddDeliverymanPopup({
                     label="Phone"
                     type="text"
                   />
-                </Box>
-
-                <Box>
-                  <Typography sx={labelStyle}>Categories</Typography>
-                  <FormInputCategories
-                    restaurantCategories={restaurantCategories}
-                    setRestaurantCategories={setRestaurantCategories}
-                    tags={tags}
-                    setTags={setTags}
-                  />
-                </Box>
-
-                <Box>
-                  <Typography sx={labelStyle}>Icon</Typography>
-                  <Button
-                    variant="contained"
-                    component="label"
-                    fullWidth
-                    color="secondary"
-                  >
-                    {icon?.length ? icon[0]?.name : "Choose Icon"}
-                    <input
-                      {...register("icon", { required: true })}
-                      name="icon"
-                      type="file"
-                      accept="image/png, image/gif, image/jpeg"
-                      hidden
-                    />
-                  </Button>
-                </Box>
-
-                <Box>
-                  <Typography sx={labelStyle}>Banner</Typography>
-                  <Button
-                    variant="contained"
-                    component="label"
-                    fullWidth
-                    color="secondary"
-                  >
-                    {banner?.length ? banner[0]?.name : "Choose Banner"}
-                    <input
-                      {...register("banner", { required: true })}
-                      name="banner"
-                      type="file"
-                      accept="image/png, image/gif, image/jpeg"
-                      hidden
-                    />
-                  </Button>
                 </Box>
 
                 <Stack
@@ -288,7 +165,7 @@ export default function AddDeliverymanPopup({
                       width: "96px",
                     }}
                     loading={isLoading}
-                    disabled={!isDirty || !isValid || !tags.length}
+                    disabled={!isDirty || !isValid }
                     type="submit"
                   >
                     {" "}
