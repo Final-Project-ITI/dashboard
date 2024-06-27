@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { IOrderStatus } from "../../../models/orderStatus.model";
 import { DVOrderStatus } from "../../../utils/defaultValues";
-import { GET_ORDER_STATUESES } from "../../../utils/URLs";
 import useAxiosPrivate from "../../useAxiosPrivate";
+import { GET_ORDER_STATUESES } from "../../../utils/URLs";
 
 const useOrderStatueses = (): [IOrderStatus[], boolean, Error] => {
   const [data, setData] = useState<IOrderStatus[]>([DVOrderStatus]);
