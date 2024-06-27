@@ -78,7 +78,7 @@ export default function Pagination({
             height: "20px",
             color: currentPage == 1 ? "black" : "#E4002B",
             border: "solid 2px",
-            display: "flex",
+            display: Math.ceil(data?.length / pageSize) === 1 ? "none" : "flex",
             justifyContent: "center",
             alignItems: "center",
             borderRadius: "2px",

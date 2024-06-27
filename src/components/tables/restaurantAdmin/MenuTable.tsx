@@ -49,7 +49,7 @@ export default function MenuTable() {
   const [ingredients, setIngredients] = useItemIngredients({ menuItem, isAdd });
 
   const tableHeadTextStyle = {
-    textAlign: "center",
+    textAlign: "start",
     color: "#0A0A0A80",
     fontSize: "20px",
     fontWeight: "bold",
@@ -57,7 +57,7 @@ export default function MenuTable() {
   };
 
   const tableBodyTextStyle = {
-    textAlign: "center",
+    textAlign: "start",
     fontSize: "16px",
     borderBottom: "none",
   };
@@ -84,7 +84,7 @@ export default function MenuTable() {
           direction={"row"}
           marginBlock={"10px"}
           justifyContent={"space-between"}
-          width={"85%"}
+          width={"100%"}
         >
           <Typography
             sx={{
@@ -147,10 +147,22 @@ export default function MenuTable() {
 
             <Stack justifyContent={"space-between"} height={"85%"}>
               <Table>
-                <TableHead>
+                <TableHead
+                  sx={{
+                    borderTop: "1px black solid",
+                    borderBottom: "1px black solid",
+                  }}
+                >
                   <TableRow>
                     <TableCell sx={tableHeadTextStyle}>Item Name</TableCell>
-                    <TableCell sx={tableHeadTextStyle}>Icon</TableCell>
+                    <TableCell
+                      sx={{
+                        ...tableHeadTextStyle,
+                        display: { md: "table-cell", xs: "none" },
+                      }}
+                    >
+                      Icon
+                    </TableCell>
                     <TableCell
                       sx={{
                         ...tableHeadTextStyle,
@@ -165,7 +177,11 @@ export default function MenuTable() {
                   </TableRow>
                 </TableHead>
 
-                <TableBody>
+                <TableBody
+                  sx={{
+                    justifyContent: "flex-start",
+                  }}
+                >
                   {isLoading ? (
                     <SkeletonTheme
                       baseColor="transparent"
@@ -188,6 +204,7 @@ export default function MenuTable() {
                         <TableCell
                           sx={{
                             ...tableBodyTextStyle,
+                            display: { md: "table-cell", xs: "none" },
                           }}
                         >
                           <img
@@ -204,14 +221,22 @@ export default function MenuTable() {
                         <TableCell
                           sx={{
                             ...tableBodyTextStyle,
-                            width: "200px",
-                            textAlign: "start",
                             display: { md: "table-cell", xs: "none" },
                           }}
                         >
-                          {item.ingredientsIds.map(
-                            (ingredient) => ingredient.name + ", "
-                          )}
+                          <Typography
+                            sx={{
+                              width: "100px",
+                              textAlign: "start",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {item.ingredientsIds.map(
+                              (ingredient) => ingredient.name + ", "
+                            )}
+                          </Typography>
                         </TableCell>
                         <TableCell sx={tableBodyTextStyle}>
                           EGP {item.price}

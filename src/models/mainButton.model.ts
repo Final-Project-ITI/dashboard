@@ -6,4 +6,5 @@ export interface IMainButton {
   state: boolean;
   width?: any;
   handler?: Function;
+  align?: string;
 }

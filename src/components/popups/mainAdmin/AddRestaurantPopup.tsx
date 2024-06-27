@@ -50,11 +50,6 @@ export default function AddRestaurantPopup({
   const icon = watch("icon", false);
   const banner = watch("banner", false);
 
-  const labelStyle = {
-    fontSize: "16px",
-    marginBottom: "8px",
-  };
-
   useEffect(() => {
     toast.error(error?.message, {
       position: "bottom-right",
@@ -101,10 +96,9 @@ export default function AddRestaurantPopup({
             >
               Add Restaurant
             </Typography>
-            <Stack spacing={"8px"}>
-              <form>
+            <form>
+              <Stack spacing={"16px"}>
                 <Box>
-                  <Typography sx={labelStyle}>Restaurant Name</Typography>
                   <FormInputText
                     register={register}
                     validation={{
@@ -121,7 +115,6 @@ export default function AddRestaurantPopup({
                 </Box>
 
                 <Box>
-                  <Typography sx={labelStyle}>Email</Typography>
                   <FormInputText
                     register={register}
                     validation={{
@@ -142,7 +135,6 @@ export default function AddRestaurantPopup({
                 </Box>
 
                 <Box>
-                  <Typography sx={labelStyle}>Address</Typography>
                   <FormInputText
                     register={register}
                     validation={{
@@ -167,7 +159,6 @@ export default function AddRestaurantPopup({
                 </Box>
 
                 <Box>
-                  <Typography sx={labelStyle}>Description</Typography>
                   <FormInputText
                     register={register}
                     validation={{
@@ -192,7 +183,6 @@ export default function AddRestaurantPopup({
                 </Box>
 
                 <Box>
-                  <Typography sx={labelStyle}>Phone</Typography>
                   <FormInputText
                     register={register}
                     validation={{
@@ -213,7 +203,6 @@ export default function AddRestaurantPopup({
                 </Box>
 
                 <Box>
-                  <Typography sx={labelStyle}>Categories</Typography>
                   <FormInputCategories
                     restaurantCategories={restaurantCategories}
                     setRestaurantCategories={setRestaurantCategories}
@@ -223,7 +212,6 @@ export default function AddRestaurantPopup({
                 </Box>
 
                 <Box>
-                  <Typography sx={labelStyle}>Icon</Typography>
                   <Button
                     variant="contained"
                     component="label"
@@ -242,7 +230,6 @@ export default function AddRestaurantPopup({
                 </Box>
 
                 <Box>
-                  <Typography sx={labelStyle}>Banner</Typography>
                   <Button
                     variant="contained"
                     component="label"
@@ -295,8 +282,8 @@ export default function AddRestaurantPopup({
                     Add{" "}
                   </LoadingButton>
                 </Stack>
-              </form>
-            </Stack>
+              </Stack>
+            </form>
           </Box>
 
           <ToastContainer />

@@ -58,7 +58,13 @@ export default function RestaurantCashier() {
   }, [user]);
 
   const navBtns: IMainButton[] = [
-    { text: "Cashier", Icon: PhoneSVG, state: true, width: "100%" },
+    {
+      text: "Cashier",
+      Icon: PhoneSVG,
+      state: true,
+      width: "100%",
+      align: "flex-start",
+    },
   ];
 
   return (

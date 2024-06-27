@@ -94,7 +94,7 @@ export default function OrdersTable({
           direction={"row"}
           marginBlock={"10px"}
           justifyContent={"space-between"}
-          width={"85%"}
+          width={"100%"}
         >
           <Typography
             sx={{
@@ -136,7 +136,12 @@ export default function OrdersTable({
 
             <Stack justifyContent={"space-between"} height={"85%"}>
               <Table>
-                <TableHead>
+                <TableHead
+                  sx={{
+                    borderTop: "1px black solid",
+                    borderBottom: "1px black solid",
+                  }}
+                >
                   <TableRow>
                     <TableCell sx={tableHeadTextStyle}>User Name</TableCell>
                     <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>

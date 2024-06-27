@@ -71,7 +71,7 @@ export default function RestaurantsTable() {
           direction={"row"}
           marginBlock={"10px"}
           justifyContent={"space-between"}
-          width={"85%"}
+          width={"100%"}
         >
           <Typography
             sx={{
@@ -118,13 +118,18 @@ export default function RestaurantsTable() {
                 marginLeft: "40px",
               }}
             >
-              Categories
+              Restaurants
             </Typography>
 
             <Stack justifyContent={"space-between"} height={"85%"}>
               <Table>
                 <TableHead>
-                  <TableRow>
+                  <TableRow
+                    sx={{
+                      borderTop: "1px black solid",
+                      borderBottom: "1px black solid",
+                    }}
+                  >
                     <TableCell sx={tableHeadTextStyle}>
                       Restaurant Name
                     </TableCell>
@@ -156,7 +161,7 @@ export default function RestaurantsTable() {
                       {skeletonRows.map((e, i) => (
                         <TableRow key={i}>
                           <TableCell colSpan={5}>
-                            <Skeleton height={50} />
+                            <Skeleton height={40} />
                           </TableCell>
                         </TableRow>
                       ))}

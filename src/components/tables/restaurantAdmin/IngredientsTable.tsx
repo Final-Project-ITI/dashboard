@@ -76,7 +76,7 @@ export default function IngredientsTable() {
           direction={"row"}
           marginBlock={"10px"}
           justifyContent={"space-between"}
-          width={"85%"}
+          width={"100%"}
         >
           <Typography
             sx={{
@@ -135,7 +135,12 @@ export default function IngredientsTable() {
 
             <Stack justifyContent={"space-between"} height={"85%"}>
               <Table>
-                <TableHead>
+                <TableHead
+                  sx={{
+                    borderTop: "1px black solid",
+                    borderBottom: "1px black solid",
+                  }}
+                >
                   <TableRow>
                     <TableCell sx={tableHeadTextStyle}>Ingredient</TableCell>
                     <TableCell sx={tableHeadTextStyle}>Action</TableCell>

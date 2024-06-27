@@ -83,7 +83,7 @@ export default function MenuCategoryTable() {
           direction={"row"}
           marginBlock={"10px"}
           justifyContent={"space-between"}
-          width={"85%"}
+          width={"100%"}
         >
           <Typography
             sx={{
@@ -142,7 +142,12 @@ export default function MenuCategoryTable() {
 
             <Stack justifyContent={"space-between"} height={"85%"}>
               <Table>
-                <TableHead>
+                <TableHead
+                  sx={{
+                    borderTop: "1px black solid",
+                    borderBottom: "1px black solid",
+                  }}
+                >
                   <TableRow>
                     <TableCell sx={tableHeadTextStyle}>Title</TableCell>
                     <TableCell sx={tableHeadTextStyle}>Icon</TableCell>

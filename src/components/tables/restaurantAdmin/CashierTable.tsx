@@ -31,7 +31,7 @@ export default function CashierTable() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const tableHeadTextStyle = {
-    textAlign: "center",
+    textAlign: "start",
     color: "#0A0A0A80",
     fontSize: "20px",
     fontWeight: "bold",
@@ -39,7 +39,7 @@ export default function CashierTable() {
   };
 
   const tableBodyTextStyle = {
-    textAlign: "center",
+    textAlign: "start",
     fontSize: "16px",
     borderBottom: "none",
   };
@@ -61,7 +61,7 @@ export default function CashierTable() {
           direction={"row"}
           marginBlock={"10px"}
           justifyContent={"space-between"}
-          width={"85%"}
+          width={"100%"}
         >
           <Typography
             sx={{
@@ -112,14 +112,23 @@ export default function CashierTable() {
 
             <Stack justifyContent={"space-between"} height={"85%"}>
               <Table>
-                <TableHead>
+                <TableHead
+                  sx={{
+                    borderTop: "1px black solid",
+                    borderBottom: "1px black solid",
+                  }}
+                >
                   <TableRow>
                     <TableCell sx={tableHeadTextStyle}>Cashier Name</TableCell>
                     <TableCell sx={tableHeadTextStyle}>E-Mail</TableCell>
                   </TableRow>
                 </TableHead>
 
-                <TableBody>
+                <TableBody
+                  sx={{
+                    justifyContent: "flex-start",
+                  }}
+                >
                   {isLoading ? (
                     <SkeletonTheme
                       baseColor="transparent"

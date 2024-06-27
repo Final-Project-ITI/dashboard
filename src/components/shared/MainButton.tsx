@@ -1,6 +1,13 @@
 import { Button, Typography } from "@mui/material";
 
-export default function MainButton({ width, Icon, text, handler, state }: any) {
+export default function MainButton({
+  width,
+  Icon,
+  text,
+  handler,
+  state,
+  align,
+}: any) {
   const style = {
     width,
     padding: "8.5px 0",
@@ -17,7 +24,12 @@ export default function MainButton({ width, Icon, text, handler, state }: any) {
   };
 
   return (
-    <Button sx={style} onClick={handler}>
+    <Button
+      sx={style}
+      onClick={handler}
+      variant="outlined"
+      style={{ justifyContent: align ? align : "center" }}
+    >
       {Icon ? <Icon color={state ? "white" : "#0A0A0A80"} /> : ""}
       <Typography
         sx={{

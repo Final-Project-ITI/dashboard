@@ -21,6 +21,7 @@ export default function MainAdmin() {
       handler: () => {
         navigate("restaurants");
       },
+      align: "flex-start",
     },
     {
       width: { xl: "100%" },
@@ -30,6 +31,7 @@ export default function MainAdmin() {
       handler: () => {
         navigate("category");
       },
+      align: "flex-start",
     },
     {
       width: { xl: "100%" },
@@ -39,6 +41,7 @@ export default function MainAdmin() {
       handler: () => {
         navigate("delivery");
       },
+      align: "flex-start",
     },
   ];
 

@@ -24,6 +24,7 @@ export default function RestaurantAdmin({ setUser }: any) {
       handler: () => {
         navigate("menu");
       },
+      align: "flex-start",
     },
     {
       width: { xl: "100%" },
@@ -33,6 +34,7 @@ export default function RestaurantAdmin({ setUser }: any) {
       handler: () => {
         navigate("cashier");
       },
+      align: "flex-start",
     },
     {
       width: { xl: "100%" },
@@ -42,6 +44,7 @@ export default function RestaurantAdmin({ setUser }: any) {
       handler: () => {
         navigate("ingredients");
       },
+      align: "flex-start",
     },
     {
       width: { xl: "100%" },
@@ -51,6 +54,7 @@ export default function RestaurantAdmin({ setUser }: any) {
       handler: () => {
         navigate("menuCategory");
       },
+      align: "flex-start",
     },
   ];
 

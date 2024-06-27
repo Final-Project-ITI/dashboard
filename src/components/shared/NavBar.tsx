@@ -66,7 +66,6 @@ export default function NavBar({ Buttons, title }: any) {
           <MainButton
             width={{ xl: "100%", xs: "150px" }}
             text={"Log Out"}
-            state={true}
             handler={handleLogout}
           ></MainButton>
         </Stack>
@@ -118,6 +117,7 @@ export default function NavBar({ Buttons, title }: any) {
                   handler={btn.handler}
                   state={btn.state}
                   key={btn.text}
+                  align={btn.align}
                 />
               ))}
             </Stack>
