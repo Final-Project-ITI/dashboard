@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import useAxiosPrivate from "../../useAxiosPrivate";
 import { DVRestaurantCategory } from "../../../utils/defaultValues";
-import { RESTAURANT_CATEGORY_URL } from "../../../utils/urls";
+import { RESTAURANT_CATEGORY_URL } from "../../../utils/URLs";
 import { IRestaurantCategory } from "../../../models/restaurantCategory.model";
 
 const useRestaurantsCategory = (): [

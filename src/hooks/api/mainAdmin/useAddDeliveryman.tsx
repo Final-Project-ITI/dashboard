@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useAxiosPrivate from "../../useAxiosPrivate";
 import { IFormInputDeliveryMan } from "../../../models/formInputs/formInputDeliveryMan.model.ts";
-import { DELIVERY_MAN_URL } from "../../../utils/urls";
+import { DELIVERY_MAN_URL } from "../../../utils/URLs.ts";
 
 const useAddDeliveryMan = ({
   setTrigger,
@@ -17,13 +17,9 @@ const useAddDeliveryMan = ({
     setIsLoading(true);
 
     try {
+      const res = await axiosPrivate.post(DELIVERY_MAN_URL, data);
 
-      const res = await axiosPrivate.post( DELIVERY_MAN_URL, data);
-
-      setData((pre: any) => [
-        ...pre,
-       res.data        
-      ]);
+      setData((pre: any) => [...pre, res.data]);
 
       reset();
       setTrigger(false);

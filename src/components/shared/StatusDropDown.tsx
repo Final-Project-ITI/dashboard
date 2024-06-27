@@ -9,7 +9,7 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 /* -------- */
 import { IOrderStatus } from "../../models/orderStatus.model";
 import { IOrder } from "../../models/order.model";
-import { GET_ORDERS_URL } from "../../utils/urls";
+import { GET_ORDERS_URL } from "../../utils/URLs";
 
 /* -------- */
 import ArrowDown from "../../assets/svgs/ArrowDown";

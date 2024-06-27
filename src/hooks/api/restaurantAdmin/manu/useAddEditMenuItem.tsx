@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IFormInputMenuItem } from "../../../../models/formInputs/formInputMenuItem.model";
 import { IIngredient } from "../../../../models/ingredient.model";
 import useAxiosPrivate from "../../../useAxiosPrivate";
-import { CREATE_PRODUCT_URL } from "../../../../utils/urls";
+import { CREATE_PRODUCT_URL } from "../../../../utils/URLs";
 
 const useAddEditMenuItem = ({
   setTrigger,

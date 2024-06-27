@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IUser } from "../../../../models/user.model";
 import { DVUser } from "../../../../utils/defaultValues";
-import { RESTAURANTS_CAHSIERS_URL } from "../../../../utils/urls";
+import { RESTAURANTS_CAHSIERS_URL } from "../../../../utils/URLs";
 import useAxiosPrivate from "../../../useAxiosPrivate";
 
 const useCashiers = (): [IUser[], any, boolean, Error] => {

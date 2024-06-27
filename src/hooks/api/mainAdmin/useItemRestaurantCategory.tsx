@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IRestaurantCategory } from "../../../models/restaurantCategory.model";
 import useAxiosPrivate from "../../useAxiosPrivate";
-import { RESTAURANT_CATEGORY_URL } from "../../../utils/urls";
+import { RESTAURANT_CATEGORY_URL } from "../../../utils/URLs";
 import { DVRestaurantCategory } from "../../../utils/defaultValues";
 
 const useItemRestaurantCategories = ({

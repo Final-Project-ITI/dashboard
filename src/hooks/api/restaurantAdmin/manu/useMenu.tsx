@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IProduct } from "../../../../models/product.model";
 import { DVProduct } from "../../../../utils/defaultValues";
-import { PRODUCT_URL } from "../../../../utils/urls";
+import { PRODUCT_URL } from "../../../../utils/URLs";
 import useAxiosPrivate from "../../../useAxiosPrivate";
 
 const useMenu = ({ user }: any): [IProduct[], any, boolean, Error] => {

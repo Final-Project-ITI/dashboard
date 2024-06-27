@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import { IFormInputLogin } from "../../models/formInputs/formInputLogin.model";
 import { IPayload } from "../../models/payload.mode";
-import { LOGIN_URL } from "../../utils/urls";
+import { LOGIN_URL } from "../../utils/URLs";
 import useAuth from "../useAuth";
 
 const useLogin = (): [any, Error] => {

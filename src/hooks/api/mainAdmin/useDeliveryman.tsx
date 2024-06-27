@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useAxiosPrivate from "../../useAxiosPrivate";
 import { DVDeliveryman } from "../../../utils/defaultValues";
-import { DELIVERY_MAN_URL } from "../../../utils/urls";
+import { DELIVERY_MAN_URL } from "../../../utils/URLs";
 import { IDeliveryman } from "../../../models/deliveryman.model";
 
 const useDeliveryman = (): [IDeliveryman[], any, boolean, Error] => {

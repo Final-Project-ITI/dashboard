@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IIngredient } from "../../../../models/ingredient.model";
 import { DVIngredient } from "../../../../utils/defaultValues";
-import { INGREDIENT_URL } from "../../../../utils/urls";
+import { INGREDIENT_URL } from "../../../../utils/URLs";
 import useAxiosPrivate from "../../../useAxiosPrivate";
 
 const useIngredients = (): [IIngredient[], any, boolean, Error] => {

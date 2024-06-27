@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useAxiosPrivate from "../../../useAxiosPrivate";
-import { MENU_CATEGORY_URL } from "../../../../utils/urls";
+import { MENU_CATEGORY_URL } from "../../../../utils/URLs";
 
 const useAddEditMenuCategory = ({
   setTrigger,

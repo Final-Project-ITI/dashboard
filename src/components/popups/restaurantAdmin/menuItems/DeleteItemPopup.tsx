@@ -4,7 +4,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 
 /* -------- */
-import { CREATE_PRODUCT_URL } from "../../../../utils/urls";
+import { CREATE_PRODUCT_URL } from "../../../../utils/URLs";
 
 export default function DeleteItemPopup({
   trigger,

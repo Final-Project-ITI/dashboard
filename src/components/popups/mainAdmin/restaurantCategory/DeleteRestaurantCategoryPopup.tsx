@@ -4,7 +4,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 
 /* -------- */
-import { RESTAURANT_CATEGORY_URL } from "../../../../utils/urls";
+import { RESTAURANT_CATEGORY_URL } from "../../../../utils/URLs";
 
 export default function DeleteRestaurantCategoryPopup({
   trigger,

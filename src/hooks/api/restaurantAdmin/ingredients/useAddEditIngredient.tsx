@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useAxiosPrivate from "../../../useAxiosPrivate";
-import { INGREDIENT_URL } from "../../../../utils/urls";
+import { INGREDIENT_URL } from "../../../../utils/URLs";
 import { IFormInputIngredient } from "../../../../models/formInputs/formInputIngredient.model";
 
 const useAddEditIngredient = ({
