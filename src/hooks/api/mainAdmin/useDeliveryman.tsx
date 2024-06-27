@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import useAxiosPrivate from "../../useAxiosPrivate";
 import { DVDeliveryman } from "../../../utils/defaultValues";
-import { DELIVERY_MAN_URL } from "../../../utils/URLs";
 import { IDeliveryman } from "../../../models/deliveryman.model";
+import { DELIVERY_MAN_URL } from "../../../utils/endpoints";
 
 const useDeliveryman = (): [IDeliveryman[], any, boolean, Error] => {
   const [data, setData] = useState<IDeliveryman[]>([DVDeliveryman]);

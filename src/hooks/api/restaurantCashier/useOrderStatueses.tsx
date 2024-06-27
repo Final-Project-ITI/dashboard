@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { IOrderStatus } from "../../../models/orderStatus.model";
 import { DVOrderStatus } from "../../../utils/defaultValues";
 import useAxiosPrivate from "../../useAxiosPrivate";
-import { GET_ORDER_STATUESES } from "../../../utils/URLs";
+import { GET_ORDER_STATUESES } from "../../../utils/endpoints";
 
 const useOrderStatueses = (): [IOrderStatus[], boolean, Error] => {
   const [data, setData] = useState<IOrderStatus[]>([DVOrderStatus]);

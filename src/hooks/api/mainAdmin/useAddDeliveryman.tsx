@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useAxiosPrivate from "../../useAxiosPrivate";
 import { IFormInputDeliveryMan } from "../../../models/formInputs/formInputDeliveryMan.model.ts";
-import { DELIVERY_MAN_URL } from "../../../utils/URLs.ts";
+import { DELIVERY_MAN_URL } from "../../../utils/endpoints.ts";
 
 const useAddDeliveryMan = ({
   setTrigger,

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { IIngredient } from "../../../../models/ingredient.model";
 import { DVIngredient } from "../../../../utils/defaultValues";
-import { INGREDIENT_URL } from "../../../../utils/URLs";
 import useAxiosPrivate from "../../../useAxiosPrivate";
+import { INGREDIENT_URL } from "../../../../utils/endpoints";
 
 const useIngredients = (): [IIngredient[], any, boolean, Error] => {
   const [data, setData] = useState<IIngredient[]>([DVIngredient]);

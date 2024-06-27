@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useAxiosPrivate from "../../../useAxiosPrivate";
-import { REGISTER_CASHIER_URL } from "../../../../utils/URLs";
+import { REGISTER_CASHIER_URL } from "../../../../utils/endpoints";
 
 const useAddCashier = ({ setTrigger, setData }: any): [any, boolean, Error] => {
   const axiosPrivate = useAxiosPrivate();

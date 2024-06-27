@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import useAxiosPrivate from "../../useAxiosPrivate";
-import { GET_ORDERS_URL } from "../../../utils/URLs";
+import { GET_ORDERS_URL } from "../../../utils/endpoints";
 
 const useFilteredOrders = ({
   startDate,

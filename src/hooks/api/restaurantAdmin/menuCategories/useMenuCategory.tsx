@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { IMenuCategory } from "../../../../models/menuCategory.model";
 import { DVCategory } from "../../../../utils/defaultValues";
-import { MENU_CATEGORY_URL } from "../../../../utils/URLs";
 import useAxiosPrivate from "../../../useAxiosPrivate";
+import { MENU_CATEGORY_URL } from "../../../../utils/endpoints";
 
 const useMenuCategory = (): [IMenuCategory[], any, boolean, Error] => {
   const [data, setData] = useState<IMenuCategory[]>([DVCategory]);

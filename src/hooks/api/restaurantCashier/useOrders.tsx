@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { IItem } from "../../../models/item.model";
 import { IOrder } from "../../../models/order.model";
 import { DVItem, DVOrder } from "../../../utils/defaultValues";
-import { GET_ORDERS_URL } from "../../../utils/URLs";
 import useAxiosPrivate from "../../useAxiosPrivate";
+import { GET_ORDERS_URL } from "../../../utils/endpoints";
 
 const useOrders = ({
   refreshOrders,

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import useAxiosPrivate from "../../useAxiosPrivate";
 import { DVDelivery } from "../../../utils/defaultValues";
-import { DELIVERY_URL } from "../../../utils/URLs";
 import { IDelivery } from "../../../models/delivery.model";
+import { DELIVERY_URL } from "../../../utils/endpoints";
 
 const useIsDelivering = (id: string): [IDelivery[], any, boolean, Error] => {
   const [data, setData] = useState<IDelivery[]>([DVDelivery]);

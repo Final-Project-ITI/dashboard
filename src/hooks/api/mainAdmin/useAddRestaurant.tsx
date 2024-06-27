@@ -1,8 +1,8 @@
 import { useState } from "react";
 import useAxiosPrivate from "../../useAxiosPrivate";
 import { IFormInputRestaurant } from "../../../models/formInputs/formInputRestaurant.model";
-import { CREATE_RESTAURANT_URL } from "../../../utils/URLs";
 import { IRestaurantCategory } from "../../../models/restaurantCategory.model";
+import { CREATE_RESTAURANT_URL } from "../../../utils/endpoints";
 
 const useAddRestaurant = ({
   setTrigger,

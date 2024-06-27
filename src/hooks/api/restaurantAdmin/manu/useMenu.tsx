@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { IProduct } from "../../../../models/product.model";
 import { DVProduct } from "../../../../utils/defaultValues";
-import { PRODUCT_URL } from "../../../../utils/URLs";
 import useAxiosPrivate from "../../../useAxiosPrivate";
+import { PRODUCT_URL } from "../../../../utils/endpoints";
 
 const useMenu = ({ user }: any): [IProduct[], any, boolean, Error] => {
   const [data, setData] = useState<IProduct[]>([DVProduct]);

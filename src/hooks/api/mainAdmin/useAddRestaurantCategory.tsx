@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useAxiosPrivate from "../../useAxiosPrivate";
-import { RESTAURANT_CATEGORY_URL } from "../../../utils/URLs";
+import { RESTAURANT_CATEGORY_URL } from "../../../utils/endpoints";
 
 const useAddRestaurantCategory = ({
   setTrigger,

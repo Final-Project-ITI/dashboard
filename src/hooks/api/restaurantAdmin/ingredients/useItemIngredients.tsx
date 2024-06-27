@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { IIngredient } from "../../../../models/ingredient.model";
 import { DVCategory } from "../../../../utils/defaultValues";
-import { INGREDIENT_URL } from "../../../../utils/URLs";
 import useAxiosPrivate from "../../../useAxiosPrivate";
+import { INGREDIENT_URL } from "../../../../utils/endpoints";
 
 const useItemIngredients = ({
   menuItem,
