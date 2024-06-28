@@ -103,7 +103,7 @@ export const FormInputCategories = ({
         sx={{
           "& fieldset": { border: "none" },
         }}
-        placeholder="Enter an ingredient ..."
+        placeholder="Enter a category ..."
         onChange={handleOnChange}
         onFocus={handleOnFocus}
         autoComplete="off"

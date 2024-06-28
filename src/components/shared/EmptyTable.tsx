@@ -14,7 +14,7 @@ export default function EmptyTable({ message }: any) {
     >
       <Typography
         sx={{
-          fontSize: "40px",
+          fontSize: "20px",
           fontWeight: "bold",
           textTransform: "uppercase",
           color: "gray",
