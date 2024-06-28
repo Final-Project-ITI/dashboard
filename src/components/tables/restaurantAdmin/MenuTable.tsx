@@ -33,6 +33,7 @@ import useItemIngredients from "../../../hooks/api/restaurantAdmin/ingredients/u
 import useMenuCategory from "../../../hooks/api/restaurantAdmin/menuCategories/useMenuCategory";
 import Pagination from "../../shared/Pagination";
 import { DVProduct } from "../../../utils/defaultValues";
+import EmptyTable from "../../shared/EmptyTable";
 
 export default function MenuTable() {
   const [addItemTrigger, setAddItemTrigger] = useState(false);
@@ -49,7 +50,7 @@ export default function MenuTable() {
   const [ingredients, setIngredients] = useItemIngredients({ menuItem, isAdd });
 
   const tableHeadTextStyle = {
-    textAlign: "start",
+    textAlign: "center",
     color: "#0A0A0A80",
     fontSize: "20px",
     fontWeight: "bold",
@@ -57,7 +58,7 @@ export default function MenuTable() {
   };
 
   const tableBodyTextStyle = {
-    textAlign: "start",
+    textAlign: "center",
     fontSize: "16px",
     borderBottom: "none",
   };
@@ -259,7 +260,7 @@ export default function MenuTable() {
                       </TableRow>
                     ))
                   ) : (
-                    ""
+                    <EmptyTable message={"no items to show"} />
                   )}
                 </TableBody>
               </Table>

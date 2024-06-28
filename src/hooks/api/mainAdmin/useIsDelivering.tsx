@@ -4,7 +4,10 @@ import { DVDelivery } from "../../../utils/defaultValues";
 import { IDelivery } from "../../../models/delivery.model";
 import { DELIVERY_URL } from "../../../utils/endpoints";
 
-const useIsDelivering = (id: string): [IDelivery[], any, boolean, Error] => {
+const useIsDelivering = (
+  id: string,
+  refresh: any
+): [IDelivery[], any, boolean, Error] => {
   const [data, setData] = useState<IDelivery[]>([DVDelivery]);
   const axiosPrivate = useAxiosPrivate();
 
@@ -26,7 +29,7 @@ const useIsDelivering = (id: string): [IDelivery[], any, boolean, Error] => {
         }
       }
     })();
-  }, []);
+  }, [refresh]);
 
   return [data, setData, isLoading, error];
 };

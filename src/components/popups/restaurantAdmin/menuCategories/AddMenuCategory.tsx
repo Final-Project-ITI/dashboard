@@ -41,6 +41,7 @@ export default function AddCategory({
     menuCategory,
     isAdd,
     setData,
+    reset,
   });
 
   const labelStyle = {
@@ -101,9 +102,8 @@ export default function AddCategory({
               >
                 Categories
               </Typography>
-              <Stack spacing={"8px"}>
+              <Stack spacing={"16px"}>
                 <Box>
-                  <Typography sx={labelStyle}>Category</Typography>
                   <FormInputText
                     type="text"
                     register={register}
@@ -124,7 +124,6 @@ export default function AddCategory({
                 </Box>
 
                 <Box>
-                  <Typography sx={labelStyle}>Icon</Typography>
                   <Button
                     variant="contained"
                     component="label"

@@ -19,12 +19,17 @@ import useDeliveryHistory from "../../../../hooks/api/mainAdmin/useDeliveryHisto
 import { IDelivery } from "../../../../models/delivery.model";
 import Pagination from "../../../shared/Pagination";
 
-
 /* -------- */
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import EmptyTable from "../../../shared/EmptyTable";
 
-export default function DeliveryHistoryPopup({ trigger, setTrigger, id,setId }: any) {
+export default function DeliveryHistoryPopup({
+  trigger,
+  setTrigger,
+  id,
+  setId,
+}: any) {
   const [data, setData, isLoading, error] = useDeliveryHistory(id);
   const [deliveryHistory, setDeliveryHistory] = useState<IDelivery[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,6 +48,7 @@ export default function DeliveryHistoryPopup({ trigger, setTrigger, id,setId }: 
     fontSize: "20px",
     fontWeight: "bold",
     borderBottom: "none",
+    textTransform: "capitalize",
   };
 
   const tableBodyTextStyle = {
@@ -80,7 +86,18 @@ export default function DeliveryHistoryPopup({ trigger, setTrigger, id,setId }: 
               position: "relative",
             }}
           >
-            <Box onClick={()=>{setTrigger(false);setId("")}} sx={{ position: "absolute", right: "20px", top: "20px" ,"&:hover":{cursor:"pointer"}}}>
+            <Box
+              onClick={() => {
+                setTrigger(false);
+                setId("");
+              }}
+              sx={{
+                position: "absolute",
+                right: "20px",
+                top: "20px",
+                "&:hover": { cursor: "pointer" },
+              }}
+            >
               <svg
                 width="14"
                 height="14"
@@ -108,7 +125,11 @@ export default function DeliveryHistoryPopup({ trigger, setTrigger, id,setId }: 
               Delivery history
             </Typography>
 
-            <Stack justifyContent={"space-between"} height={"85%"} sx={{paddingInline:"12px"}}>
+            <Stack
+              justifyContent={"space-between"}
+              height={"85%"}
+              sx={{ paddingInline: "12px" }}
+            >
               <Table>
                 <TableHead>
                   <TableRow>
@@ -145,7 +166,7 @@ export default function DeliveryHistoryPopup({ trigger, setTrigger, id,setId }: 
                         </TableRow>
                       ))}
                     </SkeletonTheme>
-                  ) : (
+                  ) : deliveryHistory.length ? (
                     deliveryHistory.map((delivery) => {
                       return (
                         <TableRow key={delivery._id}>
@@ -192,6 +213,8 @@ export default function DeliveryHistoryPopup({ trigger, setTrigger, id,setId }: 
                         </TableRow>
                       );
                     })
+                  ) : (
+                    <EmptyTable message={"no history to show"} />
                   )}
                 </TableBody>
               </Table>

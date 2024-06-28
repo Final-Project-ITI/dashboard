@@ -27,7 +27,11 @@ export default function AddCashier({ setData, trigger, setTrigger }: any) {
     mode: "onChange",
   });
 
-  const [onSubmit, isLoading, error] = useAddCashier({ setTrigger, setData });
+  const [onSubmit, isLoading, error] = useAddCashier({
+    setTrigger,
+    setData,
+    reset,
+  });
 
   const labelStyle = {
     fontSize: "16px",
@@ -81,9 +85,8 @@ export default function AddCashier({ setData, trigger, setTrigger }: any) {
               >
                 Add Item
               </Typography>
-              <Stack spacing={"8px"}>
+              <Stack spacing={"16px"}>
                 <Box>
-                  <Typography sx={labelStyle}>Cashier Name</Typography>
                   <FormInputText
                     type="text"
                     register={register}
@@ -103,7 +106,6 @@ export default function AddCashier({ setData, trigger, setTrigger }: any) {
                   />
                 </Box>
                 <Box>
-                  <Typography sx={labelStyle}>E-Mail</Typography>
                   <FormInputText
                     register={register}
                     validation={{
@@ -123,7 +125,6 @@ export default function AddCashier({ setData, trigger, setTrigger }: any) {
                   />
                 </Box>
                 <Box>
-                  <Typography sx={labelStyle}>Password</Typography>
                   <FormInputText
                     register={register}
                     validation={{
@@ -143,7 +144,6 @@ export default function AddCashier({ setData, trigger, setTrigger }: any) {
                   />
                 </Box>
               </Stack>
-
               <Stack
                 marginTop={"24px"}
                 spacing={"40px"}

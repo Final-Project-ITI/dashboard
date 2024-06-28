@@ -29,6 +29,7 @@ import MainButton from "../../shared/MainButton";
 import AddRestaurantCategory from "../../popups/mainAdmin/restaurantCategory/AddRestaurantCategory";
 import DeleteRestaurantCategoryPopup from "../../popups/mainAdmin/restaurantCategory/DeleteRestaurantCategoryPopup";
 import Pagination from "../../shared/Pagination";
+import EmptyTable from "../../shared/EmptyTable";
 
 export default function MenuCategoryTable() {
   const [addCategoryTrigger, setAddCategoryTrigger] = useState(false);
@@ -183,7 +184,7 @@ export default function MenuCategoryTable() {
                       return (
                         <TableRow key={resCat._id}>
                           <TableCell sx={tableBodyTextStyle}>
-                            {resCat.title}
+                            {resCat.name}
                           </TableCell>
 
                           <TableCell
@@ -235,7 +236,7 @@ export default function MenuCategoryTable() {
                       );
                     })
                   ) : (
-                    ""
+                    <EmptyTable message={"no categories men to show"} />
                   )}
                 </TableBody>
               </Table>

@@ -39,7 +39,6 @@ export default function AddDeliverymanPopup({
     reset,
   });
 
-
   const labelStyle = {
     fontSize: "16px",
     marginBottom: "8px",
@@ -91,10 +90,9 @@ export default function AddDeliverymanPopup({
             >
               Add delivery man
             </Typography>
-            <Stack spacing={"8px"}>
-              <form>
+            <form>
+              <Stack spacing={"16px"}>
                 <Box>
-                  <Typography sx={labelStyle}>Email</Typography>
                   <FormInputText
                     register={register}
                     validation={{
@@ -114,10 +112,7 @@ export default function AddDeliverymanPopup({
                   />
                 </Box>
 
-
-
                 <Box>
-                  <Typography sx={labelStyle}>Phone</Typography>
                   <FormInputText
                     register={register}
                     validation={{
@@ -165,15 +160,15 @@ export default function AddDeliverymanPopup({
                       width: "96px",
                     }}
                     loading={isLoading}
-                    disabled={!isDirty || !isValid }
+                    disabled={!isDirty || !isValid}
                     type="submit"
                   >
                     {" "}
                     Add{" "}
                   </LoadingButton>
                 </Stack>
-              </form>
-            </Stack>
+              </Stack>
+            </form>
           </Box>
 
           <ToastContainer />

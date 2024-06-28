@@ -7,6 +7,7 @@ const useAddEditMenuCategory = ({
   menuCategory,
   isAdd,
   setData,
+  reset,
 }: any): [any, boolean, Error] => {
   const axiosPrivate = useAxiosPrivate();
 
@@ -44,6 +45,7 @@ const useAddEditMenuCategory = ({
           })
         );
       }
+      reset();
       setTrigger(false);
       setIsLoading(false);
     } catch (err: any) {

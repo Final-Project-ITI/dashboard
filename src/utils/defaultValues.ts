@@ -1,4 +1,4 @@
-import { IItem } from './../models/item.model';
+import { IItem } from "./../models/item.model";
 export const DVLogin = {
   email: "",
   password: "",
@@ -48,7 +48,7 @@ export const DVRestaurant = {
 };
 export const DVRestaurantCategory = {
   _id: "",
-  title: "",
+  name: "",
   icon: "",
   description: "",
 };
@@ -109,13 +109,15 @@ export const DVItem = {
 export const DVDeliveryman = {
   _id: "",
   userId: DVUser,
-  currentlyDeliver: [{
-    _id: "",
-    orderId: "",
-    deliveryManId: "",
-    assignedAt: null,
-    deliverdAt: null,
-  }],
+  currentlyDeliver: [
+    {
+      _id: "",
+      orderId: "",
+      deliveryManId: "",
+      assignedAt: null,
+      deliverdAt: null,
+    },
+  ],
   status: "offline",
 };
 
@@ -130,12 +132,12 @@ export const DVDelivery = {
   },
   assignedAt: null,
   deliverdAt: null,
-  restaurant:DVRestaurant,
-  items:[DVItem],
-  total:0
+  restaurant: DVRestaurant,
+  items: [DVItem],
+  total: 0,
 };
 
-export const DVAddDelivery={
-  email:"",
-  phone:""
-}
+export const DVAddDelivery = {
+  email: "",
+  phone: "",
+};

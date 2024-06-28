@@ -23,6 +23,7 @@ import useCashiers from "../../../hooks/api/restaurantAdmin/cashiers/useCashiers
 import AddCashier from "../../popups/restaurantAdmin/cashier/AddCashier";
 import MainButton from "../../shared/MainButton";
 import Pagination from "../../shared/Pagination";
+import EmptyTable from "../../shared/EmptyTable";
 
 export default function CashierTable() {
   const [addCashierTrigger, setAddCashierTrigger] = useState(false);
@@ -31,7 +32,7 @@ export default function CashierTable() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const tableHeadTextStyle = {
-    textAlign: "start",
+    textAlign: "center",
     color: "#0A0A0A80",
     fontSize: "20px",
     fontWeight: "bold",
@@ -39,7 +40,7 @@ export default function CashierTable() {
   };
 
   const tableBodyTextStyle = {
-    textAlign: "start",
+    textAlign: "center",
     fontSize: "16px",
     borderBottom: "none",
   };
@@ -156,7 +157,7 @@ export default function CashierTable() {
                       );
                     })
                   ) : (
-                    ""
+                    <EmptyTable message={"no cashiers to show"} />
                   )}
                 </TableBody>
               </Table>

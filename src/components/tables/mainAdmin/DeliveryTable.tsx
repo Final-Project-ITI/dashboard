@@ -10,7 +10,7 @@ import {
 import Table from "@mui/material/Table";
 
 /* -------- */
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 /* -------- */
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -25,6 +25,9 @@ import { IDeliveryman } from "../../../models/deliveryman.model";
 import AddDeliverymanPopup from "../../popups/mainAdmin/delivery/AddDeliverymanPopup";
 import DeliveryHistoryPopup from "../../popups/mainAdmin/delivery/DeliveryHistoryPopup";
 import IsDeliveringPopup from "../../popups/mainAdmin/delivery/IsDeliveringPopup";
+import EmptyTable from "../../shared/EmptyTable";
+import { UserContext } from "../../../App";
+import socket from "../../../utils/socket";
 
 export default function DeliveryTable() {
   const [addDeliverymanTrigger, setAddDeliverymanTrigger] = useState(false);
@@ -33,10 +36,22 @@ export default function DeliveryTable() {
   const [isDeliveringTrigger, setIsDeliveringTrigger] = useState(false);
   const [isDeliveringId, setIsDeliveringId] = useState("");
 
-  const [data, setData, isLoading, error] = useDeliveryman();
+  const [refresh, setRefresh] = useState(0);
+  const [data, setData, isLoading, error] = useDeliveryman(refresh);
   const [deliveryMen, setDeliverymen] = useState<IDeliveryman[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const skeletonRows = [0, 0, 0, 0, 0];
+
+  useEffect(() => {
+    socket.emit("join-room", "admin");
+    socket.on("notify-admin", () => {
+      setRefresh((pre) => ++pre);
+    });
+
+    return () => {
+      socket.off("connect");
+    };
+  }, []);
 
   useEffect(() => {
     setDeliverymen(data.slice(0, 6));
@@ -177,7 +192,7 @@ export default function DeliveryTable() {
                         </TableRow>
                       ))}
                     </SkeletonTheme>
-                  ) : (
+                  ) : deliveryMen.length ? (
                     deliveryMen.map((deliveryman) => {
                       return (
                         <TableRow key={deliveryman._id}>
@@ -290,6 +305,8 @@ export default function DeliveryTable() {
                         </TableRow>
                       );
                     })
+                  ) : (
+                    <EmptyTable message={"no delivery men to show"} />
                   )}
                 </TableBody>
               </Table>

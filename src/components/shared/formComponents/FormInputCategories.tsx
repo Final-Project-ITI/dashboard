@@ -27,7 +27,7 @@ export const FormInputCategories = ({
     setTags((pre: IRestaurantCategory[]) => [...pre, resCat]);
 
     setRestaurantCategories((pre: IRestaurantCategory[]) =>
-      pre.filter((pre) => pre.title !== resCat.title)
+      pre.filter((pre) => pre.name !== resCat.name)
     );
     setSearchRestaurantCategories([]);
     setSearchText("");
@@ -37,7 +37,7 @@ export const FormInputCategories = ({
     setRestaurantCategories((pre: IRestaurantCategory[]) => [...pre, resCat]);
 
     setTags((pre: IRestaurantCategory[]) =>
-      pre.filter((pre) => pre.title !== resCat.title)
+      pre.filter((pre) => pre.name !== resCat.name)
     );
   };
 
@@ -49,7 +49,7 @@ export const FormInputCategories = ({
     if (searchText) {
       setSearchRestaurantCategories(
         restaurantCategories.filter((resCat) =>
-          resCat.title.toLowerCase().includes(searchText.toLowerCase())
+          resCat.name.toLowerCase().includes(searchText.toLowerCase())
         )
       );
     } else {
@@ -86,7 +86,7 @@ export const FormInputCategories = ({
             }}
             key={tag._id}
           >
-            {tag.title}
+            {tag.name}
             <IconButton onClick={() => handleRemoveRestaurantCategory(tag)}>
               <CloseIcon
                 sx={{
@@ -125,7 +125,7 @@ export const FormInputCategories = ({
             borderTop: "1px solid #d84339",
           }}
         >
-          {searchRestaurantCategories?.map((ingredient) => (
+          {searchRestaurantCategories?.map((resCat) => (
             <Button
               sx={{
                 cursor: "pointer",
@@ -138,11 +138,11 @@ export const FormInputCategories = ({
                 },
                 textAlign: "left",
               }}
-              key={ingredient._id}
+              key={resCat._id}
               style={{ justifyContent: "flex-start" }}
-              onClick={() => handleSelectRestaurantCategory(ingredient)}
+              onClick={() => handleSelectRestaurantCategory(resCat)}
             >
-              {ingredient.title}
+              {resCat.name}
             </Button>
           ))}
         </Stack>

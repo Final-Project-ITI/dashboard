@@ -103,7 +103,6 @@ export default function AddIngredient({
               </Typography>
               <Stack spacing={"8px"}>
                 <Box>
-                  <Typography sx={labelStyle}>ingredient</Typography>
                   <FormInputText
                     type="text"
                     register={register}

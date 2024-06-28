@@ -29,6 +29,7 @@ import MainButton from "../../shared/MainButton";
 import AddCategory from "../../popups/restaurantAdmin/menuCategories/AddMenuCategory";
 import DeleteCategoryPopup from "../../popups/restaurantAdmin/menuCategories/DeleteMenuCategory";
 import Pagination from "../../shared/Pagination";
+import EmptyTable from "../../shared/EmptyTable";
 
 export default function MenuCategoryTable() {
   const [addCategoryTrigger, setAddCategoryTrigger] = useState(false);
@@ -207,7 +208,7 @@ export default function MenuCategoryTable() {
                       );
                     })
                   ) : (
-                    ""
+                    <EmptyTable message={"no categories to show"} />
                   )}
                 </TableBody>
               </Table>

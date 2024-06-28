@@ -11,6 +11,8 @@ import PersonSVG from "../../assets/svgs/PersonSVG";
 import TomatoSVG from "../../assets/svgs/TomatoSVG";
 import { IMainButton } from "../../models/mainButton.model";
 import NavBar from "../shared/NavBar";
+import socket from "../../utils/socket";
+import { useEffect } from "react";
 
 export default function RestaurantAdmin({ setUser }: any) {
   const navigate = useNavigate();

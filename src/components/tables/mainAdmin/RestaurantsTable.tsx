@@ -24,6 +24,7 @@ import AddRestaurantPopup from "../../popups/mainAdmin/AddRestaurantPopup";
 import MainButton from "../../shared/MainButton";
 import Pagination from "../../shared/Pagination";
 import useRestaurantsCategory from "../../../hooks/api/mainAdmin/useResturantCategory";
+import EmptyTable from "../../shared/EmptyTable";
 
 export default function RestaurantsTable() {
   const [addRestaurantTrigger, setAddRestaurantTrigger] = useState(false);
@@ -166,7 +167,7 @@ export default function RestaurantsTable() {
                         </TableRow>
                       ))}
                     </SkeletonTheme>
-                  ) : (
+                  ) : restaurants.length ? (
                     restaurants.map((admin) => {
                       return (
                         <TableRow key={admin._id}>
@@ -195,7 +196,17 @@ export default function RestaurantsTable() {
                               textAlign: "start",
                             }}
                           >
-                            {admin.restaurantId?.address}
+                            <Typography
+                              sx={{
+                                width: "100px",
+                                textAlign: "start",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {admin.restaurantId?.address}
+                            </Typography>
                           </TableCell>
                           <TableCell
                             sx={{ ...tableHeadTextStyle, ...hideContent }}
@@ -208,6 +219,8 @@ export default function RestaurantsTable() {
                         </TableRow>
                       );
                     })
+                  ) : (
+                    <EmptyTable message={"no restaurants to show"} />
                   )}
                 </TableBody>
               </Table>

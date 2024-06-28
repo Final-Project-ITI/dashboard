@@ -151,7 +151,6 @@ export default function OrdersTable({
                       Total
                     </TableCell>
                     <TableCell sx={tableHeadTextStyle}>Order Details</TableCell>
-                    <TableCell sx={tableHeadTextStyle}>Status</TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -163,7 +162,7 @@ export default function OrdersTable({
                     >
                       {skeletonRows.map((e, i) => (
                         <TableRow key={i}>
-                          <TableCell colSpan={5}>
+                          <TableCell colSpan={4}>
                             <Skeleton height={40} />
                           </TableCell>
                         </TableRow>
@@ -194,12 +193,6 @@ export default function OrdersTable({
                           >
                             <DetailsSVG />
                           </IconButton>
-                        </TableCell>
-                        <TableCell sx={tableBodyTextStyle}>
-                          <StatusDropDown
-                            orderStatuses={orderStatuses}
-                            order={order}
-                          />
                         </TableCell>
                       </TableRow>
                     ))

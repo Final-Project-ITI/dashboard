@@ -1,5 +1,5 @@
 interface IFormInputRestaurantCategory {
-  title: string;
+  name: string;
   description: string;
   icon: any;
 }

@@ -2,7 +2,11 @@ import { useState } from "react";
 import useAxiosPrivate from "../../../useAxiosPrivate";
 import { REGISTER_CASHIER_URL } from "../../../../utils/endpoints";
 
-const useAddCashier = ({ setTrigger, setData }: any): [any, boolean, Error] => {
+const useAddCashier = ({
+  setTrigger,
+  setData,
+  reset,
+}: any): [any, boolean, Error] => {
   const axiosPrivate = useAxiosPrivate();
 
   const [error, setError] = useState<any>();
@@ -18,6 +22,7 @@ const useAddCashier = ({ setTrigger, setData }: any): [any, boolean, Error] => {
         { fullName: data.fullName, email: data.email },
         ...pre,
       ]);
+      reset();
       setTrigger(false);
       setIsLoading(false);
     } catch (err: any) {

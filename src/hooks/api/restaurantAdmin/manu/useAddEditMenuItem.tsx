@@ -11,6 +11,7 @@ const useAddEditMenuItem = ({
   tags,
   setTags,
   setData,
+  reset,
 }: any): [any, boolean, Error] => {
   const axiosPrivate = useAxiosPrivate();
 
@@ -48,6 +49,7 @@ const useAddEditMenuItem = ({
         console.log(res.data);
       }
 
+      reset();
       setTags([]);
       setTrigger(false);
       setIsLoading(false);

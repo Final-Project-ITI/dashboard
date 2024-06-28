@@ -19,6 +19,7 @@ const useDeliveryHistory = (id: string): [IDelivery[], any, boolean, Error] => {
             DELIVERY_URL + "/" + id + "/deliveryman"
           );
           setData(await req.data);
+          console.log(await req.data);
           setIsLoading(false);
         } catch (err: any) {
           setError(err.response);

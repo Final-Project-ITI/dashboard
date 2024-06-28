@@ -41,12 +41,8 @@ export default function AddRestaurantCategory({
     restaurantCategory,
     isAdd,
     setData,
+    reset,
   });
-
-  const labelStyle = {
-    fontSize: "16px",
-    marginBottom: "8px",
-  };
 
   useEffect(() => {
     toast.error(error?.message, {
@@ -63,7 +59,7 @@ export default function AddRestaurantCategory({
 
   useEffect(() => {
     if (!isAdd) {
-      setValue("title", restaurantCategory?.title);
+      setValue("name", restaurantCategory?.name);
       setValue("description", restaurantCategory?.description);
     }
   }, [restaurantCategory]);
@@ -104,35 +100,33 @@ export default function AddRestaurantCategory({
               </Typography>
               <Stack spacing={"8px"}>
                 <Box>
-                  <Typography sx={labelStyle}>Title</Typography>
                   <FormInputText
                     type="text"
                     register={register}
                     validation={{
                       required: {
                         value: true,
-                        message: "category title is required",
+                        message: "category name is required",
                       },
                       maxLength: {
                         value: 25,
                         message: "maximum 25 characters",
                       },
                     }}
-                    name="title"
+                    name="name"
                     control={control}
-                    label="Title"
+                    label="name"
                   />
                 </Box>
 
                 <Box>
-                  <Typography sx={labelStyle}>Description</Typography>
                   <FormInputText
                     type="text"
                     register={register}
                     validation={{
                       required: {
                         value: true,
-                        message: "category title is required",
+                        message: "category name is required",
                       },
                       maxLength: {
                         value: 100,
@@ -146,7 +140,6 @@ export default function AddRestaurantCategory({
                 </Box>
 
                 <Box>
-                  <Typography sx={labelStyle}>Icon</Typography>
                   <Button
                     variant="contained"
                     component="label"

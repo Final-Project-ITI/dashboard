@@ -7,6 +7,7 @@ const useAddRestaurantCategory = ({
   restaurantCategory,
   isAdd,
   setData,
+  reset,
 }: any): [any, boolean, Error] => {
   const axiosPrivate = useAxiosPrivate();
 
@@ -20,7 +21,7 @@ const useAddRestaurantCategory = ({
     try {
       const formData = new FormData();
 
-      formData.append("title", data.title);
+      formData.append("name", data.name);
       formData.append("description", data.description);
       formData.append("icon", data.icon[0]);
 
@@ -37,7 +38,7 @@ const useAddRestaurantCategory = ({
         setData((pre: any) =>
           pre.map((item: any) => {
             if (item._id === restaurantCategory._id) {
-              item.title = data.title;
+              item.name = data.name;
               item.description = data.description;
               if (res.data.icon) item.icon = res.data.icon;
             }
@@ -46,6 +47,7 @@ const useAddRestaurantCategory = ({
           })
         );
       }
+      reset();
       setTrigger(false);
       setIsLoading(false);
     } catch (err: any) {

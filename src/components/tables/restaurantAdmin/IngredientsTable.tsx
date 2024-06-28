@@ -28,6 +28,7 @@ import AddIngredient from "../../popups/restaurantAdmin/ingredients/AddIngredien
 import DeleteIngredientPopup from "../../popups/restaurantAdmin/ingredients/DeleteIngredient";
 import MainButton from "../../shared/MainButton";
 import Pagination from "../../shared/Pagination";
+import EmptyTable from "../../shared/EmptyTable";
 
 export default function IngredientsTable() {
   const [addIngredientTrigger, setAddIngredientTrigger] = useState(false);
@@ -190,7 +191,7 @@ export default function IngredientsTable() {
                       );
                     })
                   ) : (
-                    ""
+                    <EmptyTable message={"no ingredients to show"} />
                   )}
                 </TableBody>
               </Table>

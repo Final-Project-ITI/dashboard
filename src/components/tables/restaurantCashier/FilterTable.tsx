@@ -97,13 +97,6 @@ export default function FilterTable({
           />
 
           <Box marginTop={{ xl: "40px", md: 0 }}>
-            <Typography sx={titleStyle}>Status</Typography>
-            <StatusFilter
-              orderStatuses={orderStatuses}
-              handleFilterStatus={handleFilterStatus}
-            />
-          </Box>
-          <Box marginTop={{ xl: "40px", md: 0 }}>
             <Typography sx={titleStyle}>Date</Typography>
             <Stack direction={{ xl: "column", md: "row" }} spacing={"10px"}>
               <DateFilter label="From" setDate={setStartDate} />
