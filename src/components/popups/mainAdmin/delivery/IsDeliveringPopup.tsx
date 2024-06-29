@@ -33,7 +33,7 @@ export default function IsDeliveringPopup({
   const [data, setData, isLoading, error] = useIsDelivering(id);
   const [deliveryHistory, setDeliveryHistory] = useState<IDelivery[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const skeletonRows = [0, 0, 0, 0, 0];
+  const skeletonRows = [0, 0];
 
   useEffect(() => {
     if (data) {
@@ -200,7 +200,12 @@ export default function IsDeliveringPopup({
                   </TableRow>
                 </TableHead>
 
-                <TableBody>
+                <TableBody
+                  sx={{
+                    alignItems: "flex-start",
+                    justifyContent: "flex-start",
+                  }}
+                >
                   {isLoading ? (
                     <SkeletonTheme
                       baseColor="transparent"

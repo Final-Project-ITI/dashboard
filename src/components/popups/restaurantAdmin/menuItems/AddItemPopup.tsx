@@ -27,6 +27,8 @@ export default function AddItemPopup({
   setIngredients,
   categories,
   setData,
+  tags,
+  setTags,
 }: any) {
   const {
     handleSubmit,
@@ -41,7 +43,6 @@ export default function AddItemPopup({
     mode: "onChange",
   });
 
-  const [tags, setTags] = useState<IIngredient[]>([]);
   const icon = watch("icon", false);
 
   const [onSubmit, isLoading, error] = useAddEditMenuItem({
@@ -53,11 +54,6 @@ export default function AddItemPopup({
     setData,
     reset,
   });
-
-  const labelStyle = {
-    fontSize: "16px",
-    marginBottom: "8px",
-  };
 
   useEffect(() => {
     toast.error(error?.message, {

@@ -48,6 +48,7 @@ export default function RestaurantCashier() {
     socket.emit("join-room", user.restaurantId?._id);
 
     socket.on("new-order-res", () => {
+      console.log("hello");
       setTrigger(true);
       setNewOrders(++counter);
     });

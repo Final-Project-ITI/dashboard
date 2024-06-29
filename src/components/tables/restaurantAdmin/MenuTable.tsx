@@ -34,6 +34,7 @@ import useMenuCategory from "../../../hooks/api/restaurantAdmin/menuCategories/u
 import Pagination from "../../shared/Pagination";
 import { DVProduct } from "../../../utils/defaultValues";
 import EmptyTable from "../../shared/EmptyTable";
+import { IIngredient } from "../../../models/ingredient.model";
 
 export default function MenuTable() {
   const [addItemTrigger, setAddItemTrigger] = useState(false);
@@ -47,7 +48,8 @@ export default function MenuTable() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [categories] = useMenuCategory();
-  const [ingredients, setIngredients] = useItemIngredients({ menuItem, isAdd });
+  const [tags, setTags] = useState<IIngredient[]>([]);
+  const [ingredients, setIngredients] = useItemIngredients({ menuItem, tags });
 
   const tableHeadTextStyle = {
     textAlign: "center",
@@ -119,6 +121,8 @@ export default function MenuTable() {
             setIngredients={setIngredients}
             categories={categories}
             setData={setData}
+            tags={tags}
+            setTags={setTags}
           />
           <DeleteItemPopup
             trigger={deleteItemTrigger}

@@ -6,6 +6,7 @@ import { INGREDIENT_URL } from "../../../../utils/endpoints";
 
 const useItemIngredients = ({
   menuItem,
+  tags,
 }: any): [IIngredient[], any, boolean, Error] => {
   const [data, setData] = useState<IIngredient[]>([DVCategory]);
   const axiosPrivate = useAxiosPrivate();
@@ -33,7 +34,7 @@ const useItemIngredients = ({
         setError(err.response);
       }
     })();
-  }, [menuItem]);
+  }, [menuItem, tags]);
 
   return [data, setData, isLoading, error];
 };

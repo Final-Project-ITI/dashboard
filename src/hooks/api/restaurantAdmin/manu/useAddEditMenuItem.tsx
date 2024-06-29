@@ -45,8 +45,6 @@ const useAddEditMenuItem = ({
           CREATE_PRODUCT_URL + "/" + menuItem?._id,
           formData
         );
-
-        console.log(res.data);
       }
 
       reset();

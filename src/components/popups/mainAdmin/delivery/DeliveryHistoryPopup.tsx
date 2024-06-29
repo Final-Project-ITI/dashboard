@@ -80,7 +80,7 @@ export default function DeliveryHistoryPopup({
             sx={{
               width: { xl: "1000px", md: "850px", xs: "450px" },
               height: "600px",
-              backgroundColor: "#F3ECE4",
+              backgroundColor: "#E8DCCC",
               borderRadius: "15px",
               padding: "12px ",
               position: "relative",
@@ -131,7 +131,12 @@ export default function DeliveryHistoryPopup({
               sx={{ paddingInline: "12px" }}
             >
               <Table>
-                <TableHead>
+                <TableHead
+                  sx={{
+                    borderTop: "1px black solid",
+                    borderBottom: "1px black solid",
+                  }}
+                >
                   <TableRow>
                     <TableCell sx={tableHeadTextStyle}>resturat</TableCell>
                     <TableCell sx={{ ...tableHeadTextStyle, ...hideContent }}>
